@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/11/23 15:59:21 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/23 16:14:06 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct s_cmd
 	char		*in_redir;
 	char		*out_redir;
 	char		**cmd_args;
-	char		*here_doc_delim;
+	char		*heredoc_delim;
 	struct s_cmd	*next;
 } t_cmd_node;
 
