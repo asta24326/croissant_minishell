@@ -6,32 +6,21 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 16:15:52 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/11/23 17:55:46 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/23 20:09:16 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// check input
-void	ft_check_exec_input(t_cmd_node *cmd)
+/* Expecting "t_data *shell, char **env" */
+
+void	ft_exec_init(t_data *shell, char **env)
 {
-	t_cmd_node	*temp;
-	
-	temp = cmd;
-	
-	while(temp)
-	{
-		
-
-		temp = temp->next;
-	}
-
-}
+	ft_init_files_fds()
 
 
-void	ft_redir_init(char *infile, char *out_file)
-{
-	opene
+
+int	*ft_init_fds()
 
 
 

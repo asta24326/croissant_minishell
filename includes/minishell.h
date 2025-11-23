@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/11/23 18:18:33 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/23 20:31:01 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,31 @@
 // for tputs
 # include <term.h>
 
-typedef struct s_cmd
+typedef struct	s_cmd
 {
-	char 			*cmd;
-	char			*in_redir;
-	char			*out_redir;
-	char			**cmd_args;
-	char			*heredoc_delim;
-	struct s_cmd	*next;
-}	t_cmd_node;
+/* cmd data */
+	char 	*cmd;
+	char	**cmd_args;
+/* infile data */
+	char	*infile;
+	int		infile_fd;
+/* outfile data */
+	char	*outfile;
+	int		outfile_fd;
+	bool	append;
+/* heredoc data */
+	char	*heredoc_delim;
+	int		heredoc_fd;
+/* next node in list*/
+	t_cmd	*next;
+}	t_cmd;
 
 /* main data storage */
-typedef struct s_data
+typedef struct	s_data
 {
-	int			cmds_count;
-	int			*pipes_fds;
-	int			*files_fds;
-	t_cmd_node	*init_cmd;
+	int		cmds_count;
+	int		**pipes;
+	t_cmd	*init_cmd;
 }	t_data;
 
 #endif
