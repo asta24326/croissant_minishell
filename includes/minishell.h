@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/11/23 16:20:51 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/23 17:06:49 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,14 @@
 
 typedef struct s_cmd
 {
-	char 		*cmd;
-	char		*in_redir;
-	char		*out_redir;
-	char		**cmd_args;
-	char		*heredoc_delim;
+	char 			*cmd;
+	char			*in_redir;
+	char			*out_redir;
+	char			**cmd_args;
+	char			*heredoc_delim;
 	struct s_cmd	*next;
 } t_cmd_node;
 
+/* Execution structures */
 
 #endif
