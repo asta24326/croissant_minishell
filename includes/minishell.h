@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/11/25 23:07:43 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/25 23:19:36 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ typedef struct	s_redirs
 	int		in_fd;
 	int		out_fd;
 	bool	append;
-	bool	exp_hdoc; // if heredoc delimeter has '  ' 
+	bool	exp_hdoc; // no - if heredoc delimeter has '  ', yes - if none
 	int		hdoc_fd[2]; // on exec step
 }	t_redirs;
 

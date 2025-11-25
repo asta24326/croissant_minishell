@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 22:51:59 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/11/25 23:04:32 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/25 23:19:52 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	ft_write_heredoc_line(t_shell *shell, t_redirs *rdrs, char *line)
 {
 	char	*expand_line;
 
-	if (rdrs->exp_hdoc)
+	if (rdrs->exp_hdoc == TRUE)
 	{
 		expand_line = ft_expand_vars(line, shell);
 		write(rdrs->hdoc_fd[1], expand_line, ft_strlen(expand_line));
