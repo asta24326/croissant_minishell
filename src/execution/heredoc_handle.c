@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 22:51:59 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/11/25 23:19:52 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/26 23:13:24 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,17 @@ static void	ft_write_heredoc_line(t_shell *shell, t_redirs *rdrs, char *line)
 	else
 		write(rdrs->hdoc_fd[1], line, ft_strlen(line));
 	write(rdrs->hdoc_fd[1], "\n", 1);
+}
+
+void	ft_process_all_heredocs(t_shell *shell)
+{
+	t_cmd	*current;
+
+	current = shell->cmd;
+	while (current)
+	{
+		if (current->hdoc_delim)
+			ft_handle_heredoc(shell, current, current->redirs);
+		current = current->next;
+	}
 }

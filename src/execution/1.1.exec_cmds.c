@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 16:15:52 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/11/25 23:08:00 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/26 23:59:06 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,14 @@ void	ft_exec_cmds(t_shell *shell, t_cmd *cmd)
 {
 	if (!cmd)
 		return ;
+	ft_pipes_init(shell);
+	ft_process_all_heredocs(shell, shell->cmd); // processing all heredocs before executing
+	
+	// if 1 command or several
 	if (cmd->next)
-		ft_exec_multy_cmds(shell);
+		ft_exec_multi_cmds(shell, cmd);
 	else
-		ft_exec_solo_cmd(shell);
+		ft_exec_solo_cmd(shell, cmd);
 
 	//smth with last exit status??
 	ft_pipes_init(shell);
@@ -35,18 +39,10 @@ void	ft_exec_cmds(t_shell *shell, t_cmd *cmd)
 
 void	ft_exec_solo_cmd(t_shell *shell, t_cmd *cmd)
 {
-	int	saved_stdin;
-	int	saved_stdout;
-
-	if (ft_is_builtin(cmd->name))
-	{
-		if (cmd->hdoc_delim)
-		{
-			ft_handle_heredoc(shell, cmd, cmd->redirs);
-		}
+	if (ft_is_builtin(cmd->name) && !cmd->next)
+		shell->exit_status = ft_exec_builtin(shell, cmd);	//in parent process
 	else
-		
-	}
+		ft_exec_system(shell, cmd);
 }
 
 bool	ft_is_builtin(char *cmd_name)
