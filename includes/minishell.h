@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/11/26 23:59:05 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/27 13:44:30 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,13 @@ typedef struct	s_redirs
 /* command data structure */
 typedef struct	s_cmd
 {
-	char 		*name;
-	char		**args;
-	char		*infile;
-	char		*outfile;
-	char		*hdoc_delim;
-	t_redirs	*redirs;
-	t_cmd		*next;
+	char 			*name;
+	char			**args;
+	char			*infile;
+	char			*outfile;
+	char			*hdoc_delim;
+	t_redirs		*redirs;
+	struct t_cmd	*next;
 }	t_cmd;
 
 /* main data storage */
