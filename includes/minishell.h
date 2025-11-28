@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/11/27 13:44:30 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:23:43 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ typedef struct	s_cmd
 	char			*infile;
 	char			*outfile;
 	char			*hdoc_delim;
+	bool			closed; // false if further input is needed through interaction
 	t_redirs		*redirs;
 	struct t_cmd	*next;
 }	t_cmd;
