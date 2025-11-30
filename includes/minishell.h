@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/11/29 15:14:04 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/30 14:01:53 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ int		ft_handle_heredoc(t_shell *shell, t_cmd *cmd, t_redirs *rdrs);
 void	ft_process_all_heredocs(t_shell *shell);
 
 // path_setup.c
-char	*ft_getpath(char *cmd, char **env;
+char	*ft_getpath(char *cmd, char **env);
 char	*ft_parse_env(char *name, char **env);
 void	ft_free_arr(char **arr);
 
