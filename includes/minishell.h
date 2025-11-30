@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/11/30 14:10:31 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/11/30 15:00:47 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ typedef struct	s_cmd
 	char			*outfile;
 	char			*hdoc_delim;
 	bool			closed; // false if further input is needed through interaction
+	bool			builtin;// true if is builtin command
 	t_redirs		*redirs;
 	struct t_cmd	*next;
 }	t_cmd;
