@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/01 17:43:39 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/01 19:38:55 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,7 @@ typedef struct	s_redirs
 /* command data structure */
 typedef struct	s_cmd
 {
-//	char			*name - no need anymore
 	char			**args;
-	// char			*infile;
-	// char			*outfile;
 	char			*hdoc_delim;
 	bool			closed; // false if further input is needed through interaction
 	bool			builtin;// true if is builtin command
