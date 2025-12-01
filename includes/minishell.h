@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/11/30 18:33:25 by kschmitt         ###   ########.fr       */
-=======
-/*   Updated: 2025/11/30 15:00:47 by aidarsharaf      ###   ########.fr       */
->>>>>>> 3bc9c4293671a51c1f12ee1d354b87d21274b012
+/*   Updated: 2025/12/01 17:43:39 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +99,8 @@ typedef struct	s_cmd
 {
 //	char			*name - no need anymore
 	char			**args;
-	char			*infile;
-	char			*outfile;
+	// char			*infile;
+	// char			*outfile;
 	char			*hdoc_delim;
 	bool			closed; // false if further input is needed through interaction
 	bool			builtin;// true if is builtin command
