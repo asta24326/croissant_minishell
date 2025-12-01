@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/11/30 18:33:25 by kschmitt         ###   ########.fr       */
+=======
+/*   Updated: 2025/11/30 15:00:47 by aidarsharaf      ###   ########.fr       */
+>>>>>>> 3bc9c4293671a51c1f12ee1d354b87d21274b012
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +107,7 @@ typedef struct	s_cmd
 	char			*outfile;
 	char			*hdoc_delim;
 	bool			closed; // false if further input is needed through interaction
+	bool			builtin;// true if is builtin command
 	t_redirs		*redirs;
 	struct t_cmd	*next;
 }	t_cmd;
@@ -137,7 +142,7 @@ void	ft_process_all_heredocs(t_shell *shell);
 // path_setup.c
 char	*ft_getpath(char *cmd, char **env);
 char	*ft_parse_env(char *name, char **env);
-void	ft_free_arr(char **arr);
+void	ft_free_arr_str(char **arr);
 
 // redirs_setup.c
 void	ft_setup_redirs(t_shell *shell, t_cmd *cmd);
