@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/02 16:05:11 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:06:46 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,10 @@ typedef struct	s_redirs
 typedef struct	s_cmd
 {
 //	char			*name - no need anymore
-	char			*args; //attention: needs to be turned back into array
+	char			**args;
 	// char			*infile;
 	// char			*outfile;
+	char			*hdoc_delim;
 	bool			closed; // false if further input is needed through interaction
 	bool			builtin;// true if is builtin command
 	t_redirs		*redirs;

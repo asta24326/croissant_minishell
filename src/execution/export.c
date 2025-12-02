@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 16:29:54 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/11/30 23:18:45 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/02 00:01:53 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	ft_export(t_shell *shell, t_cmd *cmd)
 	i = 0;
 	while (cmd->args[++i])
 	{
-		expand_var = ft_expand_vars(cmd->args[i], shell);
 		if (ft_is_valid_var(cmd->args[i]) == false)//check name of arg
 			return (FAILURE);
 		if (ft_set_export_var(shell, cmd->args[i]))
