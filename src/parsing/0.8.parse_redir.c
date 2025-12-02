@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   0.6.parse_redir.c                                  :+:      :+:    :+:   */
+/*   0.8.parse_redir.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 14:18:25 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/01 17:37:05 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/02 14:58:31 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ char	*blackout_quoted_content(char *str)
 
 
 
-- open fd
-- get sign
-- get filename/redir
--
+// - open fd
+// - get sign
+// - get filename/redir
+// -
 

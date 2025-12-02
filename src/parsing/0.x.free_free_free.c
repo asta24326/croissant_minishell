@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 15:02:19 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/11/27 15:18:03 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/02 13:46:20 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,4 +16,18 @@
 // HISTORY		void rl_clear_history(void)
 // PROMPT		free(prompt)
 
+// adjust to cmd_list
+void	free_stack(t_stack **stack)
+{
+	t_node	*tmp;
 
+	if (!stack || !*stack)
+		return ;
+	while (*stack)
+	{
+		tmp = (*stack)->next;
+		free(*stack);
+		*stack = tmp;
+	}
+	*stack = NULL;
+}

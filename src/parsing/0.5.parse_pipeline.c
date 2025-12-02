@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 15:06:57 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/01 17:41:14 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/02 13:34:08 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,10 +140,11 @@ int	parse_pipeline(char *pipeline, char **env)
 	minishell.pipe_count = get_pipe_count(pipeline);
 	minishell.pipes = NULL;							//handled in exec
 	minishell.env = env;
-	minishell.cmd = (t_cmd *)malloc(sizeof (t_cmd));
-	if (!minishell.cmd)
-		return (printf("memory allocation failed in t_shell (cmd).\n"), FAILURE);
-	ft_memset(minishell.cmd, 0, sizeof(*minishell.cmd));	//sets node to zero
+	minishell.cmd = NULL;							//will be handled in create_cmd_list;
+	// minishell.cmd = (t_cmd *)malloc(sizeof (t_cmd));
+	// if (!minishell.cmd)
+	// 	return (printf("memory allocation failed in t_shell (cmd).\n"), FAILURE);
+	// ft_memset(minishell.cmd, 0, sizeof(*minishell.cmd));	//sets node to zero
 	minishell.exit_status = 0;
 	return (SUCCESS);
 }

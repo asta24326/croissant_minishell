@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC =
+SRC = 
 
 OBJ = $(SRC:.c=.o)
 
