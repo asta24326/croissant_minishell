@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 22:27:14 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/02 00:10:56 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/02 22:47:30 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	ft_expand_all_vars(t_shell *shell)// main function to expand variables in al
 			curr_cmd->args[i] = ft_expand_arg(shell, curr_cmd->args[i]);
 		curr_cmd = curr_cmd->next;
 	}
+	return (SUCCESS);
 }
 
 char *ft_expand_arg(t_shell *shell, char *arg)
@@ -56,16 +57,16 @@ char *ft_handle_dollar(t_shell *shell, char *arg, char *result, int *i)
 {
 	size_t	var_len;
 
-	*i++;
+	(*i)++;
 	if (arg[*i] == '{')
-		ft_handle_braces(shell, arg, result, *i);
+		return (ft_handle_braces(shell, arg, result, *i));
 	else if (arg[*i] == '?')
-		ft_expand_question(shell, arg, result, *i);
+		return (ft_expand_question(shell, arg, result, *i));
 	else if (arg[*i] == '$')
-		ft_expand_pid(shell, arg, result, *i);
+		return (ft_expand_pid(shell, arg, result, *i));
 	else
-		ft_expand_env_var(shell, arg, result, *i);
-	return (result);
+		return (ft_expand_env_var(shell, arg, result, *i));
+	return (NULL);
 }
 
 size_t	ft_varlen(char *arg)
@@ -75,3 +76,5 @@ size_t	ft_varlen(char *arg)
 	len = -1;
 	return (len);
 }
+
+char *ft_handle_dollar()
