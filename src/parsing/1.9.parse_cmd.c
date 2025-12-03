@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   0.7.parse_cmd.c                                    :+:      :+:    :+:   */
+/*   1.9.parse_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 16:18:09 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/02 18:16:04 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/03 20:04:35 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int	get_redir_count(char *cmd_str)
 		if (is_token(*cmd_str))
 		{
 			count++;
+			cmd_str++;
 			// checks whether it is append or heredoc
 			// works because I did syntax check before
 			if (is_token(*cmd_str))
@@ -141,20 +142,38 @@ int	get_arg_count(char *cmd_str)
 
 // I AM HERE
 // attention, this cannot be blackout str
-char	**fillarr(char *cmd_str, char **arr)
+char	*get_cmd(char *cmd_str)
+{
+	int		i;
+	char	quote;
+
+	i = 0;
+	while (*cmd_str)
+	{
+		while (is_whitespace(*cmd_str))
+			cmd_str++;
+		if (is_quote(*cmd_str))
+		{
+			quote = *cmd_str;
+			if (quote == 34) //actually only needed if there is a $ in it (then, I'll keep the single quotation marks)
+				cmd_str++;
+		}
+	}
+}
+
+// I AM HERE
+// attention, this cannot be blackout str
+char	**fill_args_arr(char *cmd_str, char **arr)
 {
 	int	i;
 
 	i = 0;
 	while (*cmd_str)
-	{
-		while (is_whitespace(*cmd_str) || is_token(*cmd_str))
-		{
-
-		}
-	}
+	{}
+	get_cmd(cmd_str);
 }
 
+// this can go into parse_pipeline
 // the redirs need to be identified and taken out of the equation
 char	**create_cmd_arr(char *cmd_str)
 {

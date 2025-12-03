@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:55:55 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/11/30 15:20:40 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/03 19:56:43 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,19 @@ int	is_quote(char c)
 
 // works
 // checks whether c is '$' (prefix for env. arg.) or '-' (prefix for flag)
-int	is_prefix(char c)
+int	is_prefix(char c) //needed?
 {
 	if (c == 36 || c == 45)
 		return (1);
 	return (0);
+}
+
+// checks whether c is cmd/arg/flag/filename/delimiter
+int	is_other(char c)
+{
+	if (is_whitespace(c) || is_token(c) || is_quote(c))
+		return (0);
+	return (1);
 }
 
 // works

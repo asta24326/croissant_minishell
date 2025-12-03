@@ -6,110 +6,110 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 13:13:31 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/01 17:47:20 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/03 20:07:50 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // ---------------  - needs to go out!  --------------
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+// #include <readline/readline.h>
+// #include <readline/history.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <unistd.h>
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	j;
+// size_t	ft_strlcat(char *dst, const char *src, size_t size)
+// {
+// 	size_t	i;
+// 	size_t	j;
 
-	i = strlen(dst);
-	if (size <= i)
-		return (size + strlen(src));
-	j = 0;
-	while (src[j] && ((i + j) < (size - 1)))
-	{
-		dst[i + j] = src[j];
-		j++;
-	}
-	dst[i + j] = '\0';
-	return (i + strlen(src));
-}
+// 	i = strlen(dst);
+// 	if (size <= i)
+// 		return (size + strlen(src));
+// 	j = 0;
+// 	while (src[j] && ((i + j) < (size - 1)))
+// 	{
+// 		dst[i + j] = src[j];
+// 		j++;
+// 	}
+// 	dst[i + j] = '\0';
+// 	return (i + strlen(src));
+// }
 
-char	*ft_strjoin(const char *s1, const char *s2)
-{
-	char	*new;
-	size_t	len1;
-	size_t	len2;
+// char	*ft_strjoin(const char *s1, const char *s2)
+// {
+// 	char	*new;
+// 	size_t	len1;
+// 	size_t	len2;
 
-	len1 = strlen(s1);
-	len2 = strlen(s2);
-	new = (char *)calloc((len1 + len2 + 1), sizeof(char));
-	if (!new)
-		return (NULL);
-	ft_strlcat(new, s1, len1 + 1);
-	ft_strlcat(new, s2, len2 + len1 + 1);
-	return (new);
-}
+// 	len1 = strlen(s1);
+// 	len2 = strlen(s2);
+// 	new = (char *)calloc((len1 + len2 + 1), sizeof(char));
+// 	if (!new)
+// 		return (NULL);
+// 	ft_strlcat(new, s1, len1 + 1);
+// 	ft_strlcat(new, s2, len2 + len1 + 1);
+// 	return (new);
+// }
 
-char	*ft_strdup(const char *s)
-{
-	int		i;
-	char	*d;
+// char	*ft_strdup(const char *s)
+// {
+// 	int		i;
+// 	char	*d;
 
-	i = 0;
-	d = malloc(strlen(s) + 1);
-	if (!d)
-		return (NULL);
-	while (s[i])
-	{
-		d[i] = s[i];
-		i++;
-	}
-	d[i] = '\0';
-	return (d);
-}
+// 	i = 0;
+// 	d = malloc(strlen(s) + 1);
+// 	if (!d)
+// 		return (NULL);
+// 	while (s[i])
+// 	{
+// 		d[i] = s[i];
+// 		i++;
+// 	}
+// 	d[i] = '\0';
+// 	return (d);
+// }
 
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
-{
-	const char	*ptr;
+// size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+// {
+// 	const char	*ptr;
 
-	ptr = src;
-	if (size == 0)
-		return (strlen(src));
-	if (size != 0)
-	{
-		while (size > 1 && *src)
-		{
-			*dest++ = *src++;
-			size--;
-		}
-		*dest = '\0';
-	}
-	return (strlen(ptr));
-}
+// 	ptr = src;
+// 	if (size == 0)
+// 		return (strlen(src));
+// 	if (size != 0)
+// 	{
+// 		while (size > 1 && *src)
+// 		{
+// 			*dest++ = *src++;
+// 			size--;
+// 		}
+// 		*dest = '\0';
+// 	}
+// 	return (strlen(ptr));
+// }
 
-char	*ft_substr(const char *s, unsigned int start, size_t len)
-{
-	char			*sub;
-	unsigned int	max;
+// char	*ft_substr(const char *s, unsigned int start, size_t len)
+// {
+// 	char			*sub;
+// 	unsigned int	max;
 
-	if (!s)
-		return (NULL);
-	max = strlen(s);
-	if ((start >= max) || len == 0)
-		return (ft_strdup(""));
-	if (len > (size_t)strlen(s + start))
-		len = (size_t)strlen(s + start);
-	sub = malloc((len + 1) * sizeof(char));
-	if (!sub)
-		return (NULL);
-	s += start;
-	if (start < max)
-		ft_strlcpy(sub, s, len + 1);
-	return (sub);
-}
+// 	if (!s)
+// 		return (NULL);
+// 	max = strlen(s);
+// 	if ((start >= max) || len == 0)
+// 		return (ft_strdup(""));
+// 	if (len > (size_t)strlen(s + start))
+// 		len = (size_t)strlen(s + start);
+// 	sub = malloc((len + 1) * sizeof(char));
+// 	if (!sub)
+// 		return (NULL);
+// 	s += start;
+// 	if (start < max)
+// 		ft_strlcpy(sub, s, len + 1);
+// 	return (sub);
+// }
 // ---------------  libft functions - end!  --------------
 
 

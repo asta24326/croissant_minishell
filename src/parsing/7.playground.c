@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:24:38 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/02 17:38:04 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/03 19:34:32 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,56 +29,122 @@ int	is_token(char c)
 }
 
 // works
-// needed: str with blackout quotes
-// returns the number of redirs in cmd_str
-int	get_redir_count(char *cmd_str)
+// checks whether c is double or single quotation mark
+int	is_quote(char c)
 {
-	int	count;
-
-	count = 0;
-	while (*cmd_str)
-	{
-		// works because I excluded the pipes at this stage
-		if (is_token(*cmd_str))
-		{
-			count++;
-			// checks whether it is append or heredoc
-			// works because I did syntax check before
-			if (is_token(*cmd_str))
-				cmd_str++;
-		}
-		cmd_str++;
-	}
-	return (count);
+	if (c == 34 || c == 39)
+		return (1);
+	return (0);
 }
 
 // works
-// needed: str with blackout quotes
-// needed: how many redirs? (also with blackout quotes)
-int	get_arg_count(char *cmd_str)
+// checks whether c is '$' (prefix for env. arg.) or '-' (prefix for flag)
+int	is_prefix(char c)
 {
-	int	count;
+	if (c == 36 || c == 45)
+		return (1);
+	return (0);
+}
+
+// checks whether c is cmd/arg/flag/filename/delimiter
+int	is_other(char c)
+{
+	if (is_whitespace(c) || is_token(c) || is_quote(c))
+		return (0);
+	return (1);
+}
+
+//----------------------------------------------------------
+
+// ------------needs to go out---------------------
+size_t	ft_strlen(const char *s)
+{
 	int	i;
 
-	count = 0;
-	i = -1;
-	while (cmd_str[++i])
+	i = 0;
+	while (*s++)
+		i++;
+	return (i);
+}
+
+char	*ft_strdup(const char *s)
+{
+	size_t	s_len;
+	char	*dest;
+	size_t	i;
+
+	i = 0;
+	s_len = ft_strlen(s);
+	dest = (char *)malloc(sizeof(char) * (s_len + 1));
+	if (dest == NULL)
+		return (NULL);
+	while (s_len > i)
 	{
-		if (!is_whitespace(cmd_str[i]) && !is_token(cmd_str[i]))
-		{
-			count++;
-			// whitespace and token work as delimiter
-			while (cmd_str[i] && !is_whitespace(cmd_str[i])
-				&& !is_token(cmd_str[i]))
-				i++;
-		}
+		dest[i] = s[i];
+		i++;
 	}
-	// if redirs in cmd_str, substract it (aka substract the filename/delimiter)
-	return (count - (get_redir_count(cmd_str)));
+	dest[i] = '\0';
+	return (dest);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*dest;
+	size_t	str_len;
+	size_t	i;
+
+	if (!s)
+		return (NULL);
+	str_len = ft_strlen(s);
+	if (start >= str_len)
+		return (ft_strdup(""));
+	if (len > str_len - start)
+		len = str_len - start;
+	dest = (char *)malloc(sizeof(char) * (len + 1));
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (len > i)
+	{
+		dest[i] = s[start + i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+// ------------END (needs to go out)---------------------
+
+// returns length of cmd/flag/arg/env_arg
+int	get_arg_len(char *str)
+{
+	int	len;
+
+	len = 0;
+	while (!is_whitespace(*str) && !is_token(*str))
+	{
+		len++;
+		str++;
+	}
+	return (len);
+}
+
+// loops through cmd/flag/arg/env_arg and returns index after quote
+// int	parse_cmd(char *str, t_shell *minishell)
+int	parse_cmd(char *str)
+{
+	int		index;
+	char	*arg;
+
+	index = get_arg_len(str);
+	printf("%i\n", index);
+	arg = ft_substr(str, 0, index); // attention: memory allocation
+	printf("%s\n", arg);
+// >> add it to char **args
+	return (index);
 }
 
 
 int	main(void)
 {
-	printf("%i\n", get_arg_count("hellloooo -l '000' >oooops $ARG where? ?!?"));
+	parse_cmd("hello3.<($ARG>file   hey");
 }

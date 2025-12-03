@@ -6,11 +6,14 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 15:18:34 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/01 17:36:07 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:37:22 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+
+
 
 // works
 // takes the current byte at which we stopped and looks into the following one(s)
@@ -27,6 +30,8 @@ char	sneak_preview(char *str)
 	}
 	return (0);
 }
+
+
 
 
 int	parse(char *pipeline, char **env)
@@ -52,3 +57,8 @@ int	parse(char *pipeline, char **env)
 	//parsing
 	return (SUCCESS);
 }
+
+
+
+
+

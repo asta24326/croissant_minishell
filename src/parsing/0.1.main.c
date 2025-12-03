@@ -6,12 +6,13 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 15:34:19 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/01 17:46:50 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/03 20:06:40 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+// WIP
 int	main(int ac, char **av, char **env)
 {
 	(void)ac;									//alternative: check if ac == 1, else error
