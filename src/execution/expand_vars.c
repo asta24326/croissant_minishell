@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 22:27:14 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/02 22:47:30 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/04 06:27:47 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,30 @@ char *ft_handle_dollar(t_shell *shell, char *arg, char *result, int *i)
 	return (NULL);
 }
 
-size_t	ft_varlen(char *arg)
+char *ft_handle_braces(t_shell *shell, char *arg, char *result, int *i)
 {
-	size_t	len;
+	size_t	var_len;
 
-	len = -1;
-	return (len);
+	(*i)++; 
+	while (!(arg[*i] == '}' || arg[*i] == '='))
+		(*i)++;
+	var_len = (*i);
+
+
 }
 
-char *ft_handle_dollar()
+bool	ft_is_valid_var_name(char *var, size_t var_len)
+{
+	int	i;
+
+	if (!var || var_len == 0)
+		return (false);
+	if (var[0] != '_' && !ft_is_alpha(var[0]))//first char: letter or underscore
+		return (false);
+	i = 0;
+	while (++i < var_len)//cheking the rest of the char
+		if ((var[i] != '_') && !ft_isalnum(var[i]))
+			return (false);
+	return (true);
+}
+
