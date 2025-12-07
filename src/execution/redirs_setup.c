@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 20:44:31 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/11/26 23:10:21 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/07 17:48:46 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_setup_redirs(t_shell *shell, t_cmd *cmd)
 	temp = cmd;
 	while (temp)
 	{
-		if (temp->hdoc_delim)
+		if (temp->redirs->hdoc_delim)
 		{
 			dup2(temp->redirs->hdoc_fd[0], STDIN_FILENO);
 			close(temp->redirs->hdoc_fd[0]);
