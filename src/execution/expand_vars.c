@@ -6,93 +6,87 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 22:27:14 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/04 06:27:47 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/07 17:42:02 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_expand_all_vars(t_shell *shell)// main function to expand variables in all commands
+static bool	ft_is_valid_var_char(int c)
+{
+	if (ft_isalnum(c) || c == '_')
+		return (true);
+	return (false);
+}
+
+int	ft_expand_all_args(t_shell *shell)// main function to expand variables in all commands
 {
 	t_cmd	*curr_cmd;
 	int		i;
+	char	*expanded;
 
 	curr_cmd = shell->cmd;
 	while (curr_cmd)
 	{
 		i = -1;
 		while (curr_cmd->args && curr_cmd->args[++i])// got through every coommand in list
-			curr_cmd->args[i] = ft_expand_arg(shell, curr_cmd->args[i]);
+		{
+			expanded = ft_expand_arg(shell, curr_cmd->args[i]);
+			if (!expanded)
+				return (FAILURE);
+			free(curr_cmd->args[i]);
+			curr_cmd->args[i] = expanded;// adding expanded string
+		}
 		curr_cmd = curr_cmd->next;
 	}
 	return (SUCCESS);
 }
 
-char *ft_expand_arg(t_shell *shell, char *arg)
+char	*ft_expand_arg(t_shell *shell, char *arg)
 {
-	char	*result;
-	int		i;
-	bool	in_qts;
-
-	result = ft_strdup("");
-	i = -1;
-	in_qts = false;
-	while (arg[++i])
+	if (!arg)
+		return (NULL);
+	if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')//case if there is ' '
+		return (ft_substr(arg, 1, ft_strlen(arg) - 2));// simply returning string
+	if (arg[0] == '$')
 	{
-		if (arg[i] == '\'')// toogle single quote state
-		{
-			in_qts = !in_qts;
-			continue ;// skip the quote character
-		}
-		if (arg[i] == '$' && arg[i+1] && in_qts == false)
-			result = ft_handle_dollar(shell, arg, result, &i);
-		else
-			result = ft_append_char(arg[i], result);
+		if (arg[1] == '?')
+			return (ft_itoa(shell->exit_status));
+		if (arg[1] == '$')
+			return (ft_itoa(shell->shell_pid));
+		if (arg[1] && ft_is_valid_var_char(arg[1]) == true)
+			return (ft_expand_env_var(shell, arg));
+		return (ft_strdup(arg));
 	}
-	free(arg);
-	return (result);
+	return (ft_strdup(arg));
 }
 
-char *ft_handle_dollar(t_shell *shell, char *arg, char *result, int *i)
+char	*ft_expand_env_var(t_shell *shell, char *arg)
 {
-	size_t	var_len;
+	int		i;
+	size_t	var_name_len;
+	char	*result;
 
-	(*i)++;
-	if (arg[*i] == '{')
-		return (ft_handle_braces(shell, arg, result, *i));
-	else if (arg[*i] == '?')
-		return (ft_expand_question(shell, arg, result, *i));
-	else if (arg[*i] == '$')
-		return (ft_expand_pid(shell, arg, result, *i));
-	else
-		return (ft_expand_env_var(shell, arg, result, *i));
-	return (NULL);
+	var_name_len = ft_get_var_name_len(arg + 1);
+	i = -1;
+	while (shell->env[++i])
+	{
+		if (ft_strncmp(shell->env[i], arg + 1, var_name_len) == 0
+			&& shell->env[i][var_name_len] == '=')
+		{
+			result = ft_strdup(ft_strchr(shell->env[i], '=') + 1);
+			return (result);
+		}
+	}
+	return (ft_strdup(""));
 }
 
-char *ft_handle_braces(t_shell *shell, char *arg, char *result, int *i)
+size_t	ft_get_var_name_len(char *arg)
 {
-	size_t	var_len;
+	size_t	len;
 
-	(*i)++; 
-	while (!(arg[*i] == '}' || arg[*i] == '='))
-		(*i)++;
-	var_len = (*i);
-
-
+	len = 0;
+	while (arg[len] && arg[len] != '=')
+		len++;
+	return (len);
 }
-
-bool	ft_is_valid_var_name(char *var, size_t var_len)
-{
-	int	i;
-
-	if (!var || var_len == 0)
-		return (false);
-	if (var[0] != '_' && !ft_is_alpha(var[0]))//first char: letter or underscore
-		return (false);
-	i = 0;
-	while (++i < var_len)//cheking the rest of the char
-		if ((var[i] != '_') && !ft_isalnum(var[i]))
-			return (false);
-	return (true);
-}
-

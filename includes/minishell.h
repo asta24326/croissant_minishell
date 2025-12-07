@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/06 14:41:47 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/07 17:45:19 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,13 @@ typedef struct	s_redirs
 typedef struct	s_cmd
 {
 //	char			*name - no need anymore
-	char			**cmd;	//changed name
+	char			**args;	//changed name
 	// char			*infile;
 	// char			*outfile;
 	// bool			closed; // false if further input is needed through interaction
 	bool			builtin;// true if is builtin command
 	t_redirs		*redirs;
-	struct t_cmd	*next;
+	struct s_cmd	*next;
 }	t_cmd;
 
 /* main data storage */
@@ -115,11 +115,12 @@ typedef struct	s_shell
 	char	**env;
 	t_cmd	*cmd;
 	int		exit_status;
+	pid_t	shell_pid;
 }	t_shell;
 
 /* FUNCTIONS */
-/* execution folder */
 
+/* execution folder */
 // 1.1 exec_cmds.c
 void	ft_exec_cmds(t_shell *shell, t_cmd *cmd);
 void	ft_exec_solo_cmd(t_shell *shell, t_cmd *cmd);
@@ -147,6 +148,12 @@ int		ft_cd(t_shell *shell, t_cmd *cmd);
 
 // echo.c
 int		ft_echo(t_cmd *cmd);
+
+// expand_vars.c
+int		ft_expand_all_args(t_shell *shell);
+char	*ft_expand_arg(t_shell *shell, char *arg);
+char	*ft_expand_env_var(t_shell *shell, char *arg);
+size_t	ft_get_var_name_len(char *arg);
 
 
 #endif

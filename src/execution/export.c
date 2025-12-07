@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 16:29:54 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/03 21:00:57 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/06 15:36:45 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_export(t_shell *shell, t_cmd *cmd)
 	i = 0;
 	while (cmd->args[++i])
 	{
-		if (ft_is_valid_var(cmd->args[i]) == false)//check name of arg
+		if (ft_is_valid_var_name(cmd->args[i]) == false)//check name of arg
 			return (FAILURE);
 		if (ft_set_export_var(shell, cmd->args[i]))
 			return (perror("set env var failed"), FAILURE);
@@ -128,4 +128,21 @@ static size_t	ft_keylen(char *arg)
 	while (arg[len] && arg[len] != '=')
 		len++;
 	return (len);
+}
+
+bool	ft_is_valid_var_name(char *var)
+{
+	int	i;
+	size_t	var_len;
+
+	var_len = ft_strlen(var);
+	if (!var || var_len == 0)
+		return (false);
+	if (var[0] != '_' && !ft_is_alpha(var[0]))//first char: letter or underscore
+		return (false);
+	i = 0;
+	while (++i < var_len)//cheking the rest of the char
+		if ((var[i] != '_') && !ft_isalnum(var[i]))
+			return (false);
+	return (true);
 }
