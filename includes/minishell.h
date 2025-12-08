@@ -125,41 +125,86 @@ typedef struct	s_shell
 /* execution folder */
 
 // env_init.c - initialisation copy of env
-char	**ft_env_dup(char **env);
+char		**ft_env_dup(char **env);
 
 // 1.1 exec_cmds.c
-void	ft_exec_cmds(t_shell *shell, t_cmd *cmd);
-void	ft_exec_solo_cmd(t_shell *shell, t_cmd *cmd);
-bool	ft_is_builtin(char *cmd_name);
-int		ft_pipes_init(t_shell *shell);
+void		ft_exec_cmds(t_shell *shell, t_cmd *cmd);
+void		ft_exec_solo_cmd(t_shell *shell, t_cmd *cmd);
+bool		ft_is_builtin(char *cmd_name);
+int			ft_pipes_init(t_shell *shell);
 
 // builtin_1.c
-int		ft_echo(t_cmd *cmd);
-int		ft_cd(t_shell *shell, t_cmd *cmd);
+int			ft_echo(t_cmd *cmd);
+int			ft_cd(t_shell *shell, t_cmd *cmd);
 
 // heredoc_handle.c
-int		ft_handle_heredoc(t_shell *shell, t_cmd *cmd, t_redirs *rdrs);
-void	ft_process_all_heredocs(t_shell *shell);
+int			ft_handle_heredoc(t_shell *shell, t_cmd *cmd, t_redirs *rdrs);
+void		ft_process_all_heredocs(t_shell *shell);
 
 // path_setup.c
-char	*ft_getpath(char *cmd, char **env);
-char	*ft_parse_env(char *name, char **env);
-void	ft_free_arr_str(char **arr);
+char		*ft_getpath(char *cmd, char **env);
+char		*ft_parse_env(char *name, char **env);
+void		ft_free_arr_str(char **arr);
 
 // redirs_setup.c
-void	ft_setup_redirs(t_shell *shell, t_cmd *cmd);
+void		ft_setup_redirs(t_shell *shell, t_cmd *cmd);
 
 // cd.c
-int		ft_cd(t_shell *shell, t_cmd *cmd);
+int			ft_cd(t_shell *shell, t_cmd *cmd);
 
 // echo.c
-int		ft_echo(t_cmd *cmd);
+int			ft_echo(t_cmd *cmd);
 
 // expand_vars.c
-int		ft_expand_all_args(t_shell *shell);
-char	*ft_expand_arg(t_shell *shell, char *arg);
-char	*ft_expand_env_var(t_shell *shell, char *arg);
-size_t	ft_get_var_name_len(char *arg);
+int			ft_expand_all_args(t_shell *shell);
+char		*ft_expand_arg(t_shell *shell, char *arg);
+char		*ft_expand_env_var(t_shell *shell, char *arg);
+size_t		ft_get_var_name_len(char *arg);
 
+
+/* parsing folder */
+
+// minishell_initialization.c
+int			init_minishell(char **env);
+void		handle_signal(int signum);
+const char	*get_prompt(void);
+
+// parse_pipeline.c
+void		parse_pipeline(char *pipeline, char **env);
+int			get_pipe_count(char *pipeline);
+
+// syntax_check.c
+int			is_valid_syntax(char *str);
+int			are_valid_pipes(char *str);
+int			is_valid_redir(char *str);
+
+// syntax_utils.c
+char		*blackout_quoted_content(char *str);
+int			is_whitespace(char c);
+int			is_token(char c);
+int			is_quote(char c);
+int			is_other(char c);
+
+// create_cmd_lst.c
+void		create_cmd_list(char *pipeline, int cmd_count, t_shell *minishell);
+void		add_node(t_cmd **list, t_cmd *new);
+t_cmd		*create_node(char *cmd_line);
+
+// create_args_arr.c
+void		create_args_arr(char *cmd_str, t_cmd *cmd);
+void		fill_args_arr(char *arg_str, t_cmd *cmd);
+int			get_arg_count(char *copy);
+int			get_redir_count(char *copy);
+
+// tokenize.c
+void		tokenize(char *cmd_str, t_cmd *cmd);
+
+// parse_quote.c
+int			parse_quote(char *str, t_cmd *cmd);
+int			get_quot_len(char *str, char quot_mark, int *env_arg);
+
+//parse_cmd.c
+int			parse_cmd(char *str, t_cmd *cmd);
+int			get_arg_len(char *str);
 
 #endif
