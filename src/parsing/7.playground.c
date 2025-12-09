@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:24:38 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/04 18:15:37 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:41:23 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	is_whitespace(char c)
 
 // works
 // checks whether c is pipe, right or left arrow
-int	is_token(char c)
+int	is_operator(char c)
 {
 	if (c == 124 || c == 60 || c == 62)
 		return (1);
@@ -49,7 +49,7 @@ int	is_prefix(char c)
 // checks whether c is cmd/arg/flag/filename/delimiter
 int	is_other(char c)
 {
-	if (is_whitespace(c) || is_token(c) || is_quote(c))
+	if (is_whitespace(c) || is_operator(c) || is_quote(c))
 		return (0);
 	return (1);
 }
@@ -157,7 +157,7 @@ int	get_arg_len(char *str)
 	int	len;
 
 	len = 0;
-	while (!is_whitespace(*str) && !is_token(*str))
+	while (!is_whitespace(*str) && !is_operator(*str))
 	{
 		len++;
 		str++;
@@ -181,13 +181,13 @@ int	parse_cmd(char *str)
 }
 
 
-// void	tokenize(char *cmd_str, t_shell *minishell)
-void	tokenize(char *cmd_str)
+// void	operatorize(char *cmd_str, t_shell *minishell)
+void	operatorize(char *cmd_str)
 {
 	int	i;
 
 	i = 0;
-	// loops through cmd_str and sets i to byte after token
+	// loops through cmd_str and sets i to byte after operator
 	printf("start:%s\n", cmd_str);
 	while (cmd_str[i])
 	{
@@ -203,12 +203,12 @@ void	tokenize(char *cmd_str)
 			cmd_str += 7;
 			printf("other!-%s\n", cmd_str);
 		}
-		// works because at this point, the pipe tokens were taken out already
-		if (is_token(cmd_str[i]))
+		// works because at this point, the pipe operators were taken out already
+		if (is_operator(cmd_str[i]))
 		{
 			// cmd_str += parse_redir(cmd_str + i);
 			cmd_str += 6;
-			printf("token!-%s\n", cmd_str);
+			printf("operator!-%s\n", cmd_str);
 		}
 		cmd_str++;
 	}
@@ -257,11 +257,11 @@ int	get_redir_count(char *copy)
 	while (copy[++i])
 	{
 		// works because pipes have been taken out and quotes are blacked out
-		if (is_token(copy[i]))
+		if (is_operator(copy[i]))
 		{
 			count++;
 			i++;
-			if (is_token(copy[i]))
+			if (is_operator(copy[i]))
 				i++;
 		}
 	}
@@ -279,12 +279,12 @@ int	get_arg_count(char *copy)
 	i = -1;
 	while (copy[++i])
 	{
-		if (!is_whitespace(copy[i]) && !is_token(copy[i]))
+		if (!is_whitespace(copy[i]) && !is_operator(copy[i]))
 		{
 			count++;
-			// whitespace and token work as delimiter
+			// whitespace and operator work as delimiter
 			while (copy[i] && !is_whitespace(copy[i])
-				&& !is_token(copy[i]))
+				&& !is_operator(copy[i]))
 				i++;
 		}
 	}
@@ -301,7 +301,7 @@ void	fill_args_arr(char *arg_str, t_cmd *cmd)
 	cmd->args[i] = arg_str;
 	i++;
 	// NULL-terminate array and reset i to 0 when all cmds were handled
-	if (i == cmd->arg_count)
+	if (i == cmd->args_count)
 	{
 		cmd->args[i] = NULL;
 		i = 0;
@@ -316,9 +316,9 @@ void	create_args_arr(char *cmd_str, t_cmd *cmd)
 	char	*copy;
 
 	copy = blackout_quoted_content(cmd_str);
-	cmd->arg_count = get_arg_count(copy);
+	cmd->args_count = get_arg_count(copy);
 	// calloc needed as single strings are not filled immediatly
-	cmd->args = calloc(cmd->arg_count + 1, sizeof(char *)); //attention: memory allocation
+	cmd->args = calloc(cmd->args_count + 1, sizeof(char *)); //attention: memory allocation
 	free (copy);
 }
 
@@ -328,62 +328,62 @@ void	create_args_arr(char *cmd_str, t_cmd *cmd)
 // 	int		i;
 
 // 	i = 0;
-// 	create_args_arr("hello3. <($ARG  'whooop' hey", &cmd);
-// 	printf("args count = %i\n", cmd.arg_count);
+// 	create_args_arr("hello3. >'file'1  'whooop'whoop hey'jou'", &cmd);
+// 	printf("args count = %i\n", cmd.args_count);
 // 	fill_args_arr("args", &cmd);
 // 	fill_args_arr("'whooop'", &cmd);
 // 	fill_args_arr("hey", &cmd);
-// 	while (i < cmd.arg_count)
+// 	while (i < cmd.args_count)
 // 	{
 // 		printf("arg[%i]: %s\n", i, cmd.args[i]);
 // 		i++;
 // 	}
 // }
 
-// t_cmd	*create_cmd_list(char *pipeline, int cmd_count, t_shell *minishell)
-// {
-// 	char	**arr;
-// 	t_cmd	*list;
-// 	int		i;
+t_cmd	*create_cmd_list(char *pipeline, int cmd_count, t_shell *minishell)
+{
+	char	**arr;
+	t_cmd	*list;
+	int		i;
 
-// 	// splits the pipeline into its cmd-lines
-// 	arr = ft_split(pipeline, 124);
-// 	// initiates the list, creates first node with entire cmd line
-// 	list = create_node(arr[0]);
-// 	printf("first node: %s\n", list->args);
-// 	i = 0;
-// 	// creates entire list by passing 1 cmd-line per node
-// 	while (++i < cmd_count)
-// 		add_node(&list, create_node(arr[i]));
-// 	// print_list(list);
-// 	minishell->cmd = list;
-// 	ft_free_arr(arr); // double check if ready for freeing here already, include function into libft if not there
-// 	return (list);
-// }
+	// splits the pipeline into its cmd-lines
+	arr = ft_split(pipeline, 124);
+	// initiates the list, creates first node with entire cmd line
+	list = create_node(arr[0]);
+	printf("first node: %s\n", list->args);
+	i = 0;
+	// creates entire list by passing 1 cmd-line per node
+	while (++i < cmd_count)
+		add_node(&list, create_node(arr[i]));
+	// print_list(list);
+	minishell->cmd = list;
+	ft_free_arr(arr); // double check if ready for freeing here already, include function into libft if not there
+	return (list);
+}
 
-// // works
-// // extracts data for the t_shell structure
-// void	parse_pipeline(char *pipeline, char **env)
-// {
-// 	t_shell	minishell;
+// works
+// extracts data for the t_shell structure
+void	parse_pipeline(char *pipeline, char **env)
+{
+	t_shell	minishell;
 
-// 	// if (!is_valid_syntax(pipeline))
-// 	// 	return (printf("Syntax error.\n"), FAILURE);
-// 	// minishell.pipe_count = get_pipe_count(pipeline);
-// 	// minishell.pipes = NULL; //handled in exec
-// 	minishell.env = env;
-// 	create_cmd_list(pipeline, minishell.pipe_count + 1, &minishell);
-// 	minishell.exit_status = 0;
-// 	// execute(&minishell); //passing to execution
-// }
+	// if (!is_valid_syntax(pipeline))
+	// 	return (printf("Syntax error.\n"), FAILURE);
+	// minishell.pipe_count = get_pipe_count(pipeline);
+	// minishell.pipes = NULL; //handled in exec
+	minishell.env = env;
+	create_cmd_list(pipeline, minishell.pipe_count + 1, &minishell);
+	minishell.exit_status = 0;
+	// execute(&minishell); //passing to execution
+}
 
-// ----------for testing only-----------------------
-// int	main(int ac, char **av, char **env)
-// {
-// 	(void)ac;
-// 	(void)av;
-// 	parse_pipeline("hello | string | another ||", env);
-// }
+----------for testing only-----------------------
+int	main(int ac, char **av, char **env)
+{
+	(void)ac;
+	(void)av;
+	parse_pipeline("hello | string | another ||", env);
+}
 
 static int	ft_strcount(const char *s, char c)
 {

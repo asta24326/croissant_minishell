@@ -1,30 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   0.1.main.c                                         :+:      :+:    :+:   */
+/*   4.4.handle_unclosed_quotes.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/23 15:34:19 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/08 18:22:11 by kschmitt         ###   ########.fr       */
+/*   Created: 2025/12/04 13:30:21 by kschmitt          #+#    #+#             */
+/*   Updated: 2025/12/08 18:17:25 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// Structure logic
-// 0.x. overall
-// 1.x. pipeline level (input str)
-// 2.x. command string level (input str split by pipes)
-// 3.x. token level (arg vs. redir)
-// 4.x. argument level (cmd, built-in cmd, flag, arg, env. arg, quotes)
-
 // works
-int	main(int ac, char **av, char **env)
+// checks whether quotes are closed
+// attention: I need to get rest of quote if this function returns 0
+int	quotes_are_closed(char *cmd_line)
 {
-	(void)ac;
-	(void)av;
-	if (!init_minishell(env))
-		return (printf("Error with initialization.\n"), 1);
-	return (0);
+	char	quote;
+	int		flag;
+
+	flag = 0;
+	while (*cmd_line)
+	{
+		if (is_quote(*cmd_line) && flag == 0)
+		{
+			quote = *cmd_line;
+			flag = 1;
+			cmd_line++;
+		}
+		if (*cmd_line == quote && flag == 1)
+			flag = 0;
+		cmd_line++;
+	}
+	if (flag == 1)
+		return (0);
+	return (1);
 }

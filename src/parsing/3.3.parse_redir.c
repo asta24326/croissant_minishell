@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   0.10.parse_redir.c                                 :+:      :+:    :+:   */
+/*   3.3.parse_redir.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 14:18:25 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/04 11:43:59 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:56:28 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 // 	return (0);
 // }
 
-// int	is_token(char c)
+// int	is_operator(char c)
 // {
 // 	if (c == 124 || c == 60 || c == 62)
 // 		return (1);
@@ -113,11 +113,11 @@ int	get_redir_count(char *cmd_str)
 	while (copy[i])
 	{
 		// works because pipes have been taken out and quotes are blacked out
-		if (is_token(copy[i]))
+		if (is_operator(copy[i]))
 		{
 			count++;
 			i++;
-			if (is_token(copy[i]))
+			if (is_operator(copy[i]))
 				i++;
 		}
 		i++;

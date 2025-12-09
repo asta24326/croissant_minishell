@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:55:55 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/04 18:33:39 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:39:38 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	is_valid_redir(char *str)
 		str++;
 	// ensures a valid filename or delimiter is linked to redir sign
 	// ensures the amount of redir sign does not exceed 2 in a row
-	if (is_token(*str) || *str == 45 || !*str)
+	if (is_operator(*str) || *str == 45 || !*str)
 		return (ft_printf("Syntax error. No filename/delimiter."), 0);
 	// ensures quotes are non-empty
 	else if (is_quote(*str))
@@ -60,7 +60,7 @@ int	are_valid_pipes(char *str)
 	flag_redir = 0;
 	while (*str)
 	{
-		if (!(is_whitespace(*str)) && !(is_token(*str)) && !(is_prefix(*str))
+		if (!(is_whitespace(*str)) && !(is_operator(*str)) && !(is_prefix(*str))
 			&& flag_cmd == 0)
 			flag_cmd = 1;
 		if (*str == 60 || *str == 62)

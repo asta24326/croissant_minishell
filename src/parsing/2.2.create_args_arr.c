@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 19:37:46 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/04 18:38:22 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:46:11 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ int	get_redir_count(char *copy)
 	while (copy[++i])
 	{
 		// works because pipes have been taken out and quotes are blacked out
-		if (is_token(copy[i]))
+		if (is_operator(copy[i]))
 		{
 			count++;
 			i++;
-			if (is_token(copy[i]))
+			if (is_operator(copy[i]))
 				i++;
 		}
 	}
@@ -76,12 +76,12 @@ int	get_arg_count(char *copy)
 	i = -1;
 	while (copy[++i])
 	{
-		if (!is_whitespace(copy[i]) && !is_token(copy[i]))
+		if (!is_whitespace(copy[i]) && !is_operator(copy[i]))
 		{
 			count++;
-			// whitespace and token work as delimiter
+			// whitespace and operator work as delimiter
 			while (copy[i] && !is_whitespace(copy[i])
-				&& !is_token(copy[i]))
+				&& !is_operator(copy[i]))
 				i++;
 		}
 	}
@@ -99,12 +99,14 @@ void	fill_args_arr(char *arg_str, t_cmd *cmd)
 	cmd->args[i] = arg_str;
 	i++;
 	// NULL-terminate array and reset i to 0 when all cmds were handled
-	if (i == cmd->arg_count)
+	if (i == cmd->args_count)
 	{
 		cmd->args[i] = NULL;
 		i = 0;
 	}
 }
+
+
 
 // works, no memory leaks
 // sets the arg_count and the args_arr for cmd node
@@ -113,8 +115,9 @@ void	create_args_arr(char *cmd_str, t_cmd *cmd)
 	char	*copy;
 
 	copy = blackout_quoted_content(cmd_str);
-	cmd->arg_count = get_arg_count(copy);
+	cmd->args_count = get_arg_count(copy);
 	// calloc needed as single strings are not filled immediatly
-	cmd->args = ft_calloc(cmd->arg_count + 1, sizeof(char *)); //attention: memory allocation
+	cmd->args = ft_calloc(cmd->args_count + 1, sizeof(char *)); //attention: memory allocation
+	tokenize(cmd_str, cmd);
 	free (copy);
 }

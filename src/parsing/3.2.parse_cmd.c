@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   3.3.parse_cmd.c                                    :+:      :+:    :+:   */
+/*   3.2.parse_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:49:19 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/04 13:20:08 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:56:31 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	get_arg_len(char *str)
 	int	len;
 
 	len = 0;
-	while (!is_whitespace(*str) && !is_token(*str))
+	while (*str && !is_whitespace(*str) && !is_operator(*str))
 	{
 		len++;
 		str++;

@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:58:07 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/04 13:58:54 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:39:33 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	is_whitespace(char c)
 
 // works
 // checks whether c is pipe, right or left arrow
-int	is_token(char c)
+int	is_operator(char c)
 {
 	if (c == 124 || c == 60 || c == 62)
 		return (1);
@@ -44,7 +44,7 @@ int	is_quote(char c)
 // checks whether c is cmd/arg/flag/filename/delimiter
 int	is_other(char c)
 {
-	if (is_whitespace(c) || is_token(c) || is_quote(c))
+	if (is_whitespace(c) || is_operator(c) || is_quote(c))
 		return (0);
 	return (1);
 }
