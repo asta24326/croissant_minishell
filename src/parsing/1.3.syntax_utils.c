@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:58:07 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/08 17:39:33 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:12:41 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,15 @@ int	is_whitespace(char c)
 int	is_operator(char c)
 {
 	if (c == 124 || c == 60 || c == 62)
+		return (1);
+	return (0);
+}
+
+// works
+// checks whether c is right or left arrow
+int	is_redir(char c)
+{
+	if (c == 60 || c == 62)
 		return (1);
 	return (0);
 }

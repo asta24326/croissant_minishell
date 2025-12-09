@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:40:26 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/08 11:59:08 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:22:59 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,7 +261,7 @@ t_cmd	*create_node(char *cmd_line)
 		return (printf("Error with node creation.\n"), NULL);
 	//extracts char **args and int args_count;
 	create_args_arr(cmd_line, new);
-	// new->builtin = is_builtin_cmd(cmd_line); //only when I identified cmd - TODO
+	new->builtin = is_builtin_cmd(new);
 	// new->redirs = extract_redir_data(cmd_line); //will be handled in parse_redir - TODO
 	new->next = NULL;
 	return (new);

@@ -6,112 +6,105 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:55:55 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/08 17:39:38 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/09 19:28:18 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // works
-// checks whether redirection has correct syntax
-// takes the current byte which is a redir sign
-// attention: I do not handle non-closed quotes (as discussed)
-int	is_valid_redir(char *str)
+// checks whether pipe is valid (it needs at least 1 cmd or 1 redir on left side)
+int	are_valid_pipes(char *copy)
 {
-	char	redir_sign;
-	char	quot_mark;
+	int	flag;
 
-	redir_sign = *str;
-	str++;
-	// ensures that directly following byte is the same (if there is one)
-	if (*str == 60 || *str == 62)
+	flag = 0;
+	while (*copy)
 	{
-		if (*str != redir_sign)
-			return (ft_printf("Syntax error. Mixed redir signs."), 0);
-		str++;
+		if (is_quote(*copy) || is_redir(*copy) || is_other(*copy))
+			flag = 1;
+		else if (*copy == 124)
+		{
+			if (flag == 0)
+				return (printf("Syntax error. Missing command/redir.\n"), false);
+			flag = 0;
+		}
+		copy++;
 	}
-	// loops through whitespaces if needed
-	while (is_whitespace(*str))
-		str++;
-	// ensures a valid filename or delimiter is linked to redir sign
-	// ensures the amount of redir sign does not exceed 2 in a row
-	if (is_operator(*str) || *str == 45 || !*str)
-		return (ft_printf("Syntax error. No filename/delimiter."), 0);
-	// ensures quotes are non-empty
-	else if (is_quote(*str))
-	{
-		quot_mark = *str;
-		str++;
-		if (*str == quot_mark)
-			return (ft_printf("Syntax error. No filename/delimiter."), 0);
-	}
-	return (1);
+	return (true);
 }
 
 // works
-// checks whether pipe is valid (it needs at least 1 cmd or 1 redir on left side)
-// loops through entire input str
-int	are_valid_pipes(char *str)
+// checks whether redirection has exactly 1 or 2 same arrows, +filename/delimiter
+int	are_valid_redirs(char *copy)
 {
-	int		flag_cmd;
-	int		flag_redir;
+	int		i;
 
-	flag_cmd = 0;
-	flag_redir = 0;
-	while (*str)
+	i = -1;
+	while (copy[++i])
 	{
-		if (!(is_whitespace(*str)) && !(is_operator(*str)) && !(is_prefix(*str))
-			&& flag_cmd == 0)
-			flag_cmd = 1;
-		if (*str == 60 || *str == 62)
-			flag_redir = 1;
-		if (*str == 124 || !*str)
+		if (is_redir(copy[i]))
 		{
-			if (flag_cmd == 0 && flag_redir == 0)
-				return (printf("Syntax error. Missing command/redir.\n"), 0);
-			if (*str == 124)
-				flag_cmd = 0;
+			i++;
+			if (copy[i] == copy[i - 1]) //case: double arrow
+				i++;
+			while (is_whitespace(copy[i]))
+				i++;
+			if (is_quote(copy[i]) && !is_quote(copy[i + 1])) //case:quoted filename/delimiter
+				i++;
+			if (!is_other(copy[i])) //MUST be other
+				return (printf("Syntax error. Invalid redir(s).\n"), false);
 		}
-		str++;
 	}
-	return (1);
+	return (true);
+}
+
+// works
+// checks whether quotes are closed
+int	are_closed_quotes(char *copy)
+{
+	char	quot_mark;
+
+	quot_mark = 0;
+	while (*copy)
+	{
+		if (is_quote(*copy) & !quot_mark)
+			quot_mark = *copy;
+		else if (*copy == quot_mark)
+			quot_mark = 0;
+		copy++;
+	}
+	if (quot_mark == 0)
+		return (true);
+	return (false);
 }
 
 // works, no memory leaks
-// checks overall syntax of input str
-// attention: I do not handle non-closed quotes (as discussed)
-int	is_valid_syntax(char *str)
+// checks overall syntax of input pipeline
+int	is_valid_syntax(char *pipeline)
 {
 	char	*copy;
-	int		i;
 
-	copy = blackout_quoted_content(str);
-	if (!(are_valid_pipes(copy)))
-		return (printf("Syntax error. Pipe(s) invalid.\n"), 0);
-	i = 0;
-	while (copy[i])
-	{
-		//check redirections 1 by 1
-		if (copy[i] == 60 || copy[i] == 62)
-		{
-			if (!(is_valid_redir(copy + i)))
-				return (printf("Syntax error. Redir(s) invalid.\n"), 0);
-		}
-		i++;
-	}
+	copy = blackout_quoted_content(pipeline);
+	if (!are_valid_pipes(copy))
+		return (printf("Syntax error. Pipe(s) invalid.\n"), free(copy), false);
+	if (!are_valid_redirs(copy))
+		return (printf("Syntax error. Redir(s) invalid.\n"), free(copy), false);
+	if (!are_closed_quotes(copy))
+		return (printf("Syntax error. Unclosed quote(s).\n"), free(copy), false);
 	free(copy);
-	return (1);
+	return (true);
 }
 
 // // only for testing--------------
 // int	main(void)
 // {
-// 	char	*str;
+// 	char	*pipeline;
 // 	int		i;
 
-// 	str = "''";
-// 	// str = "echo 'hi' hello | cat -l $USER | >> filex | j";
-// 	if (!(is_valid_syntax(str)))
+// 	pipeline = "''";
+// 	// pipeline = "echo 'hi' hello | cat -l $USER | >> filex | j";
+// 	if (!(is_valid_syntax(pipeline)))
 // 		printf("non-valid syntax\n");
 // 	else
 // 		printf("valid syntax\n");

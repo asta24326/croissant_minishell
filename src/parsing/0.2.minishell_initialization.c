@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 13:13:31 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/04 18:30:08 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:34:42 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ const char	*get_prompt(void)
 }
 
 // handles 'ctrl-c' - works
-// handles 'ctrl-\' - WIP
 void	handle_signal(int signum)
 {
 	// 'ctrl-c': displays a new prompt on command line
@@ -138,12 +137,6 @@ void	handle_signal(int signum)
 		printf("\n");
 		rl_on_new_line();
 		rl_redisplay();
-	}
-	// 'ctrl-\': does nothing - so, does ignore SIGQUIT, disbales echo (nothing to be seen)
-	if (signum == 3)
-	{
-		printf(" - ignoring!\n");		//needs to be handled!
-		// disable_echo();
 	}
 	return ;
 }
@@ -162,7 +155,7 @@ int	init_minishell(char **env)
 	static char	*input_str;
 
 	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, handle_signal);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		if (input_str)

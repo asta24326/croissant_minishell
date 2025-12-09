@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 19:37:46 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/08 17:46:11 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/09 19:29:57 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,6 @@ void	fill_args_arr(char *arg_str, t_cmd *cmd)
 		i = 0;
 	}
 }
-
-
 
 // works, no memory leaks
 // sets the arg_count and the args_arr for cmd node
