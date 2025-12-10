@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 15:02:19 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/04 18:41:40 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/10 12:23:19 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 // 0.2.
 // HISTORY		void rl_clear_history(void)
-// PROMPT		free(prompt)
+// PROMPT		free(char *prompt)
+
+// 1.1.
+// MINISHELL		free(t_shell minishell)
 
 
 
