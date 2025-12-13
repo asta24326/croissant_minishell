@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 19:48:00 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/10 19:49:16 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/13 00:45:15 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,33 @@ static void	ft_sort_algo(int count, char **sorted)
 			}
 		}
 	}
+}
+
+char	*ft_normalize_env_var(char *var)
+{
+	char	*result;
+
+	if (ft_strchr(var, '='))
+		return (var);
+	result = ft_str_join(var, "=");
+	if (!result)
+		return (perror("malloc failed"), NULL);
+	free(var);
+	return (result);
+}
+
+void	ft_print_var_with_quotes(char *var)
+{
+	char	*equals_pos;
+
+	equals_pos = ft_strchr(var, '=');
+	if (equals_pos)
+	{
+		write(1, var, equals_pos - var);
+		ft_putstr_fd("=\"", 1);
+		ft_putstr_fd(equals_pos + 1, 1);
+		ft_putstr_fd("\"", 1);
+	}
+	else
+		ft_putstr_fd(var, 1);
 }

@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 16:29:54 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/10 19:48:48 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/13 00:45:14 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 static int		ft_set_var(t_shell *shell, char *var);
 static int		ft_add_new_var(t_shell *shell, char *var);
 static void		ft_print_all(char **env);
-static bool		ft_is_valid_var_name(char *var);
 
 int	ft_export(t_shell *shell, t_cmd *cmd)
 {
@@ -58,7 +57,7 @@ static int	ft_set_var(t_shell *shell, char *var)
 	{
 		if (ft_strncmp(shell->env[i], var, var_len) == 0
 			&& (shell->env[i][var_len] == '='
-			|| shell->env[i][var_len] == '\0'))
+			|| shell->env[i][var_len] == '\0')) // check if variable already exist
 		{
 			if (equals_sign)
 			{
@@ -79,6 +78,9 @@ static int	ft_add_new_var(t_shell *shell, char *var)
 	int		env_len;
 	int		i;
 
+	if (!var)
+		return (FAILURE);
+	var = ft_normalize_env_var(var);
 	if (!var)
 		return (FAILURE);
 	env_len = 0;
@@ -111,13 +113,13 @@ static void	ft_print_all(char **env)
 	while (sorted_env[++i])
 	{
 		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(sorted_env[i], 1);
+		ft_print_var_with_quotes(sorted_env[i]);
 		ft_putstr_fd("\n", 1);
 	}
 	ft_free_arr_str(sorted_env);
 }
 
-static bool	ft_is_valid_var_name(char *var)
+bool	ft_is_valid_var_name(char *var)
 {
 	size_t	i;
 	size_t	var_name_len;

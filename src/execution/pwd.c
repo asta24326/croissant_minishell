@@ -1,39 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/28 20:36:22 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/13 00:45:17 by aidarsharaf      ###   ########.fr       */
+/*   Created: 2025/12/13 00:46:37 by aidarsharaf       #+#    #+#             */
+/*   Updated: 2025/12/13 00:57:04 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int	ft_echo(t_cmd *cmd)
+int	ft_pwd(t_shell *shell, t_cmd *cmd)
 {
-	int	i;
-	int	new_line;
+	char	curr_dir[PATH_MAX];
 
-	i = 0;
-	new_line = 1;
-	if (!cmd->args[1])
-		return (SUCCESS);
-	if (cmd->args[1] && ft_strcmp(cmd->args[1], "-n") == 0)
+	(void)shell;
+	(void)cmd;
+	if (getcwd(curr_dir, sizeof(curr_dir)) != NULL)
 	{
-		i = 2;
-		new_line = 0;
-	}
-	while (cmd->args[i])
-	{
-		ft_putstr_fd(cmd->args[i], 1);
-		if (cmd->args[i + 1])
-			ft_putstr_fd(" ", 1);
-		i++;
-	}
-	if (new_line)
+		ft_putstr_fd(curr_dir, 1);
 		ft_putstr_fd("\n", 1);
-	return (SUCCESS);
+		return (SUCCESS);
+	}
+	else
+		return (perror("pwd"), FAILURE);
 }
