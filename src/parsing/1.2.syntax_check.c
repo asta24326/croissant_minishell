@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:55:55 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/10 12:18:00 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:36:31 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	are_valid_redirs(char *copy)
 				i++;
 			while (is_quote(copy[i])) //case:quoted filename/delimiter
 				i++;
-			if (!is_other(copy[i])) //MUST be other
+			if (!is_other(copy[i]) || !copy[i]) //MUST be other
 				return (false);
 		}
 	}

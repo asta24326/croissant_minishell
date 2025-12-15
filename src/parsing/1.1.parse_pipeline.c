@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 15:06:57 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/12 12:56:27 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/15 14:06:43 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,12 @@ char	*blackout_quoted_content(char *str)
 	i = -1;
 	while (copy[++i])
 	{
+		printf("%c\n", copy[i]);
 		if (is_quote(copy[i]))
 		{
 			quot_mark = copy[i];
 			i++;
-			while (copy[i] && copy[i] != quot_mark)
+			while (copy[i + 1] && copy[i] != quot_mark)
 			{
 				copy[i] = 48;
 				i++;
