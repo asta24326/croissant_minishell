@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   0.1.main.c                                         :+:      :+:    :+:   */
+/*   0.4.minishell_termination.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/23 15:34:19 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 12:28:37 by kschmitt         ###   ########.fr       */
+/*   Created: 2025/12/15 12:28:14 by kschmitt          #+#    #+#             */
+/*   Updated: 2025/12/15 13:07:45 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	main(int ac, char **av, char **env)
+void	end_minishell(t_shell *minishell)
 {
-	t_shell	*minishell;
-
-	(void)ac;
-	(void)av;
-	minishell = (t_shell *)malloc(sizeof(t_shell));
-	if (!minishell)
-		return (printf("Memory allocation failed.\n"), FAILURE);
-	minishell->env = ft_env_dup(env);
-	init_minishell(minishell); //what if this goes wrong?
-	end_minishell(minishell);
-	return (0);
+	free(minishell->prompt);
+	free(minishell->env);
+	free(minishell);
+	minishell = NULL;
+	rl_clear_history();
 }

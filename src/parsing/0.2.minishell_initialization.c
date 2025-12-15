@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 13:13:31 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 12:00:18 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/15 12:50:23 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,9 @@
 // creates and continously adds to history if input is non-empty
 int	init_minishell(t_shell *minishell)
 {
-	const char	*prompt;
 	static char	*input_str;
 
-	prompt = ft_strjoin(getenv("USER"), "@minishell: ");
+	minishell->prompt = ft_strjoin(getenv("USER"), "@minishell: ");
 	setup_signals(handle_signal_parent);
 	while (1)
 	{
@@ -129,7 +128,7 @@ int	init_minishell(t_shell *minishell)
 			free(input_str);
 			input_str = NULL;
 		}
-		input_str = readline(prompt);
+		input_str = readline(minishell->prompt);
 		if (!input_str)// exits in case of ctrl-D
 		{
 			printf("exit\n");
