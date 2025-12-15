@@ -196,7 +196,7 @@ void		handle_signal_child(int signum);
 void		end_minishell(t_shell *minishell);
 
 // parse_pipeline.c
-int			parse_pipeline(char *pipeline, char **env);
+int			parse_pipeline(char *pipeline, t_shell *minishell);
 int			get_pipe_count(char *copy);
 char		*blackout_quoted_content(char *str);
 
