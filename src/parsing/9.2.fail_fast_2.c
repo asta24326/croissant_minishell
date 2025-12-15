@@ -1,0 +1,782 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   9.2.fail_fast_2.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/15 19:13:02 by kschmitt          #+#    #+#             */
+/*   Updated: 2025/12/15 21:30:49 by kschmitt         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
+
+// #include <readline/readline.h>
+// #include <readline/history.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <unistd.h>
+
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	j;
+
+	i = strlen(dst);
+	if (size <= i)
+		return (size + strlen(src));
+	j = 0;
+	while (src[j] && ((i + j) < (size - 1)))
+	{
+		dst[i + j] = src[j];
+		j++;
+	}
+	dst[i + j] = '\0';
+	return (i + strlen(src));
+}
+
+char	*ft_strjoin(const char *s1, const char *s2)
+{
+	char	*new;
+	size_t	len1;
+	size_t	len2;
+
+	len1 = strlen(s1);
+	len2 = strlen(s2);
+	new = (char *)calloc((len1 + len2 + 1), sizeof(char));
+	if (!new)
+		return (NULL);
+	ft_strlcat(new, s1, len1 + 1);
+	ft_strlcat(new, s2, len2 + len1 + 1);
+	return (new);
+}
+
+char	*ft_strdup(const char *s)
+{
+	int		i;
+	char	*d;
+
+	i = 0;
+	d = malloc(strlen(s) + 1);
+	if (!d)
+		return (NULL);
+	while (s[i])
+	{
+		d[i] = s[i];
+		i++;
+	}
+	d[i] = '\0';
+	return (d);
+}
+
+size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+{
+	const char	*ptr;
+
+	ptr = src;
+	if (size == 0)
+		return (strlen(src));
+	if (size != 0)
+	{
+		while (size > 1 && *src)
+		{
+			*dest++ = *src++;
+			size--;
+		}
+		*dest = '\0';
+	}
+	return (strlen(ptr));
+}
+
+char	*ft_substr(const char *s, unsigned int start, size_t len)
+{
+	char			*sub;
+	unsigned int	max;
+
+	if (!s)
+		return (NULL);
+	max = strlen(s);
+	if ((start >= max) || len == 0)
+		return (ft_strdup(""));
+	if (len > (size_t)strlen(s + start))
+		len = (size_t)strlen(s + start);
+	sub = malloc((len + 1) * sizeof(char));
+	if (!sub)
+		return (NULL);
+	s += start;
+	if (start < max)
+		ft_strlcpy(sub, s, len + 1);
+	return (sub);
+}
+
+void	clean(char **result, int word_index)
+{
+	while (word_index > 0)
+	{
+		word_index--;
+		free(result[word_index]);
+	}
+	free(result);
+}
+
+char	*ft_strrchr(const char *s, int c)
+{
+	int	i;
+
+	i = strlen(s);
+	while (i >= 0)
+	{
+		if (s[i] == (char)c)
+			return ((char *)(s + i));
+		i--;
+	}
+	return (NULL);
+}
+
+static int	ft_strcount(const char *s, char c)
+{
+	int	count;
+
+	count = 0;
+	while (*s)
+	{
+		while (*s && *s == c)
+			s++;
+		if (*s && *s != c)
+			count++;
+		while (*s && *s != c)
+			s++;
+	}
+	return (count);
+}
+
+static int	ft_strlength(const char *s, char c)
+{
+	int		length;
+
+	if (!ft_strrchr(s, c))
+		length = strlen(s);
+	else
+	{
+		length = 0;
+		while (*s && *s == c)
+			s++;
+		while (*s && *s != c)
+		{
+			length++;
+			s++;
+		}
+	}
+	return (length);
+}
+
+static void	ft_free(char **arr_split)
+{
+	int	i;
+
+	i = 0;
+	while (arr_split[i])
+	{
+		free(arr_split[i]);
+		i++;
+	}
+	free(arr_split);
+}
+
+static char	**ft_fillarr(char const *s, char c, char **arr_split)
+{
+	int		i;
+
+	i = 0;
+	while (*s)
+	{
+		while (*s && *s == c)
+			s++;
+		if (*s && *s != c)
+		{
+			arr_split[i] = ft_substr(s, 0, ft_strlength(s, c));
+			if (!arr_split[i])
+			{
+				ft_free(arr_split);
+				return (NULL);
+			}
+			s += ft_strlength(s, c);
+			i++;
+		}
+	}
+	arr_split[i] = NULL;
+	return (arr_split);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**arr_split;
+
+	if (s)
+		arr_split = calloc((ft_strcount(s, c) + 1), sizeof(char *));
+	if (!s || !arr_split)
+		return (NULL);
+	return (ft_fillarr(s, c, arr_split));
+}
+// ---------------  libft functions - end!  --------------
+
+// works
+// checks whether c is space or horizontal tab
+// attention: without '\n'
+int	is_whitespace(char c)
+{
+	if (c == 32 || c == 9)
+		return (1);
+	return (0);
+}
+
+// works
+// checks whether c is pipe, right or left arrow
+int	is_operator(char c)
+{
+	if (c == 124 || c == 60 || c == 62)
+		return (1);
+	return (0);
+}
+
+// works
+// checks whether c is right or left arrow
+int	is_redir(char c)
+{
+	if (c == 60 || c == 62)
+		return (1);
+	return (0);
+}
+
+// works
+// checks whether c is double or single quotation mark
+int	is_quote(char c)
+{
+	if (c == 34 || c == 39)
+		return (1);
+	return (0);
+}
+
+// works
+// checks whether c is cmd/arg/flag/filename/delimiter
+int	is_other(char c)
+{
+	if (is_whitespace(c) || is_operator(c) || is_quote(c))
+		return (0);
+	return (1);
+}
+
+// works
+// returns copy of the input str all bytes within quotes set to 0
+char	*blackout_quoted_content(char *str)
+{
+	char	*copy;
+	char	quot_mark;
+	int		i;
+
+	copy = ft_strjoin("", str);
+	quot_mark = 0;
+	i = -1;
+	while (copy[++i])
+	{
+		if (is_quote(copy[i]))
+		{
+			quot_mark = copy[i];
+			i++;
+			while (copy[i + 1] && copy[i] != quot_mark)
+			{
+				copy[i] = 48;
+				i++;
+			}
+		}
+	}
+	return (copy);
+}
+
+// works
+// returns length of redirection token
+int	get_redir_len(char *str)
+{
+	int		len;
+	char	*copy;
+
+	len = 1; //skip the (first) redir sign
+	copy = blackout_quoted_content(str);
+	if (copy[len] == copy[len - 1]) //case: double arrow
+		len++;
+	while (is_whitespace(copy[len])) //case:whitespaces in between
+		len++;
+	while (is_quote(copy[len]) || is_other(copy[len]))
+		len++;
+	free (copy);
+	return (len);
+}
+
+// works
+// includes the redirs/heredoc into the redirs->list
+void	fill_redirs_arr(char *redirect, t_cmd *cmd)
+{
+	static int	i; // needed because of repeated call
+
+	cmd->redirs->list[i] = redirect;
+	i++;
+	if (i == cmd->redirs_count) // NULL-terminate array and reset i to 0 when all cmds were handled
+	{
+		cmd->redirs->list[i] = NULL;
+		i = 0;
+	}
+}
+
+// works
+// here, we look into single redirs
+// returns index after the redir token
+int	parse_redir(char *cmd_str, t_cmd *cmd)
+{
+	int		index;
+	char	*redirect;
+
+	index = get_redir_len(cmd_str);
+	redirect = ft_substr(cmd_str, 0, index); // attention: memory allocation
+	fill_redirs_arr(redirect, cmd);
+	return (index);
+}
+
+// works
+// returns length of cmd/flag/arg/env_arg
+int	get_arg_len(char *str)
+{
+	int	len;
+
+	len = 0;
+	while (*str && !is_whitespace(*str) && !is_operator(*str))
+	{
+		len++;
+		str++;
+	}
+	return (len);
+}
+
+// works
+// includes the cmd/flag/arg/env_arg into the args_array
+// attention, this will be called repeatedly as soon as arg is encountered
+void	fill_args_arr(char *arg, t_cmd *cmd)
+{
+	static int	i; // needed because of repeated call
+
+	cmd->args[i] = arg;
+	i++;
+	if (i == cmd->args_count) // NULL-terminate array and reset i to 0 when all cmds were handled
+	{
+		cmd->args[i] = NULL;
+		i = 0;
+	}
+}
+
+// works
+// loops through cmd/flag/arg/env_arg and returns index after last byte
+int	parse_cmd(char *cmd_str, t_cmd *cmd)
+{
+	int		index;
+	char	*arg;
+
+	index = get_arg_len(cmd_str);
+	arg = ft_substr(cmd_str, 0, index); // attention: memory allocation
+	fill_args_arr(arg, cmd);
+	// printf("[parse cmd] %s\n", cmd->args[0]);
+	return (index);
+}
+
+// works
+// forks tokens into arguments and redirs
+void	tokenize(char *cmd_str, t_cmd *cmd)
+{
+	while (*cmd_str) // loops through cmd_str and sets i to byte after operator
+	{
+		if (is_quote(*cmd_str) || is_other(*cmd_str))
+			cmd_str += parse_cmd(cmd_str, cmd);
+		else if (is_redir(*cmd_str))
+			cmd_str += parse_redir(cmd_str, cmd);
+		else
+			cmd_str += 1;
+	}
+}
+
+int	prepare_redirs(char *cmd_str, t_cmd *cmd)
+{
+	t_redirs	*redirects;
+
+	redirects = (t_redirs *)malloc(sizeof(t_redirs));
+	if (!redirects)
+		return (printf("Memory allocation failed.\n"), FAILURE);
+	redirects->list = calloc(cmd->redirs_count + 1, sizeof(char *));
+	if (!redirects->list)
+		return (printf("Memory allocation failed.\n"), FAILURE);
+	redirects->in_fd = 0;
+	redirects->out_fd = 0;
+	redirects->hdoc_delim = NULL;
+	redirects->exp_hdoc = NULL; //needed?
+	cmd->redirs = redirects;
+	return (SUCCESS);
+}
+
+//works
+// returns amout of redirs in 1 cmd_line
+int	get_redir_count(char *copy)
+{
+	int		count;
+	int		i;
+
+	count = 0;
+	i = -1;
+	while (copy[++i])
+	{
+		if (is_redir(copy[i]))
+		{
+			count++;
+			i++;
+			if (is_redir(copy[i]))
+				i++;
+		}
+	}
+	return (count);
+}
+
+// works
+// returns the amout of arguments in 1 cmd_line
+int	get_arg_count(char *copy)
+{
+	int	count;
+	int	i;
+
+	count = 0;
+	i = -1;
+	while (copy[++i])
+	{
+		if (!is_whitespace(copy[i]) && !is_operator(copy[i]))
+		{
+			count++;
+			while (copy[i] && !is_whitespace(copy[i]) // whitespace and operator work as delimiter
+				&& !is_operator(copy[i]))
+				i++;
+		}
+	}
+	// if redirs in cmd_str, substract the filename/delimiter
+	return (count);
+}
+
+// works, no memory leaks
+// sets the arg_count and the args_arr for cmd node
+void	prepare_args_arr(char *cmd_str, t_cmd *cmd)
+{
+	char	*copy;
+
+	copy = blackout_quoted_content(cmd_str);
+	cmd->redirs_count = get_redir_count(copy);
+	cmd->args_count = get_arg_count(copy) - cmd->redirs_count;
+	free (copy);
+	cmd->args = calloc(cmd->args_count + 1, sizeof(char *)); //attention: memory allocation // calloc needed as single strings are not filled immediatly
+}
+
+// works
+// creates t_cmd node
+t_cmd	*create_node(char *cmd_line)
+{
+	t_cmd	*new;
+
+	new = (t_cmd *)malloc(sizeof(t_cmd));
+	if (!new)
+		return (printf("Memory allocation failed.\n"), NULL);
+	prepare_args_arr(cmd_line, new);//creates char **args, int args_count, int redirs_count
+	new->builtin = NULL;
+	if (new->redirs_count > 0)
+		prepare_redirs(cmd_line, new);
+	else
+		new->redirs = NULL;
+	new->next = NULL;
+	return (new);
+}
+
+// works
+// adds a new node to the back of the linked list
+void	add_node(t_cmd **list, t_cmd *new)
+{
+	t_cmd	*head;
+
+	head = *list;
+	while (head != NULL && head->next != NULL)
+		head = head->next;
+	head->next = new;
+}
+
+// // goes out - only for testing
+// void	print_list(t_cmd *list, int cmd_count)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < cmd_count)
+// 	{
+// 		printf("i = %i\n", i);
+// 		printf("tadaaaa: %s\n", list->args[0]);
+// 		list = list->next;
+// 		i++;
+// 	}
+// }
+
+// to be tested
+// splits pipeline into cmd-lines, and creates 1 node per cmd-line
+// attention: what I need here to be passed is blacked out string!
+void	create_cmd_list(char **arr, int cmd_count, t_shell *minishell)
+{
+	t_cmd	*list;
+	int		i;
+
+	list = create_node(arr[0]);//initiates the list, creates first node
+	i = 0;
+	while (++i < cmd_count) //creates entire list by passing 1 cmd-line per node
+		add_node(&list, create_node(arr[i]));
+	// print_list(list, cmd_count);
+	minishell->cmd = list;
+}
+
+// works
+void	parse_cmd_lines(char *pipeline, int cmd_count, t_shell *minishell)
+{
+	char	**arr;
+	t_cmd	*current;
+	int		i;
+
+	arr = ft_split(pipeline, 124);//splits the pipeline into its cmd-lines
+	// printf("arr= %s\n", arr[0]);
+	// printf("arr= %s\n", arr[1]);
+	// printf("arr= %s\n", arr[2]);
+	// if (!arr)
+	// 	return (printf("Error while splitting pipeline.\n"), FAILURE);
+	create_cmd_list(arr, cmd_count, minishell);
+	current = minishell->cmd;
+	i = -1;
+	while (++i < cmd_count)
+	{
+		tokenize(arr[i], current);
+		// printf("[parse cmd line] %s\n", current->args[0]);
+		// handle_heredoc();
+		// expand_env_var();
+		// handle_quotes();
+		// handle_redirs();
+		current = current->next;
+	}
+	clean(arr, cmd_count);
+}
+
+// works
+// extracts amount of pipes
+int	get_pipe_count(char *copy)
+{
+	int		count;
+	int		i;
+
+	count = 0;
+	i = -1;
+	while (copy[++i])
+		if (copy[i] == 124)
+			count++;
+	return (count);
+}
+
+// works, no memory leaks
+// extracts data for the t_shell structure
+void	parse_pipeline(char *copy, t_shell *minishell) //wrong naming
+{
+	minishell->pipe_count = get_pipe_count(copy);
+	minishell->pipes = NULL;//handled in exec
+	minishell->cmd = NULL;
+	minishell->exit_status = 0;
+	minishell->shell_pid = getpid();
+}
+
+// works
+// checks whether pipe is valid (it needs at least 1 cmd or 1 redir on left side)
+int	are_valid_pipes(char *copy)
+{
+	int	flag;
+
+	flag = 0;
+	while (*copy)
+	{
+		if (is_quote(*copy) || is_redir(*copy) || is_other(*copy))
+			flag = 1;
+		else if (*copy == 124)
+		{
+			if (flag == 0)
+				return (false);
+			flag = 0;
+		}
+		copy++;
+	}
+	return (true);
+}
+
+// works
+// checks whether redirection has exactly 1 or 2 same arrows, +filename/delimiter
+int	are_valid_redirs(char *copy)
+{
+	int		i;
+
+	i = -1;
+	while (copy[++i])
+	{
+		if (is_redir(copy[i]))
+		{
+			i++;
+			if (copy[i] == copy[i - 1]) //case: double arrow
+				i++;
+			while (is_whitespace(copy[i]))
+				i++;
+			while (is_quote(copy[i])) //case:quoted filename/delimiter
+				i++;
+			if (!is_other(copy[i]) || !copy[i]) //MUST be other
+				return (false);
+		}
+	}
+	return (true);
+}
+
+// works
+// checks whether quotes are closed
+int	are_closed_quotes(char *copy)
+{
+	char	quot_mark;
+
+	quot_mark = 0;
+	while (*copy)
+	{
+		if (is_quote(*copy) & !quot_mark)
+			quot_mark = *copy;
+		else if (*copy == quot_mark)
+			quot_mark = 0;
+		copy++;
+	}
+	if (quot_mark == 0)
+		return (true);
+	return (false);
+}
+
+// works, no memory leaks
+// checks overall syntax of input pipeline
+int	is_valid_syntax(char *copy)
+{
+	if (!are_valid_pipes(copy))
+		return (printf("Syntax error. Pipe(s) invalid.\n"), false);
+	if (!are_valid_redirs(copy))
+		return (printf("Syntax error. Redir(s) invalid.\n"), false);
+	if (!are_closed_quotes(copy))
+		return (printf("Syntax error. Unclosed quote(s).\n"), false);
+	return (true);
+}
+
+
+// goes out - only for testing
+void	print_list(t_cmd *cmd, int cmd_count)
+{
+	int	i;
+
+	i = 0;
+	while (i < cmd_count)
+	{
+		printf("[print]i = %i\n", i);
+		printf("tadaaaa: %s\n", cmd->args[0]);
+		cmd = cmd->next;
+		i++;
+	}
+}
+
+int	parse(char *pipeline, t_shell *minishell)
+{
+	char	*copy;
+
+	copy = blackout_quoted_content(pipeline);
+	if (!is_valid_syntax(copy))
+		return (free(copy), FAILURE);
+	parse_pipeline(copy, minishell);
+	free(copy);
+	parse_cmd_lines(pipeline, minishell->pipe_count + 1, minishell);
+	// printf("got here!\n");
+	// printf("[parse] %s\n", minishell->cmd->args[0]);
+	print_list(minishell->cmd, minishell->pipe_count + 1);
+	// execute(minishell);
+	return (SUCCESS);
+}
+
+void	end_minishell(t_shell *minishell)
+{
+	free(minishell->prompt);
+	free(minishell->env);
+	free(minishell);
+	minishell = NULL;
+	rl_clear_history();
+}
+
+// works
+// handles ctrl c in parent process (displays a new prompt on a new line)
+void	handle_signal_parent(int signum)
+{
+	(void)signum;
+	printf("\n");
+	rl_on_new_line();//updates about jump to next line
+	// rl_replace_line("", 0);//clears current buffer //not needed
+	rl_redisplay();//refreshes readline prompt
+	return ;
+}
+
+void	setup_signals(void (*signal_handler)(int))
+{
+	signal(SIGINT, signal_handler); //case: ctrl-C
+	signal(SIGQUIT, SIG_IGN); //case: ctrl-\ - is ignored
+}
+
+// works
+// sets the prompt, reads the user input and saves it into a char *buffer
+// creates and continously adds to history if input is non-empty
+int	init_minishell(t_shell *minishell)
+{
+	static char	*input_str;
+
+	minishell->prompt = ft_strjoin(getenv("USER"), "@minishell: ");
+	setup_signals(handle_signal_parent);
+	while (1)
+	{
+		if (input_str)
+		{
+			free(input_str);
+			input_str = NULL;
+		}
+		input_str = readline(minishell->prompt);
+		if (!input_str)// exits in case of ctrl-D
+		{
+			printf("exit\n");
+			exit(1);
+		}
+		if (*input_str)
+		{
+			parse(input_str, minishell); //what if this one fails?
+			add_history(input_str);// adds user input to history
+		}
+	}
+	return (0);
+}
+
+int	main(int ac, char **av, char **env)
+{
+	t_shell	*minishell;
+
+	(void)ac;
+	(void)av;
+	minishell = (t_shell *)malloc(sizeof(t_shell));
+	if (!minishell)
+		return (printf("Memory allocation failed.\n"), FAILURE);
+	// minishell->env = ft_env_dup(env);
+	init_minishell(minishell); //what if this goes wrong?
+	end_minishell(minishell);
+	return (0);
+}
