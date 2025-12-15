@@ -116,6 +116,7 @@ typedef struct	s_cmd
 /* main data storage */
 typedef struct	s_shell
 {
+	char	*prompt;
 	int		pipe_count;
 	int		**pipes;
 	char	**env;
@@ -185,13 +186,14 @@ int			ft_env(t_shell *shell, t_cmd *cmd);
 
 // minishell_initialization.c
 int			init_minishell(t_shell *minishell);
-void		handle_signal(int signum);
-const char	*get_prompt(void);
 
 // signal_handling.c
 void		setup_signals(void (*signal_handler)(int));
 void		handle_signal_parent(int signum);
 void		handle_signal_child(int signum);
+
+// minishell_termination.c
+void		end_minishell(t_shell *minishell);
 
 // parse_pipeline.c
 int			parse_pipeline(char *pipeline, char **env);
