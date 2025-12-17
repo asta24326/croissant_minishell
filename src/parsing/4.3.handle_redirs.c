@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 20:05:38 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/12 18:21:16 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/16 14:17:26 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,29 +93,37 @@ int	handle_heredoc(char *filename, t_cmd *cmd)
 // works
 // returns the filename/delimiter
 // pre-condition: quotes were handled (aka eliminated)
-char	*get_filename(char *str, int len, int ops)
+char	*get_filename(char *redir_str, int ops)
 {
 	int	i;
+	int	len;
 	int	whitespaces;
 
 	i = ops - 1;//jump to last redir operator sign
+	len = ft_strlen(redir_str);
 	whitespaces = 0;
-	while (is_whitespace(str[++i]))
+	while (is_whitespace(redir_str[++i]))
 		whitespaces += 1;
-	return (ft_substr(str, ops + whitespaces, len - ops - whitespaces));
+	return (ft_substr(redir_str, ops + whitespaces, len - ops - whitespaces));
 }
 
 // works
 // handles the redir depending on the type
-int	handle_redir(char *str, int len, t_cmd *cmd)
+int	handle_redir(char **redir_list, t_cmd *cmd)
 {
-	if (str[0] == '>' && str[1] != '>')
-		handle_outfile(get_filename(str, len, 1), cmd);
-	else if (str[0] == '>' && str[1] == '>')
-		handle_append(get_filename(str, len, 2), cmd);
-	else if (str[0] == '<' && str[1] != '<')
-		handle_infile(get_filename(str, len, 1), cmd);
-	else if (str[0] == '<' && str[1] == '<')
-		handle_heredoc(fget_filename(str, len, 2), cmd);//done by Aidar
+	int	i;
+
+	i = -1;
+	while (redir_list[++i])
+	{
+		if (redir_list[i][0] == '>' && redir_list[i][1] != '>')
+			handle_outfile(get_filename(redir_list[i], 1), cmd);
+		else if (redir_list[i][0] == '>' && redir_list[i][1] == '>')
+			handle_append(get_filename(redir_list[i], 2), cmd);
+		else if (redir_list[i][0] == '<' && redir_list[i][1] != '<')
+			handle_infile(get_filename(redir_list[i], 1), cmd);
+		// else if (redir_list[i][0] == '<' && redir_list[i][1] == '<')
+		// 	handle_heredoc(get_filename(redir_list[i], strlen, 2), cmd);//done by Aidar
+	}
 	return (SUCCESS);
 }

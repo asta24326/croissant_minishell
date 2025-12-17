@@ -1,43 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   2.3.extract_redirs.c                               :+:      :+:    :+:   */
+/*   2.3.prepare_redirs.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 16:56:50 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/11 20:26:44 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/15 19:25:40 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// typedef struct	s_redirs
-// {
-// 	int		in_fd;
-// 	int		out_fd;
-// 	char	*hdoc_delim;
-// 	bool	exp_hdoc; // no - if heredoc delimeter has '  ', yes - if none
-// 	int		hdoc_fd[2]; // on exec step
-// }	t_redirs;
 
-t_redirs	*extract_redir_data(char *cmd_line)
+int	prepare_redirs(char *cmd_str, t_cmd *cmd)
 {
-	t_redirs	*redirs;
+	t_redirs	*redirects;
 
-	redirs = (t_redirs *)malloc(sizeof(t_redirs));
-	if (!redirs)
-		return (printf("Memory allocation failed.\n"), NULL);
-	in_fd =
-	out_fd =
-	hdoc_delim =
-	exp_hdoc =
-	hdoc_fd = NULL; //handled in exec
-	return (redirs);
-}
-
-
-t_redirs	extract_redirs(char *cmd_str, t_cmd *cmd)
-{
-
+	redirects = (t_redirs *)malloc(sizeof(t_redirs));
+	if (!redirects)
+		return (printf("Memory allocation failed.\n"), FAILURE);
+	redirects->list = ft_calloc(cmd->redirs_count + 1, sizeof(char *));
+	if (!redirects->list)
+		return (printf("Memory allocation failed.\n"), FAILURE);
+	redirects->in_fd = 0;
+	redirects->out_fd = 0;
+	redirects->hdoc_delim = NULL;
+	redirects->exp_hdoc = NULL; //needed?
+	cmd->redirs = redirects;
+	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:40:26 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/12 13:03:26 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/16 14:09:13 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,6 +247,8 @@
 // 		return (1);
 // 	return (0);
 // }
+
+
 // ----------until here, everything goes out--------------
 
 
@@ -259,10 +261,12 @@ t_cmd	*create_node(char *cmd_line)
 	new = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!new)
 		return (printf("Memory allocation failed.\n"), NULL);
-	create_args_arr(cmd_line, new);//extracts char **args, int args_count, int redirs_count
-	new->builtin = is_builtin_cmd(new);
-	// new->redirs = extract_redirs(cmd_line, new);
-	new->redirs = NULL;
+	prepare_args_arr(cmd_line, new);//creates char **args, int args_count, int redirs_count
+	new->builtin = NULL;
+	if (new->redirs > 0)
+		prepare_redirs(cmd_line, new);
+	else
+		new->redirs = NULL;
 	new->next = NULL;
 	return (new);
 }
@@ -279,13 +283,27 @@ void	add_node(t_cmd **list, t_cmd *new)
 	head->next = new;
 }
 
+void	set_index(t_cmd *stack, int cmd_count)
+{
+	int		i;
+	t_cmd	*current;
+
+	i = -1;
+	current = stack;
+	while (++i < cmd_count)
+	{
+		current->index = i;
+		current = current->next;
+	}
+}
+
 // // goes out - only for testing
-// void	print_list(t_cmd *list)
+// void	print_list(t_cmd *list, int cmd_count)
 // {
 // 	int	i;
 
 // 	i = 0;
-// 	while (i < 5)
+// 	while (i < cmd_count)
 // 	{
 // 		printf("i = %i\n", i);
 // 		printf("tadaaaa: %s\n", list->args[0]);
@@ -297,21 +315,20 @@ void	add_node(t_cmd **list, t_cmd *new)
 // to be tested
 // splits pipeline into cmd-lines, and creates 1 node per cmd-line
 // attention: what I need here to be passed is blacked out string!
-void	create_cmd_list(char *pipeline, int cmd_count, t_shell *minishell)
+void	create_cmd_list(char **arr, int cmd_count, t_shell *minishell)
 {
-	char	**arr;
 	t_cmd	*list;
 	int		i;
 
-	arr = ft_split(pipeline, 124);//splits the pipeline into its cmd-lines
 	list = create_node(arr[0]);//initiates the list, creates first node
 	i = 0;
 	while (++i < cmd_count) //creates entire list by passing 1 cmd-line per node
 		add_node(&list, create_node(arr[i]));
-	// print_list(list);
+	// print_list(list, cmd_count);
+	set_index(list, cmd_count);
 	minishell->cmd = list;
-	clean(arr, cmd_count);
 }
+
 
 // ----------for testing only-----------------------
 // int	main(void)

@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 13:04:39 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/12 18:17:54 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/16 12:20:36 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	get_strlen_clean(char *orig_str)
 	quot_mark = 0;
 	while (*orig_str)
 	{
-		if (is_quot(*orig_str) && quot_mark == 0) //first quot.mark encountered
+		if (is_quote(*orig_str) && quot_mark == 0) //first quot.mark encountered
 			quot_mark = *orig_str;
 		else if (*orig_str == quot_mark) //matching quot.mark encountered
 			quot_mark = 0;
@@ -63,7 +63,7 @@ char	*get_clean_str(char *orig_str)
 				clean_str[j++] = orig_str[i++];
 	}
 	clean_str[j] = '\0';
-	return (clean_str);
+	return (free(orig_str), clean_str);
 }
 
 // works
@@ -75,5 +75,6 @@ void	cleanup_quotes(char **arr)
 
 	i = -1;
 	while (arr[++i])
-		arr[i] = get_clean_str(arr[i]);
+		if (strchr(arr[i], '\'') || strchr(arr[i], '\"'))
+			arr[i] = get_clean_str(arr[i]);
 }

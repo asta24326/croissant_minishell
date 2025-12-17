@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   3.1.tokenize.c                                     :+:      :+:    :+:   */
+/*   3.0.tokenize.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 17:33:40 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/12 11:03:01 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/15 19:06:23 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,13 @@
 // forks tokens into arguments and redirs
 void	tokenize(char *cmd_str, t_cmd *cmd)
 {
-	// loops through cmd_str and sets i to byte after operator
-	while (*cmd_str)
+	while (*cmd_str) // loops through cmd_str and sets i to byte after operator
 	{
 		if (is_quote(*cmd_str) || is_other(*cmd_str))
 			cmd_str += parse_cmd(cmd_str, cmd);
-		// works because at this point, the pipe operators were taken out already
 		else if (is_redir(*cmd_str))
 			cmd_str += parse_redir(cmd_str, cmd);
 		else
 			cmd_str += 1;
 	}
-	//here, I could clean up the t_redirs (only 1 per direction)
 }

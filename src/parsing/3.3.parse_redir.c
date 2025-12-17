@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 14:18:25 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/11 20:26:12 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/15 19:12:06 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,28 @@ int	get_redir_len(char *str)
 	return (len);
 }
 
+void	fill_redirs_arr(char *redir, t_cmd *cmd)
+{
+	static int	i; // needed because of repeated call
+
+	cmd->redirs->list[i] = redir;
+	i++;
+	if (i == cmd->redirs_count) // NULL-terminate array and reset i to 0 when all cmds were handled
+	{
+		cmd->redirs->list[i] = NULL;
+		i = 0;
+	}
+}
+
 // here, we look into single redirs
 // returns index after the redir token
-int	parse_redir(char *str, t_cmd *cmd)
+int	parse_redir(char *cmd_str, t_cmd *cmd)
 {
-	int	index;
+	int		index;
+	char	*redirect;
 
-	index = get_redir_len(str);
-	handle_redir(str, cmd);
+	index = get_redir_len(cmd_str);
+	redirect = ft_substr(cmd_str, 0, index); // attention: memory allocation
+	fill_redirs_arr(redirect, cmd);
 	return (index);
 }

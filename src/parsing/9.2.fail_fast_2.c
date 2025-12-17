@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 19:13:02 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 21:30:49 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/16 19:25:08 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,32 @@
 // #include <stdio.h>
 // #include <stdlib.h>
 // #include <unistd.h>
+
+size_t	ft_strlen(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (*s++)
+		i++;
+	return (i);
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s1)
+		return (1);
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (0);
+}
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
@@ -307,7 +333,7 @@ int	get_redir_len(char *str)
 		len++;
 	while (is_whitespace(copy[len])) //case:whitespaces in between
 		len++;
-	while (is_quote(copy[len]) || is_other(copy[len]))
+	while (copy[len] && (is_quote(copy[len]) || is_other(copy[len])))
 		len++;
 	free (copy);
 	return (len);
@@ -328,6 +354,30 @@ void	fill_redirs_arr(char *redirect, t_cmd *cmd)
 	}
 }
 
+char	*get_delimiter(char *cmd_str, int ops, int len)
+{
+	int	i;
+	int	whitespaces;
+
+	i = 1;//jump over hdoc operator signs
+	whitespaces = 0;
+	while (is_whitespace(cmd_str[++i]))
+		whitespaces += 1;
+	return (ft_substr(cmd_str, ops + whitespaces, len - ops - whitespaces));
+}
+
+void	prepare_hdoc(char *cmd_str, t_redirs *redirs, int len)
+{
+	static int	nbr_hdoc;
+
+	nbr_hdoc += 1;
+	if (nbr_hdoc == redirs->hdoc_count)
+	{
+		redirs->hdoc_delim = get_delimiter(cmd_str, 2, len);
+		nbr_hdoc = 0;
+	}
+}
+
 // works
 // here, we look into single redirs
 // returns index after the redir token
@@ -337,8 +387,13 @@ int	parse_redir(char *cmd_str, t_cmd *cmd)
 	char	*redirect;
 
 	index = get_redir_len(cmd_str);
-	redirect = ft_substr(cmd_str, 0, index); // attention: memory allocation
-	fill_redirs_arr(redirect, cmd);
+	if (cmd_str[0] == '<' && cmd_str[1] == '<') //case: heredoc
+		prepare_hdoc(cmd_str, cmd->redirs, index);
+	else
+	{
+		redirect = ft_substr(cmd_str, 0, index); //attention: memory allocation
+		fill_redirs_arr(redirect, cmd);
+	}
 	return (index);
 }
 
@@ -346,13 +401,24 @@ int	parse_redir(char *cmd_str, t_cmd *cmd)
 // returns length of cmd/flag/arg/env_arg
 int	get_arg_len(char *str)
 {
-	int	len;
+	int		len;
+	char	quot_mark;
 
 	len = 0;
-	while (*str && !is_whitespace(*str) && !is_operator(*str))
+	while (str[len])
 	{
-		len++;
-		str++;
+		if (is_quote(str[len]))
+		{
+			quot_mark = str[len];
+			len += 1;
+			while (str[len] && str[len] != quot_mark)
+				len += 1;
+			len += 1;
+		}
+		else if (is_other(str[len]))
+			while (str[len] && !is_whitespace(str[len])
+				&& !is_operator(str[len]) && !is_quote(str[len]))
+				len += 1;
 	}
 	return (len);
 }
@@ -383,7 +449,7 @@ int	parse_cmd(char *cmd_str, t_cmd *cmd)
 	index = get_arg_len(cmd_str);
 	arg = ft_substr(cmd_str, 0, index); // attention: memory allocation
 	fill_args_arr(arg, cmd);
-	// printf("[parse cmd] %s\n", cmd->args[0]);
+	printf("[parse cmd] %s\n", cmd->args[0]);
 	return (index);
 }
 
@@ -391,6 +457,7 @@ int	parse_cmd(char *cmd_str, t_cmd *cmd)
 // forks tokens into arguments and redirs
 void	tokenize(char *cmd_str, t_cmd *cmd)
 {
+	// printf("orig: %s\n", cmd_str);
 	while (*cmd_str) // loops through cmd_str and sets i to byte after operator
 	{
 		if (is_quote(*cmd_str) || is_other(*cmd_str))
@@ -400,6 +467,23 @@ void	tokenize(char *cmd_str, t_cmd *cmd)
 		else
 			cmd_str += 1;
 	}
+}
+
+// works
+int	get_hdoc_count(char *cmd_str)
+{
+	int		i;
+	int		count;
+	char	*copy;
+
+	i = -1;
+	count = 0;
+	copy = blackout_quoted_content(cmd_str);
+	while (cmd_str[++i])
+		if (cmd_str[i] == '<' && cmd_str[i + 1] == '<')
+			count += 1;
+	free (copy);
+	return (count);
 }
 
 int	prepare_redirs(char *cmd_str, t_cmd *cmd)
@@ -414,6 +498,8 @@ int	prepare_redirs(char *cmd_str, t_cmd *cmd)
 		return (printf("Memory allocation failed.\n"), FAILURE);
 	redirects->in_fd = 0;
 	redirects->out_fd = 0;
+	redirects->append_fd = 0;
+	redirects->hdoc_count = get_hdoc_count(cmd_str); //needed? check how often used in the end
 	redirects->hdoc_delim = NULL;
 	redirects->exp_hdoc = NULL; //needed?
 	cmd->redirs = redirects;
@@ -509,6 +595,20 @@ void	add_node(t_cmd **list, t_cmd *new)
 	head->next = new;
 }
 
+void	set_index(t_cmd *stack, int cmd_count)
+{
+	int		i;
+	t_cmd	*current;
+
+	i = -1;
+	current = stack;
+	while (++i < cmd_count)
+	{
+		current->index = i;
+		current = current->next;
+	}
+}
+
 // // goes out - only for testing
 // void	print_list(t_cmd *list, int cmd_count)
 // {
@@ -537,35 +637,249 @@ void	create_cmd_list(char **arr, int cmd_count, t_shell *minishell)
 	while (++i < cmd_count) //creates entire list by passing 1 cmd-line per node
 		add_node(&list, create_node(arr[i]));
 	// print_list(list, cmd_count);
+	set_index(list, cmd_count);
 	minishell->cmd = list;
 }
+
+// works
+// returns length of str cleaned by quotes to be removed
+int	get_strlen_clean(char *orig_str)
+{
+	int		len;
+	char	quot_mark;
+
+	len = 0;
+	quot_mark = 0;
+	while (*orig_str)
+	{
+		if (is_quote(*orig_str) && quot_mark == 0) //first quot.mark encountered
+			quot_mark = *orig_str;
+		else if (*orig_str == quot_mark) //matching quot.mark encountered
+			quot_mark = 0;
+		else
+			len++;
+		orig_str++;
+	}
+	return (len);
+}
+
+// works
+// returns a string witout quotes that will not be outputted
+// pre-condition: functioning operators, unecessary whitespaces and to be expanded $ have been gone
+char	*get_clean_str(char *orig_str)
+{
+	char	*clean_str;
+	char	quot_mark;
+	int		i;
+	int		j;
+
+	// printf("orig: %s\n", orig_str);
+	clean_str = (char *)malloc(get_strlen_clean(orig_str) + 1);
+	if (!clean_str)
+		return (printf("Error with memory allocation.\n"), NULL);
+	i = 0;
+	j = 0;
+	while (orig_str[i])
+	{
+		if (is_quote(orig_str[i]))
+		{
+			quot_mark = orig_str[i++];
+			while (orig_str[i] != quot_mark)
+				clean_str[j++] = orig_str[i++];
+			i++;
+		}
+		else if (is_other(orig_str[i]) || is_redir(orig_str[i]))
+			while (orig_str[i] && !is_quote(orig_str[i]))
+				clean_str[j++] = orig_str[i++];
+	}
+	clean_str[j] = '\0';
+	return (free(orig_str), clean_str);
+}
+
+// works
+// cleans the passed char *arr from unnecessary quotes
+// needed for char **args and for char **redirs
+void	cleanup_quotes(char **arr)
+{
+	int		i;
+
+	i = -1;
+	// printf("orig: %s\n", arr[0]);
+	while (arr[++i])
+		if (strchr(arr[i], '\'') || strchr(arr[i], '\"'))
+			arr[i] = get_clean_str(arr[i]);
+}
+
+int	is_builtin_cmd(t_cmd *cmd)
+{
+	char	*str;
+
+	str = cmd->args[0];
+	if (!(ft_strcmp(str, "echo")) || !(ft_strcmp(str, "cd"))
+		|| !(ft_strcmp(str, "pwd")) || !(ft_strcmp(str, "export"))
+		|| !(ft_strcmp(str, "unset")) || !(ft_strcmp(str, "env"))
+		|| !(ft_strcmp(str, "exit")))
+		return (true);
+	return (false);
+}
+
+//attention: here, I need the index of the cmd
+int	handle_outfile(char *filename, t_cmd *cmd)
+{
+	static int	fd;
+	static int	cmd_index;
+
+	if (cmd_index != cmd->index)//case: we arrived at next cmd
+	{
+		cmd_index = cmd->index;
+		fd = 0;
+	}
+	if (fd > 0)//case:several outfiles in 1 cmd
+		close (fd);
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		return (printf("Error while opening file %s\n", filename), FAILURE);
+	cmd->redirs->out_fd = fd;
+	free (filename);
+	return (SUCCESS);
+}
+
+//attention: here, I need the index of the cmd
+//attention: here, I need int append_fd in t_redirs
+int	handle_append(char *filename, t_cmd *cmd)
+{
+	static int	fd;
+	static int	cmd_index;
+
+	if (cmd_index != cmd->index)//case: we arrived at next cmd
+	{
+		cmd_index = cmd->index;
+		fd = 0;
+	}
+	if (fd > 0)//case:several appends in 1 cmd
+		close (fd);
+	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+		return (printf("Error while opening file %s\n", filename), FAILURE);
+	cmd->redirs->append_fd = fd;
+	free (filename);
+	return (SUCCESS);
+}
+
+//attention: here, I need the index of the cmd
+int	handle_infile(char *filename, t_cmd *cmd)
+{
+	static int	fd;
+	static int	cmd_index;
+
+	if (cmd_index != cmd->index)//case: we arrived at next cmd
+	{
+		cmd_index = cmd->index;
+		fd = 0;
+	}
+	if (fd > 0)//case:several infiles in 1 cmd
+		close (fd);
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (printf("File %s does not exist.\n", filename), FAILURE);
+	if (cmd->redirs->hdoc_delim != NULL) //only if heredoc exists
+	{
+		close (fd);
+		fd = 0;
+	}
+	cmd->redirs->in_fd = fd;
+	free (filename);
+	return (SUCCESS);
+}
+
+//attention: here, I need the index of the cmd
+// pre-condition: quotes were handled (aka eliminated)
+// means: bool exp_hdoc was extracted while quote handling
+// int	handle_heredoc(char *filename, t_cmd *cmd)
+// {
+// 	if (cmd->redirs->hdoc_delim != NULL)//case: multiple heredocs
+// 	{
+// 		free(cmd->redirs->hdoc_delim);
+// 		cmd->redirs->hdoc_delim == NULL;
+// 	}
+// 	cmd->redirs->hdoc_delim = filename;
+// 	return (SUCCESS);
+// }
+
+// works
+// returns the filename/delimiter
+// pre-condition: quotes were handled (aka eliminated)
+char	*get_filename(char *redir_str, int ops)
+{
+	int	i;
+	int	len;
+	int	whitespaces;
+
+	i = ops - 1;//jump to last redir operator sign
+	len = ft_strlen(redir_str);
+	whitespaces = 0;
+	while (is_whitespace(redir_str[++i]))
+		whitespaces += 1;
+	return (ft_substr(redir_str, ops + whitespaces, len - ops - whitespaces));
+}
+
+// works
+// handles the redir depending on the type
+int	handle_redirs(t_cmd *cmd)
+{
+	int	i;
+	char	**redir_list;
+
+	i = -1;
+	redir_list = cmd->redirs->list;
+	while (redir_list[++i])
+	{
+		if (redir_list[i][0] == '>' && redir_list[i][1] != '>')
+			handle_outfile(get_filename(redir_list[i], 1), cmd);
+		else if (redir_list[i][0] == '>' && redir_list[i][1] == '>')
+			handle_append(get_filename(redir_list[i], 2), cmd);
+		else if (redir_list[i][0] == '<' && redir_list[i][1] != '<')
+			handle_infile(get_filename(redir_list[i], 1), cmd);
+		// else if (redir_list[i][0] == '<' && redir_list[i][1] == '<')
+		// 	handle_heredoc(get_filename(redir_list[i], 2), cmd);//done by Aidar
+	}
+	if (cmd->redirs->out_fd > 0 && cmd->redirs->append_fd > 0)
+	{
+		close (cmd->redirs->append_fd);
+		cmd->redirs->append_fd = 0;
+	}
+	return (SUCCESS);
+}
+
 
 // works
 void	parse_cmd_lines(char *pipeline, int cmd_count, t_shell *minishell)
 {
 	char	**arr;
-	t_cmd	*current;
+	t_cmd	*head;
 	int		i;
 
 	arr = ft_split(pipeline, 124);//splits the pipeline into its cmd-lines
-	// printf("arr= %s\n", arr[0]);
-	// printf("arr= %s\n", arr[1]);
-	// printf("arr= %s\n", arr[2]);
 	// if (!arr)
 	// 	return (printf("Error while splitting pipeline.\n"), FAILURE);
 	create_cmd_list(arr, cmd_count, minishell);
-	current = minishell->cmd;
+	head = minishell->cmd;
 	i = -1;
 	while (++i < cmd_count)
 	{
-		tokenize(arr[i], current);
-		// printf("[parse cmd line] %s\n", current->args[0]);
+		tokenize(arr[i], minishell->cmd);
 		// handle_heredoc();
 		// expand_env_var();
-		// handle_quotes();
-		// handle_redirs();
-		current = current->next;
+		cleanup_quotes(minishell->cmd->args);
+		minishell->cmd->builtin = is_builtin_cmd(minishell->cmd);
+		if (minishell->cmd->redirs_count > 0)
+		{
+			cleanup_quotes(minishell->cmd->redirs->list);
+			handle_redirs(minishell->cmd);
+		}
+		minishell->cmd = minishell->cmd->next;
 	}
+	minishell->cmd = head;
 	clean(arr, cmd_count);
 }
 
@@ -679,14 +993,32 @@ int	is_valid_syntax(char *copy)
 // goes out - only for testing
 void	print_list(t_cmd *cmd, int cmd_count)
 {
-	int	i;
+	int		i;
+	int		j;
+	t_cmd	*current;
 
 	i = 0;
+	current = cmd;
+	printf("------------- ARGS -------------\n");
 	while (i < cmd_count)
 	{
-		printf("[print]i = %i\n", i);
-		printf("tadaaaa: %s\n", cmd->args[0]);
-		cmd = cmd->next;
+		printf("i: %i\n", i);
+		printf("index: %i\n", current->index);
+		printf("tadaaaa (args): [%s]\n", current->args[0]);
+		printf("is builtin: %i\n\n", current->builtin);
+		j = 0;
+		printf("------------- REDIRS -------------\n");
+		while (current->redirs_count > 0)
+		{
+			printf("tadaaaa (redirs): %s\n", current->redirs->list[j]);
+			j++;
+			current->redirs_count--;
+		}
+		printf("in_fd: %i\n", current->redirs->in_fd);
+		printf("out_fd: %i\n", current->redirs->out_fd);
+		printf("append_fd: %i\n", current->redirs->append_fd);
+		printf("hdoc_delim: [%s]\n", current->redirs->hdoc_delim);
+		current = current->next;
 		i++;
 	}
 }
@@ -701,7 +1033,6 @@ int	parse(char *pipeline, t_shell *minishell)
 	parse_pipeline(copy, minishell);
 	free(copy);
 	parse_cmd_lines(pipeline, minishell->pipe_count + 1, minishell);
-	// printf("got here!\n");
 	// printf("[parse] %s\n", minishell->cmd->args[0]);
 	print_list(minishell->cmd, minishell->pipe_count + 1);
 	// execute(minishell);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   2.2.create_args_arr.c                              :+:      :+:    :+:   */
+/*   2.2.prepare_args_arr.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 19:37:46 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/10 17:27:53 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/15 19:09:29 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,11 @@ int	get_redir_count(char *copy)
 	i = -1;
 	while (copy[++i])
 	{
-		// works because pipes have been taken out and quotes are blacked out
-		if (is_operator(copy[i]))
+		if (is_redir(copy[i]))
 		{
 			count++;
 			i++;
-			if (is_operator(copy[i]))
+			if (is_redir(copy[i]))
 				i++;
 		}
 	}
@@ -79,8 +78,7 @@ int	get_arg_count(char *copy)
 		if (!is_whitespace(copy[i]) && !is_operator(copy[i]))
 		{
 			count++;
-			// whitespace and operator work as delimiter
-			while (copy[i] && !is_whitespace(copy[i])
+			while (copy[i] && !is_whitespace(copy[i]) // whitespace and operator work as delimiter
 				&& !is_operator(copy[i]))
 				i++;
 		}
@@ -89,34 +87,15 @@ int	get_arg_count(char *copy)
 	return (count - get_redir_count(copy));
 }
 
-// works
-// includes the cmd/flag/arg/env_arg into the args_array
-// attention, this will be called repeatedly as soon as arg is encountered
-void	fill_args_arr(char *arg_str, t_cmd *cmd)
-{
-	static int	i; // needed because of repeated call
-
-	cmd->args[i] = arg_str;
-	i++;
-	// NULL-terminate array and reset i to 0 when all cmds were handled
-	if (i == cmd->args_count)
-	{
-		cmd->args[i] = NULL;
-		i = 0;
-	}
-}
-
 // works, no memory leaks
 // sets the arg_count and the args_arr for cmd node
-void	create_args_arr(char *cmd_str, t_cmd *cmd)
+void	prepare_args_arr(char *cmd_str, t_cmd *cmd)
 {
 	char	*copy;
 
 	copy = blackout_quoted_content(cmd_str);
 	cmd->args_count = get_arg_count(copy);
 	cmd->redirs_count = get_redir_count(copy);
-	// calloc needed as single strings are not filled immediatly
-	cmd->args = ft_calloc(cmd->args_count + 1, sizeof(char *)); //attention: memory allocation
-	tokenize(cmd_str, cmd);
 	free (copy);
+	cmd->args = ft_calloc(cmd->args_count + 1, sizeof(char *)); //attention: memory allocation // calloc needed as single strings are not filled immediatly
 }

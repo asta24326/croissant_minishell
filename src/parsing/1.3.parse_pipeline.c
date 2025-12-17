@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   1.1.parse_pipeline.c                               :+:      :+:    :+:   */
+/*   1.3.parse_pipeline.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 15:06:57 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 14:06:43 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/15 18:44:16 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,34 +57,7 @@
 // }
 
 
-// works
-// returns copy of the input str all bytes within quotes set to 0
-// attention: I do not handle non-closed quotes (as discussed)
-char	*blackout_quoted_content(char *str)
-{
-	char	*copy;
-	char	quot_mark;
-	int		i;
 
-	copy = ft_strjoin("", str);
-	quot_mark = 0;
-	i = -1;
-	while (copy[++i])
-	{
-		printf("%c\n", copy[i]);
-		if (is_quote(copy[i]))
-		{
-			quot_mark = copy[i];
-			i++;
-			while (copy[i + 1] && copy[i] != quot_mark)
-			{
-				copy[i] = 48;
-				i++;
-			}
-		}
-	}
-	return (copy);
-}
 
 // works
 // extracts amount of pipes
@@ -103,20 +76,13 @@ int	get_pipe_count(char *copy)
 
 // works, no memory leaks
 // extracts data for the t_shell structure
-int	parse_pipeline(char *pipeline, t_shell *minishell)
+void	parse_pipeline(char *copy, t_shell *minishell) //wrong naming
 {
-	char	*copy;
-
-	copy = blackout_quoted_content(pipeline);
-	if (!is_valid_syntax(copy))
-		return (free(copy), FAILURE);
 	minishell->pipe_count = get_pipe_count(copy);
-	free(copy);
 	minishell->pipes = NULL;//handled in exec
-	create_cmd_list(pipeline, minishell->pipe_count + 1, minishell);
+	minishell->cmd = NULL;
 	minishell->exit_status = 0;
-	execute(minishell);//passing to execution
-	return (SUCCESS);
+	minishell->shell_pid = getpid();
 }
 
 // ----------for testing only-----------------------
