@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 19:13:02 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/16 19:25:08 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:52:47 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,307 +18,300 @@
 // #include <stdlib.h>
 // #include <unistd.h>
 
-size_t	ft_strlen(const char *s)
-{
-	int	i;
+// size_t	ft_strlen(const char *s)
+// {
+// 	int	i;
 
-	i = 0;
-	while (*s++)
-		i++;
-	return (i);
-}
+// 	i = 0;
+// 	while (*s++)
+// 		i++;
+// 	return (i);
+// }
 
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	size_t	i;
+// int	ft_strcmp(const char *s1, const char *s2)
+// {
+// 	size_t	i;
 
-	i = 0;
-	if (!s1)
-		return (1);
-	while (s1[i] || s2[i])
-	{
-		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
-		i++;
-	}
-	return (0);
-}
+// 	i = 0;
+// 	if (!s1)
+// 		return (1);
+// 	while (s1[i] || s2[i])
+// 	{
+// 		if (s1[i] != s2[i])
+// 			return (s1[i] - s2[i]);
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	j;
+// size_t	ft_strlcat(char *dst, const char *src, size_t size)
+// {
+// 	size_t	i;
+// 	size_t	j;
 
-	i = strlen(dst);
-	if (size <= i)
-		return (size + strlen(src));
-	j = 0;
-	while (src[j] && ((i + j) < (size - 1)))
-	{
-		dst[i + j] = src[j];
-		j++;
-	}
-	dst[i + j] = '\0';
-	return (i + strlen(src));
-}
+// 	i = strlen(dst);
+// 	if (size <= i)
+// 		return (size + strlen(src));
+// 	j = 0;
+// 	while (src[j] && ((i + j) < (size - 1)))
+// 	{
+// 		dst[i + j] = src[j];
+// 		j++;
+// 	}
+// 	dst[i + j] = '\0';
+// 	return (i + strlen(src));
+// }
 
-char	*ft_strjoin(const char *s1, const char *s2)
-{
-	char	*new;
-	size_t	len1;
-	size_t	len2;
+// char	*ft_strjoin(const char *s1, const char *s2)
+// {
+// 	char	*new;
+// 	size_t	len1;
+// 	size_t	len2;
 
-	len1 = strlen(s1);
-	len2 = strlen(s2);
-	new = (char *)calloc((len1 + len2 + 1), sizeof(char));
-	if (!new)
-		return (NULL);
-	ft_strlcat(new, s1, len1 + 1);
-	ft_strlcat(new, s2, len2 + len1 + 1);
-	return (new);
-}
+// 	len1 = strlen(s1);
+// 	len2 = strlen(s2);
+// 	new = (char *)calloc((len1 + len2 + 1), sizeof(char));
+// 	if (!new)
+// 		return (NULL);
+// 	ft_strlcat(new, s1, len1 + 1);
+// 	ft_strlcat(new, s2, len2 + len1 + 1);
+// 	return (new);
+// }
 
-char	*ft_strdup(const char *s)
-{
-	int		i;
-	char	*d;
+// char	*ft_strdup(const char *s)
+// {
+// 	int		i;
+// 	char	*d;
 
-	i = 0;
-	d = malloc(strlen(s) + 1);
-	if (!d)
-		return (NULL);
-	while (s[i])
-	{
-		d[i] = s[i];
-		i++;
-	}
-	d[i] = '\0';
-	return (d);
-}
+// 	i = 0;
+// 	d = malloc(strlen(s) + 1);
+// 	if (!d)
+// 		return (NULL);
+// 	while (s[i])
+// 	{
+// 		d[i] = s[i];
+// 		i++;
+// 	}
+// 	d[i] = '\0';
+// 	return (d);
+// }
 
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
-{
-	const char	*ptr;
+// size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+// {
+// 	const char	*ptr;
 
-	ptr = src;
-	if (size == 0)
-		return (strlen(src));
-	if (size != 0)
-	{
-		while (size > 1 && *src)
-		{
-			*dest++ = *src++;
-			size--;
-		}
-		*dest = '\0';
-	}
-	return (strlen(ptr));
-}
+// 	ptr = src;
+// 	if (size == 0)
+// 		return (strlen(src));
+// 	if (size != 0)
+// 	{
+// 		while (size > 1 && *src)
+// 		{
+// 			*dest++ = *src++;
+// 			size--;
+// 		}
+// 		*dest = '\0';
+// 	}
+// 	return (strlen(ptr));
+// }
 
-char	*ft_substr(const char *s, unsigned int start, size_t len)
-{
-	char			*sub;
-	unsigned int	max;
+// char	*ft_substr(const char *s, unsigned int start, size_t len)
+// {
+// 	char			*sub;
+// 	unsigned int	max;
 
-	if (!s)
-		return (NULL);
-	max = strlen(s);
-	if ((start >= max) || len == 0)
-		return (ft_strdup(""));
-	if (len > (size_t)strlen(s + start))
-		len = (size_t)strlen(s + start);
-	sub = malloc((len + 1) * sizeof(char));
-	if (!sub)
-		return (NULL);
-	s += start;
-	if (start < max)
-		ft_strlcpy(sub, s, len + 1);
-	return (sub);
-}
+// 	if (!s)
+// 		return (NULL);
+// 	max = strlen(s);
+// 	if ((start >= max) || len == 0)
+// 		return (ft_strdup(""));
+// 	if (len > (size_t)strlen(s + start))
+// 		len = (size_t)strlen(s + start);
+// 	sub = malloc((len + 1) * sizeof(char));
+// 	if (!sub)
+// 		return (NULL);
+// 	s += start;
+// 	if (start < max)
+// 		ft_strlcpy(sub, s, len + 1);
+// 	return (sub);
+// }
 
-void	clean(char **result, int word_index)
-{
-	while (word_index > 0)
-	{
-		word_index--;
-		free(result[word_index]);
-	}
-	free(result);
-}
+// void	clean(char **result, int word_index)
+// {
+// 	while (word_index > 0)
+// 	{
+// 		word_index--;
+// 		free(result[word_index]);
+// 	}
+// 	free(result);
+// }
 
-char	*ft_strrchr(const char *s, int c)
-{
-	int	i;
+// char	*ft_strrchr(const char *s, int c)
+// {
+// 	int	i;
 
-	i = strlen(s);
-	while (i >= 0)
-	{
-		if (s[i] == (char)c)
-			return ((char *)(s + i));
-		i--;
-	}
-	return (NULL);
-}
+// 	i = strlen(s);
+// 	while (i >= 0)
+// 	{
+// 		if (s[i] == (char)c)
+// 			return ((char *)(s + i));
+// 		i--;
+// 	}
+// 	return (NULL);
+// }
 
-static int	ft_strcount(const char *s, char c)
-{
-	int	count;
+// static int	ft_strcount(const char *s, char c)
+// {
+// 	int	count;
 
-	count = 0;
-	while (*s)
-	{
-		while (*s && *s == c)
-			s++;
-		if (*s && *s != c)
-			count++;
-		while (*s && *s != c)
-			s++;
-	}
-	return (count);
-}
+// 	count = 0;
+// 	while (*s)
+// 	{
+// 		while (*s && *s == c)
+// 			s++;
+// 		if (*s && *s != c)
+// 			count++;
+// 		while (*s && *s != c)
+// 			s++;
+// 	}
+// 	return (count);
+// }
 
-static int	ft_strlength(const char *s, char c)
-{
-	int		length;
+// static int	ft_strlength(const char *s, char c)
+// {
+// 	int		length;
 
-	if (!ft_strrchr(s, c))
-		length = strlen(s);
-	else
-	{
-		length = 0;
-		while (*s && *s == c)
-			s++;
-		while (*s && *s != c)
-		{
-			length++;
-			s++;
-		}
-	}
-	return (length);
-}
+// 	if (!ft_strrchr(s, c))
+// 		length = strlen(s);
+// 	else
+// 	{
+// 		length = 0;
+// 		while (*s && *s == c)
+// 			s++;
+// 		while (*s && *s != c)
+// 		{
+// 			length++;
+// 			s++;
+// 		}
+// 	}
+// 	return (length);
+// }
 
-static void	ft_free(char **arr_split)
-{
-	int	i;
+// static void	ft_free(char **arr_split)
+// {
+// 	int	i;
 
-	i = 0;
-	while (arr_split[i])
-	{
-		free(arr_split[i]);
-		i++;
-	}
-	free(arr_split);
-}
+// 	i = 0;
+// 	while (arr_split[i])
+// 	{
+// 		free(arr_split[i]);
+// 		i++;
+// 	}
+// 	free(arr_split);
+// }
 
-static char	**ft_fillarr(char const *s, char c, char **arr_split)
-{
-	int		i;
+// static char	**ft_fillarr(char const *s, char c, char **arr_split)
+// {
+// 	int		i;
 
-	i = 0;
-	while (*s)
-	{
-		while (*s && *s == c)
-			s++;
-		if (*s && *s != c)
-		{
-			arr_split[i] = ft_substr(s, 0, ft_strlength(s, c));
-			if (!arr_split[i])
-			{
-				ft_free(arr_split);
-				return (NULL);
-			}
-			s += ft_strlength(s, c);
-			i++;
-		}
-	}
-	arr_split[i] = NULL;
-	return (arr_split);
-}
+// 	i = 0;
+// 	while (*s)
+// 	{
+// 		while (*s && *s == c)
+// 			s++;
+// 		if (*s && *s != c)
+// 		{
+// 			arr_split[i] = ft_substr(s, 0, ft_strlength(s, c));
+// 			if (!arr_split[i])
+// 			{
+// 				ft_free(arr_split);
+// 				return (NULL);
+// 			}
+// 			s += ft_strlength(s, c);
+// 			i++;
+// 		}
+// 	}
+// 	arr_split[i] = NULL;
+// 	return (arr_split);
+// }
 
-char	**ft_split(char const *s, char c)
-{
-	char	**arr_split;
+// char	**ft_split(char const *s, char c)
+// {
+// 	char	**arr_split;
 
-	if (s)
-		arr_split = calloc((ft_strcount(s, c) + 1), sizeof(char *));
-	if (!s || !arr_split)
-		return (NULL);
-	return (ft_fillarr(s, c, arr_split));
-}
-// ---------------  libft functions - end!  --------------
+// 	if (s)
+// 		arr_split = calloc((ft_strcount(s, c) + 1), sizeof(char *));
+// 	if (!s || !arr_split)
+// 		return (NULL);
+// 	return (ft_fillarr(s, c, arr_split));
+// }
+// // ---------------  libft functions - end!  --------------
 
-// works
-// checks whether c is space or horizontal tab
-// attention: without '\n'
-int	is_whitespace(char c)
-{
-	if (c == 32 || c == 9)
-		return (1);
-	return (0);
-}
+// // in
+// int	is_whitespace(char c)
+// {
+// 	if (c == 32 || c == 9)
+// 		return (true);
+// 	return (false);
+// }
 
-// works
-// checks whether c is pipe, right or left arrow
-int	is_operator(char c)
-{
-	if (c == 124 || c == 60 || c == 62)
-		return (1);
-	return (0);
-}
+// // in
+// int	is_operator(char c)
+// {
+// 	if (c == '|' || c == '>' || c == '<')
+// 		return (true);
+// 	return (false);
+// }
 
-// works
-// checks whether c is right or left arrow
-int	is_redir(char c)
-{
-	if (c == 60 || c == 62)
-		return (1);
-	return (0);
-}
+// // in
+// int	is_redir(char c)
+// {
+// 	if (c == '>' || c == '<')
+// 		return (true);
+// 	return (false);
+// }
 
-// works
-// checks whether c is double or single quotation mark
-int	is_quote(char c)
-{
-	if (c == 34 || c == 39)
-		return (1);
-	return (0);
-}
+// // in
+// int	is_quote(char c)
+// {
+// 	if (c == '\'' || c == '\"')
+// 		return (true);
+// 	return (false);
+// }
 
-// works
-// checks whether c is cmd/arg/flag/filename/delimiter
-int	is_other(char c)
-{
-	if (is_whitespace(c) || is_operator(c) || is_quote(c))
-		return (0);
-	return (1);
-}
+// // in
+// int	is_other(char c)
+// {
+// 	if (is_whitespace(c) || is_operator(c) || is_quote(c))
+// 		return (false);
+// 	return (true);
+// }
 
-// works
-// returns copy of the input str all bytes within quotes set to 0
-char	*blackout_quoted_content(char *str)
-{
-	char	*copy;
-	char	quot_mark;
-	int		i;
+// // in
+// char	*blackout_quoted_content(char *str)
+// {
+// 	char	*copy;
+// 	char	quot_mark;
+// 	int		i;
 
-	copy = ft_strjoin("", str);
-	quot_mark = 0;
-	i = -1;
-	while (copy[++i])
-	{
-		if (is_quote(copy[i]))
-		{
-			quot_mark = copy[i];
-			i++;
-			while (copy[i + 1] && copy[i] != quot_mark)
-			{
-				copy[i] = 48;
-				i++;
-			}
-		}
-	}
-	return (copy);
-}
+// 	copy = ft_strjoin("", str);
+// 	quot_mark = 0;
+// 	i = -1;
+// 	while (copy[++i])
+// 	{
+// 		if (is_quote(copy[i]))
+// 		{
+// 			quot_mark = copy[i];
+// 			i++;
+// 			while (copy[i + 1] && copy[i] != quot_mark)
+// 			{
+// 				copy[i] = 48;
+// 				i++;
+// 			}
+// 		}
+// 	}
+// 	return (copy);
+// }
 
 // works
 // returns length of redirection token
@@ -329,6 +322,8 @@ int	get_redir_len(char *str)
 
 	len = 1; //skip the (first) redir sign
 	copy = blackout_quoted_content(str);
+	if (!copy)
+		return (perror("blackout_quoted_content"), FAILURE);
 	if (copy[len] == copy[len - 1]) //case: double arrow
 		len++;
 	while (is_whitespace(copy[len])) //case:whitespaces in between
@@ -359,7 +354,7 @@ char	*get_delimiter(char *cmd_str, int ops, int len)
 	int	i;
 	int	whitespaces;
 
-	i = 1;//jump over hdoc operator signs
+	i = ops - 1;//jump over hdoc operator signs
 	whitespaces = 0;
 	while (is_whitespace(cmd_str[++i]))
 		whitespaces += 1;
@@ -374,6 +369,8 @@ void	prepare_hdoc(char *cmd_str, t_redirs *redirs, int len)
 	if (nbr_hdoc == redirs->hdoc_count)
 	{
 		redirs->hdoc_delim = get_delimiter(cmd_str, 2, len);
+		if (!redirs->hdoc_delim)
+			return (perror("get_delimiter"), FAILURE);
 		nbr_hdoc = 0;
 	}
 }
@@ -447,9 +444,11 @@ int	parse_cmd(char *cmd_str, t_cmd *cmd)
 	char	*arg;
 
 	index = get_arg_len(cmd_str);
-	arg = ft_substr(cmd_str, 0, index); // attention: memory allocation
+	arg = ft_substr(cmd_str, 0, index);
+	if (!arg)
+		return (perror("parse_cmd"), -1); //free array
 	fill_args_arr(arg, cmd);
-	printf("[parse cmd] %s\n", cmd->args[0]);
+	// printf("[parse cmd] %s\n", cmd->args[0]);
 	return (index);
 }
 
@@ -479,6 +478,8 @@ int	get_hdoc_count(char *cmd_str)
 	i = -1;
 	count = 0;
 	copy = blackout_quoted_content(cmd_str);
+	if (!copy)
+		return (perror("blackout_quoted_content"), FAILURE);
 	while (cmd_str[++i])
 		if (cmd_str[i] == '<' && cmd_str[i + 1] == '<')
 			count += 1;
@@ -492,16 +493,16 @@ int	prepare_redirs(char *cmd_str, t_cmd *cmd)
 
 	redirects = (t_redirs *)malloc(sizeof(t_redirs));
 	if (!redirects)
-		return (printf("Memory allocation failed.\n"), FAILURE);
-	redirects->list = calloc(cmd->redirs_count + 1, sizeof(char *));
+		return (perror("prepare_redirs, struct"), FAILURE);
+	redirects->list = ft_calloc(cmd->redirs_count + 1, sizeof(char *));
 	if (!redirects->list)
-		return (printf("Memory allocation failed.\n"), FAILURE);
+		return (perror("prepare_redirs, list"), FAILURE);
 	redirects->in_fd = 0;
 	redirects->out_fd = 0;
 	redirects->append_fd = 0;
-	redirects->hdoc_count = get_hdoc_count(cmd_str); //needed? check how often used in the end
+	redirects->hdoc_count = get_hdoc_count(cmd_str); //needed? check how often used in the end //RAUS bitte, sonst error handling
 	redirects->hdoc_delim = NULL;
-	redirects->exp_hdoc = NULL; //needed?
+	redirects->exp_hdoc = NULL; //needed? rather NO
 	cmd->redirs = redirects;
 	return (SUCCESS);
 }
@@ -547,7 +548,6 @@ int	get_arg_count(char *copy)
 				i++;
 		}
 	}
-	// if redirs in cmd_str, substract the filename/delimiter
 	return (count);
 }
 
@@ -558,310 +558,321 @@ void	prepare_args_arr(char *cmd_str, t_cmd *cmd)
 	char	*copy;
 
 	copy = blackout_quoted_content(cmd_str);
+	if (!copy)
+		return (perror("blackout_quoted_content"), FAILURE);
 	cmd->redirs_count = get_redir_count(copy);
 	cmd->args_count = get_arg_count(copy) - cmd->redirs_count;
 	free (copy);
 	cmd->args = calloc(cmd->args_count + 1, sizeof(char *)); //attention: memory allocation // calloc needed as single strings are not filled immediatly
 }
 
-// works
-// creates t_cmd node
-t_cmd	*create_node(char *cmd_line)
-{
-	t_cmd	*new;
-
-	new = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!new)
-		return (printf("Memory allocation failed.\n"), NULL);
-	prepare_args_arr(cmd_line, new);//creates char **args, int args_count, int redirs_count
-	new->builtin = NULL;
-	if (new->redirs_count > 0)
-		prepare_redirs(cmd_line, new);
-	else
-		new->redirs = NULL;
-	new->next = NULL;
-	return (new);
-}
-
-// works
-// adds a new node to the back of the linked list
-void	add_node(t_cmd **list, t_cmd *new)
-{
-	t_cmd	*head;
-
-	head = *list;
-	while (head != NULL && head->next != NULL)
-		head = head->next;
-	head->next = new;
-}
-
-void	set_index(t_cmd *stack, int cmd_count)
-{
-	int		i;
-	t_cmd	*current;
-
-	i = -1;
-	current = stack;
-	while (++i < cmd_count)
-	{
-		current->index = i;
-		current = current->next;
-	}
-}
-
-// // goes out - only for testing
-// void	print_list(t_cmd *list, int cmd_count)
+// // works
+// // creates t_cmd node
+// t_cmd	*create_node(char *cmd_line)
 // {
-// 	int	i;
+// 	t_cmd	*new;
 
-// 	i = 0;
-// 	while (i < cmd_count)
+// 	new = (t_cmd *)malloc(sizeof(t_cmd));
+// 	if (!new)
+// 		return (perror("create_node"), NULL);
+// 	prepare_args_arr(cmd_line, new);//creates char **args, int args_count, int redirs_count
+// 	new->builtin = NULL;
+// 	if (new->redirs_count > 0)
+// 		prepare_redirs(cmd_line, new);
+// 	else
+// 		new->redirs = NULL;
+// 	new->next = NULL;
+// 	return (new);
+// }
+
+// // works
+// // adds a new node to the back of the linked list
+// void	add_node(t_cmd **list, t_cmd *new)
+// {
+// 	t_cmd	*head;
+
+// 	head = *list;
+// 	while (head != NULL && head->next != NULL)
+// 		head = head->next;
+// 	head->next = new;
+// }
+
+// void	set_index(t_cmd *stack, int cmd_count)
+// {
+// 	int		i;
+// 	t_cmd	*current;
+
+// 	i = -1;
+// 	current = stack;
+// 	while (++i < cmd_count)
 // 	{
-// 		printf("i = %i\n", i);
-// 		printf("tadaaaa: %s\n", list->args[0]);
-// 		list = list->next;
-// 		i++;
+// 		current->index = i;
+// 		current = current->next;
 // 	}
 // }
 
-// to be tested
-// splits pipeline into cmd-lines, and creates 1 node per cmd-line
-// attention: what I need here to be passed is blacked out string!
-void	create_cmd_list(char **arr, int cmd_count, t_shell *minishell)
-{
-	t_cmd	*list;
-	int		i;
+// // // goes out - only for testing
+// // void	print_list(t_cmd *list, int cmd_count)
+// // {
+// // 	int	i;
 
-	list = create_node(arr[0]);//initiates the list, creates first node
-	i = 0;
-	while (++i < cmd_count) //creates entire list by passing 1 cmd-line per node
-		add_node(&list, create_node(arr[i]));
-	// print_list(list, cmd_count);
-	set_index(list, cmd_count);
-	minishell->cmd = list;
-}
+// // 	i = 0;
+// // 	while (i < cmd_count)
+// // 	{
+// // 		printf("i = %i\n", i);
+// // 		printf("tadaaaa: %s\n", list->args[0]);
+// // 		list = list->next;
+// // 		i++;
+// // 	}
+// // }
 
-// works
-// returns length of str cleaned by quotes to be removed
-int	get_strlen_clean(char *orig_str)
-{
-	int		len;
-	char	quot_mark;
-
-	len = 0;
-	quot_mark = 0;
-	while (*orig_str)
-	{
-		if (is_quote(*orig_str) && quot_mark == 0) //first quot.mark encountered
-			quot_mark = *orig_str;
-		else if (*orig_str == quot_mark) //matching quot.mark encountered
-			quot_mark = 0;
-		else
-			len++;
-		orig_str++;
-	}
-	return (len);
-}
-
-// works
-// returns a string witout quotes that will not be outputted
-// pre-condition: functioning operators, unecessary whitespaces and to be expanded $ have been gone
-char	*get_clean_str(char *orig_str)
-{
-	char	*clean_str;
-	char	quot_mark;
-	int		i;
-	int		j;
-
-	// printf("orig: %s\n", orig_str);
-	clean_str = (char *)malloc(get_strlen_clean(orig_str) + 1);
-	if (!clean_str)
-		return (printf("Error with memory allocation.\n"), NULL);
-	i = 0;
-	j = 0;
-	while (orig_str[i])
-	{
-		if (is_quote(orig_str[i]))
-		{
-			quot_mark = orig_str[i++];
-			while (orig_str[i] != quot_mark)
-				clean_str[j++] = orig_str[i++];
-			i++;
-		}
-		else if (is_other(orig_str[i]) || is_redir(orig_str[i]))
-			while (orig_str[i] && !is_quote(orig_str[i]))
-				clean_str[j++] = orig_str[i++];
-	}
-	clean_str[j] = '\0';
-	return (free(orig_str), clean_str);
-}
-
-// works
-// cleans the passed char *arr from unnecessary quotes
-// needed for char **args and for char **redirs
-void	cleanup_quotes(char **arr)
-{
-	int		i;
-
-	i = -1;
-	// printf("orig: %s\n", arr[0]);
-	while (arr[++i])
-		if (strchr(arr[i], '\'') || strchr(arr[i], '\"'))
-			arr[i] = get_clean_str(arr[i]);
-}
-
-int	is_builtin_cmd(t_cmd *cmd)
-{
-	char	*str;
-
-	str = cmd->args[0];
-	if (!(ft_strcmp(str, "echo")) || !(ft_strcmp(str, "cd"))
-		|| !(ft_strcmp(str, "pwd")) || !(ft_strcmp(str, "export"))
-		|| !(ft_strcmp(str, "unset")) || !(ft_strcmp(str, "env"))
-		|| !(ft_strcmp(str, "exit")))
-		return (true);
-	return (false);
-}
-
-//attention: here, I need the index of the cmd
-int	handle_outfile(char *filename, t_cmd *cmd)
-{
-	static int	fd;
-	static int	cmd_index;
-
-	if (cmd_index != cmd->index)//case: we arrived at next cmd
-	{
-		cmd_index = cmd->index;
-		fd = 0;
-	}
-	if (fd > 0)//case:several outfiles in 1 cmd
-		close (fd);
-	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-		return (printf("Error while opening file %s\n", filename), FAILURE);
-	cmd->redirs->out_fd = fd;
-	free (filename);
-	return (SUCCESS);
-}
-
-//attention: here, I need the index of the cmd
-//attention: here, I need int append_fd in t_redirs
-int	handle_append(char *filename, t_cmd *cmd)
-{
-	static int	fd;
-	static int	cmd_index;
-
-	if (cmd_index != cmd->index)//case: we arrived at next cmd
-	{
-		cmd_index = cmd->index;
-		fd = 0;
-	}
-	if (fd > 0)//case:several appends in 1 cmd
-		close (fd);
-	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd == -1)
-		return (printf("Error while opening file %s\n", filename), FAILURE);
-	cmd->redirs->append_fd = fd;
-	free (filename);
-	return (SUCCESS);
-}
-
-//attention: here, I need the index of the cmd
-int	handle_infile(char *filename, t_cmd *cmd)
-{
-	static int	fd;
-	static int	cmd_index;
-
-	if (cmd_index != cmd->index)//case: we arrived at next cmd
-	{
-		cmd_index = cmd->index;
-		fd = 0;
-	}
-	if (fd > 0)//case:several infiles in 1 cmd
-		close (fd);
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-		return (printf("File %s does not exist.\n", filename), FAILURE);
-	if (cmd->redirs->hdoc_delim != NULL) //only if heredoc exists
-	{
-		close (fd);
-		fd = 0;
-	}
-	cmd->redirs->in_fd = fd;
-	free (filename);
-	return (SUCCESS);
-}
-
-//attention: here, I need the index of the cmd
-// pre-condition: quotes were handled (aka eliminated)
-// means: bool exp_hdoc was extracted while quote handling
-// int	handle_heredoc(char *filename, t_cmd *cmd)
+// // to be tested
+// // splits pipeline into cmd-lines, and creates 1 node per cmd-line
+// // attention: what I need here to be passed is blacked out string!
+// void	create_cmd_list(char **arr, int cmd_count, t_shell *minishell)
 // {
-// 	if (cmd->redirs->hdoc_delim != NULL)//case: multiple heredocs
+// 	t_cmd	*list;
+// 	int		i;
+
+// 	list = create_node(arr[0]);//initiates the list, creates first node
+// 	i = 0;
+// 	while (++i < cmd_count) //creates entire list by passing 1 cmd-line per node
+// 		add_node(&list, create_node(arr[i]));
+// 	// print_list(list, cmd_count);
+// 	set_index(list, cmd_count);
+// 	minishell->cmd = list;
+// }
+
+// // works
+// // returns length of str cleaned by quotes to be removed
+// int	get_strlen_clean(char *orig_str)
+// {
+// 	int		len;
+// 	char	quot_mark;
+
+// 	len = 0;
+// 	quot_mark = 0;
+// 	while (*orig_str)
 // 	{
-// 		free(cmd->redirs->hdoc_delim);
-// 		cmd->redirs->hdoc_delim == NULL;
+// 		if (is_quote(*orig_str) && quot_mark == 0) //first quot.mark encountered
+// 			quot_mark = *orig_str;
+// 		else if (*orig_str == quot_mark) //matching quot.mark encountered
+// 			quot_mark = 0;
+// 		else
+// 			len++;
+// 		orig_str++;
 // 	}
-// 	cmd->redirs->hdoc_delim = filename;
+// 	return (len);
+// }
+
+// // works
+// // returns a string witout quotes that will not be outputted
+// // pre-condition: functioning operators, unecessary whitespaces and to be expanded $ have been gone
+// char	*get_clean_str(char *orig_str)
+// {
+// 	char	*clean_str;
+// 	char	quot_mark;
+// 	int		i;
+// 	int		j;
+
+// 	clean_str = (char *)malloc(get_strlen_clean(orig_str) + 1);
+// 	if (!clean_str)
+// 		return (perror("get_clean_str"), NULL);
+// 	i = 0;
+// 	j = 0;
+// 	while (orig_str[i])
+// 	{
+// 		if (is_quote(orig_str[i]))
+// 		{
+// 			quot_mark = orig_str[i++];
+// 			while (orig_str[i] != quot_mark)
+// 				clean_str[j++] = orig_str[i++];
+// 			i++;
+// 		}
+// 		else if (is_other(orig_str[i]) || is_redir(orig_str[i]))
+// 			while (orig_str[i] && !is_quote(orig_str[i]))
+// 				clean_str[j++] = orig_str[i++];
+// 	}
+// 	clean_str[j] = '\0';
+// 	return (free(orig_str), clean_str);
+// }
+
+// // works
+// // cleans the passed char *arr from unnecessary quotes
+// // needed for char **args and for char **redirs
+// void	cleanup_quotes(char **arr)
+// {
+// 	int		i;
+
+// 	i = -1;
+// 	// printf("orig: %s\n", arr[0]);
+// 	while (arr[++i])
+// 	{
+// 		if (strchr(arr[i], '\'') || strchr(arr[i], '\"'))
+// 		{
+// 			arr[i] = get_clean_str(arr[i]);
+// 			if (!arr[i])
+// 				ft_free(arr); //to include from kristin's ft_split
+// 		}
+// 	}
+// }
+
+// int	is_builtin_cmd(t_cmd *cmd)
+// {
+// 	char	*str;
+
+// 	str = cmd->args[0];
+// 	if (!(ft_strcmp(str, "echo")) || !(ft_strcmp(str, "cd"))
+// 		|| !(ft_strcmp(str, "pwd")) || !(ft_strcmp(str, "export"))
+// 		|| !(ft_strcmp(str, "unset")) || !(ft_strcmp(str, "env"))
+// 		|| !(ft_strcmp(str, "exit")))
+// 		return (true);
+// 	return (false);
+// }
+
+// // works
+// // attention: here, I need the index of the cmd
+// int	handle_outfile(char *filename, t_cmd *cmd)
+// {
+// 	static int	fd;
+// 	static int	cmd_index;
+
+// 	if (cmd_index != cmd->index)//case: we arrived at next cmd
+// 	{
+// 		cmd_index = cmd->index;
+// 		fd = 0;
+// 	}
+// 	if (fd > 0)//case:several outfiles in 1 cmd
+// 		close (fd);
+// 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 	if (fd == -1)
+// 		return (perror("handle_outfile"), FAILURE);
+// 	cmd->redirs->out_fd = fd;
+// 	free (filename);
 // 	return (SUCCESS);
 // }
 
+// //attention: here, I need the index of the cmd
+// //attention: here, I need int append_fd in t_redirs
+// int	handle_append(char *filename, t_cmd *cmd)
+// {
+// 	static int	fd;
+// 	static int	cmd_index;
+
+// 	if (cmd_index != cmd->index)//case: we arrived at next cmd
+// 	{
+// 		cmd_index = cmd->index;
+// 		fd = 0;
+// 	}
+// 	if (fd > 0)//case:several appends in 1 cmd
+// 		close (fd);
+// 	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+// 	if (fd == -1)
+// 		return (perror("handle_append"), FAILURE);
+// 	cmd->redirs->append_fd = fd;
+// 	free (filename);
+// 	return (SUCCESS);
+// }
+
+// //attention: here, I need the index of the cmd
+// int	handle_infile(char *filename, t_cmd *cmd)
+// {
+// 	static int	fd;
+// 	static int	cmd_index;
+
+// 	if (cmd_index != cmd->index)//case: we arrived at next cmd
+// 	{
+// 		cmd_index = cmd->index;
+// 		fd = 0;
+// 	}
+// 	if (fd > 0)//case:several infiles in 1 cmd
+// 		close (fd);
+// 	fd = open(filename, O_RDONLY);
+// 	if (fd == -1)
+// 		return (perror("handle_infile"), FAILURE);
+// 	if (cmd->redirs->hdoc_delim != NULL) //only if heredoc exists
+// 	{
+// 		close (fd);
+// 		fd = 0;
+// 	}
+// 	cmd->redirs->in_fd = fd;
+// 	free (filename);
+// 	return (SUCCESS);
+// }
+
+// //attention: here, I need the index of the cmd
+// // pre-condition: quotes were handled (aka eliminated)
+// // means: bool exp_hdoc was extracted while quote handling
+// // int	handle_heredoc(char *filename, t_cmd *cmd)
+// // {
+// // 	if (cmd->redirs->hdoc_delim != NULL)//case: multiple heredocs
+// // 	{
+// // 		free(cmd->redirs->hdoc_delim);
+// // 		cmd->redirs->hdoc_delim == NULL;
+// // 	}
+// // 	cmd->redirs->hdoc_delim = filename;
+// // 	return (SUCCESS);
+// // }
+
+// // works
+// // returns the filename/delimiter
+// // pre-condition: quotes were handled (aka eliminated)
+// char	*get_filename(char *redir_str)
+// {
+// 	int	skip;
+// 	int	len;
+
+// 	skip = 0;
+// 	len = ft_strlen(redir_str);
+// 	while (is_redir(redir_str[skip]) || is_whitespace(redir_str[skip]))
+// 		skip++;
+// 	return (ft_substr(redir_str, skip, len - skip));
+// }
+
+// // works
+// // handles the redir depending on the type
+// int	handle_redirs(t_cmd *cmd)
+// {
+// 	int		i;
+// 	char	**redir_list;
+// 	char	*filename;
+
+// 	i = -1;
+// 	redir_list = cmd->redirs->list;
+// 	while (redir_list[++i])
+// 	{
+// 		filename = get_filename(redir_list[i]);
+// 		if (!filename)
+// 			return (perror("get_filename"), FAILURE);
+// 		if (redir_list[i][0] == '>' && redir_list[i][1] != '>')
+// 			handle_outfile(filename, cmd);
+// 		else if (redir_list[i][0] == '>' && redir_list[i][1] == '>')
+// 			handle_append(filename, cmd);
+// 		else if (redir_list[i][0] == '<' && redir_list[i][1] != '<')
+// 			handle_infile(filename, cmd);
+// 		// else if (redir_list[i][0] == '<' && redir_list[i][1] == '<')
+// 		// 	handle_heredoc(get_filename(redir_list[i], 2), cmd);//done by Aidar
+// 	}
+// 	if (cmd->redirs->out_fd > 0 && cmd->redirs->append_fd > 0) //case: out & append, only out is passed
+// 	{
+// 		close (cmd->redirs->append_fd);
+// 		cmd->redirs->append_fd = 0;
+// 	}
+// 	return (free(cmd->redirs->list), SUCCESS);
+// }
+
+
 // works
-// returns the filename/delimiter
-// pre-condition: quotes were handled (aka eliminated)
-char	*get_filename(char *redir_str, int ops)
-{
-	int	i;
-	int	len;
-	int	whitespaces;
-
-	i = ops - 1;//jump to last redir operator sign
-	len = ft_strlen(redir_str);
-	whitespaces = 0;
-	while (is_whitespace(redir_str[++i]))
-		whitespaces += 1;
-	return (ft_substr(redir_str, ops + whitespaces, len - ops - whitespaces));
-}
-
-// works
-// handles the redir depending on the type
-int	handle_redirs(t_cmd *cmd)
-{
-	int	i;
-	char	**redir_list;
-
-	i = -1;
-	redir_list = cmd->redirs->list;
-	while (redir_list[++i])
-	{
-		if (redir_list[i][0] == '>' && redir_list[i][1] != '>')
-			handle_outfile(get_filename(redir_list[i], 1), cmd);
-		else if (redir_list[i][0] == '>' && redir_list[i][1] == '>')
-			handle_append(get_filename(redir_list[i], 2), cmd);
-		else if (redir_list[i][0] == '<' && redir_list[i][1] != '<')
-			handle_infile(get_filename(redir_list[i], 1), cmd);
-		// else if (redir_list[i][0] == '<' && redir_list[i][1] == '<')
-		// 	handle_heredoc(get_filename(redir_list[i], 2), cmd);//done by Aidar
-	}
-	if (cmd->redirs->out_fd > 0 && cmd->redirs->append_fd > 0)
-	{
-		close (cmd->redirs->append_fd);
-		cmd->redirs->append_fd = 0;
-	}
-	return (SUCCESS);
-}
-
-
-// works
-void	parse_cmd_lines(char *pipeline, int cmd_count, t_shell *minishell)
+// needed: error handling
+int	parse_cmd_lines(char *pipeline, int cmd_count, t_shell *minishell)
 {
 	char	**arr;
 	t_cmd	*head;
 	int		i;
 
 	arr = ft_split(pipeline, 124);//splits the pipeline into its cmd-lines
-	// if (!arr)
-	// 	return (printf("Error while splitting pipeline.\n"), FAILURE);
+	if (!arr)
+		return (perror("parse_cmd_line"), FAILURE);
 	create_cmd_list(arr, cmd_count, minishell);
 	head = minishell->cmd;
 	i = -1;
@@ -880,208 +891,204 @@ void	parse_cmd_lines(char *pipeline, int cmd_count, t_shell *minishell)
 		minishell->cmd = minishell->cmd->next;
 	}
 	minishell->cmd = head;
-	clean(arr, cmd_count);
+	return (clean(arr, cmd_count), SUCCESS);
 }
 
-// works
-// extracts amount of pipes
-int	get_pipe_count(char *copy)
-{
-	int		count;
-	int		i;
+// // works
+// // extracts amount of pipes
+// int	get_pipe_count(char *copy)
+// {
+// 	int		count;
+// 	int		i;
 
-	count = 0;
-	i = -1;
-	while (copy[++i])
-		if (copy[i] == 124)
-			count++;
-	return (count);
-}
+// 	count = 0;
+// 	i = -1;
+// 	while (copy[++i])
+// 		if (copy[i] == 124)
+// 			count++;
+// 	return (count);
+// }
 
-// works, no memory leaks
-// extracts data for the t_shell structure
-void	parse_pipeline(char *copy, t_shell *minishell) //wrong naming
-{
-	minishell->pipe_count = get_pipe_count(copy);
-	minishell->pipes = NULL;//handled in exec
-	minishell->cmd = NULL;
-	minishell->exit_status = 0;
-	minishell->shell_pid = getpid();
-}
+// // works
+// // extracts data for the t_shell structure
+// void	prepare_parsing(char *copy, t_shell *minishell)
+// {
+// 	minishell->pipe_count = get_pipe_count(copy);
+// 	minishell->pipes = NULL; //handled in exec
+// 	minishell->cmd = NULL;
+// 	minishell->exit_status = 0;
+// 	minishell->shell_pid = getpid();
+// }
 
-// works
-// checks whether pipe is valid (it needs at least 1 cmd or 1 redir on left side)
-int	are_valid_pipes(char *copy)
-{
-	int	flag;
+// // works
+// // checks whether pipe is valid (it needs at least 1 cmd or 1 redir on left side)
+// int	are_valid_pipes(char *copy)
+// {
+// 	int	flag;
 
-	flag = 0;
-	while (*copy)
-	{
-		if (is_quote(*copy) || is_redir(*copy) || is_other(*copy))
-			flag = 1;
-		else if (*copy == 124)
-		{
-			if (flag == 0)
-				return (false);
-			flag = 0;
-		}
-		copy++;
-	}
-	return (true);
-}
+// 	flag = 0;
+// 	while (*copy)
+// 	{
+// 		if (is_quote(*copy) || is_redir(*copy) || is_other(*copy))
+// 			flag = 1;
+// 		else if (*copy == 124)
+// 		{
+// 			if (flag == 0)
+// 				return (false);
+// 			flag = 0;
+// 		}
+// 		copy++;
+// 	}
+// 	return (true);
+// }
 
-// works
-// checks whether redirection has exactly 1 or 2 same arrows, +filename/delimiter
-int	are_valid_redirs(char *copy)
-{
-	int		i;
+// // works
+// // checks whether redirection has exactly 1 or 2 same arrows, +filename/delimiter
+// int	are_valid_redirs(char *copy)
+// {
+// 	int		i;
 
-	i = -1;
-	while (copy[++i])
-	{
-		if (is_redir(copy[i]))
-		{
-			i++;
-			if (copy[i] == copy[i - 1]) //case: double arrow
-				i++;
-			while (is_whitespace(copy[i]))
-				i++;
-			while (is_quote(copy[i])) //case:quoted filename/delimiter
-				i++;
-			if (!is_other(copy[i]) || !copy[i]) //MUST be other
-				return (false);
-		}
-	}
-	return (true);
-}
+// 	i = -1;
+// 	while (copy[++i])
+// 	{
+// 		if (is_redir(copy[i]))
+// 		{
+// 			i++;
+// 			if (copy[i] == copy[i - 1]) //case: double arrow
+// 				i++;
+// 			while (is_whitespace(copy[i]))
+// 				i++;
+// 			while (is_quote(copy[i])) //case:quoted filename/delimiter
+// 				i++;
+// 			if (!is_other(copy[i]) || !copy[i]) //MUST be other
+// 				return (false);
+// 		}
+// 	}
+// 	return (true);
+// }
 
-// works
-// checks whether quotes are closed
-int	are_closed_quotes(char *copy)
-{
-	char	quot_mark;
+// // works
+// // checks whether quotes are closed
+// int	are_closed_quotes(char *copy)
+// {
+// 	char	quot_mark;
 
-	quot_mark = 0;
-	while (*copy)
-	{
-		if (is_quote(*copy) & !quot_mark)
-			quot_mark = *copy;
-		else if (*copy == quot_mark)
-			quot_mark = 0;
-		copy++;
-	}
-	if (quot_mark == 0)
-		return (true);
-	return (false);
-}
+// 	quot_mark = 0;
+// 	while (*copy)
+// 	{
+// 		if (is_quote(*copy) & !quot_mark)
+// 			quot_mark = *copy;
+// 		else if (*copy == quot_mark)
+// 			quot_mark = 0;
+// 		copy++;
+// 	}
+// 	if (quot_mark == 0)
+// 		return (true);
+// 	return (false);
+// }
 
-// works, no memory leaks
-// checks overall syntax of input pipeline
-int	is_valid_syntax(char *copy)
-{
-	if (!are_valid_pipes(copy))
-		return (printf("Syntax error. Pipe(s) invalid.\n"), false);
-	if (!are_valid_redirs(copy))
-		return (printf("Syntax error. Redir(s) invalid.\n"), false);
-	if (!are_closed_quotes(copy))
-		return (printf("Syntax error. Unclosed quote(s).\n"), false);
-	return (true);
-}
+// // works, no memory leaks
+// // checks overall syntax of input pipeline
+// int	is_valid_syntax(char *copy)
+// {
+// 	if (!are_valid_pipes(copy))
+// 		return (printf("Syntax error. Pipe(s) invalid.\n"), false);
+// 	if (!are_valid_redirs(copy))
+// 		return (printf("Syntax error. Redir(s) invalid.\n"), false);
+// 	if (!are_closed_quotes(copy))
+// 		return (printf("Syntax error. Unclosed quote(s).\n"), false);
+// 	return (true);
+// }
 
 
-// goes out - only for testing
-void	print_list(t_cmd *cmd, int cmd_count)
-{
-	int		i;
-	int		j;
-	t_cmd	*current;
+// // goes out - only for testing
+// void	print_list(t_cmd *cmd, int cmd_count)
+// {
+// 	int		i;
+// 	int		j;
+// 	t_cmd	*current;
 
-	i = 0;
-	current = cmd;
-	printf("------------- ARGS -------------\n");
-	while (i < cmd_count)
-	{
-		printf("i: %i\n", i);
-		printf("index: %i\n", current->index);
-		printf("tadaaaa (args): [%s]\n", current->args[0]);
-		printf("is builtin: %i\n\n", current->builtin);
-		j = 0;
-		printf("------------- REDIRS -------------\n");
-		while (current->redirs_count > 0)
-		{
-			printf("tadaaaa (redirs): %s\n", current->redirs->list[j]);
-			j++;
-			current->redirs_count--;
-		}
-		printf("in_fd: %i\n", current->redirs->in_fd);
-		printf("out_fd: %i\n", current->redirs->out_fd);
-		printf("append_fd: %i\n", current->redirs->append_fd);
-		printf("hdoc_delim: [%s]\n", current->redirs->hdoc_delim);
-		current = current->next;
-		i++;
-	}
-}
+// 	i = 0;
+// 	current = cmd;
+// 	printf("------------- ARGS -------------\n");
+// 	while (i < cmd_count)
+// 	{
+// 		printf("i: %i\n", i);
+// 		printf("index: %i\n", current->index);
+// 		printf("tadaaaa (args): [%s]\n", current->args[0]);
+// 		printf("is builtin: %i\n\n", current->builtin);
+// 		j = 0;
+// 		printf("------------- REDIRS -------------\n");
+// 		while (current->redirs_count > 0)
+// 		{
+// 			printf("tadaaaa (redirs): %s\n", current->redirs->list[j]);
+// 			j++;
+// 			current->redirs_count--;
+// 		}
+// 		printf("in_fd: %i\n", current->redirs->in_fd);
+// 		printf("out_fd: %i\n", current->redirs->out_fd);
+// 		printf("append_fd: %i\n", current->redirs->append_fd);
+// 		printf("hdoc_delim: [%s]\n", current->redirs->hdoc_delim);
+// 		current = current->next;
+// 		i++;
+// 	}
+// }
 
-int	parse(char *pipeline, t_shell *minishell)
-{
-	char	*copy;
+// int	parse(char *pipeline, t_shell *minishell)
+// {
+// 	char	*copy;
 
-	copy = blackout_quoted_content(pipeline);
-	if (!is_valid_syntax(copy))
-		return (free(copy), FAILURE);
-	parse_pipeline(copy, minishell);
-	free(copy);
-	parse_cmd_lines(pipeline, minishell->pipe_count + 1, minishell);
-	// printf("[parse] %s\n", minishell->cmd->args[0]);
-	print_list(minishell->cmd, minishell->pipe_count + 1);
-	// execute(minishell);
-	return (SUCCESS);
-}
+// 	copy = blackout_quoted_content(pipeline);
+// 	if (!copy)
+// 		return (perror("blackout_quoted_content"), FAILURE);
+// 	if (!is_valid_syntax(copy))
+// 		return (free(copy), FAILURE);
+// 	prepare_parsing(copy, minishell);
+// 	free(copy);
+// 	parse_cmd_lines(pipeline, minishell->pipe_count + 1, minishell); //error handling
+// 	// printf("[parse] %s\n", minishell->cmd->args[0]);
+// 	// print_list(minishell->cmd, minishell->pipe_count + 1);
+// 	return (SUCCESS);
+// }
 
-void	end_minishell(t_shell *minishell)
-{
-	free(minishell->prompt);
-	free(minishell->env);
-	free(minishell);
-	minishell = NULL;
-	rl_clear_history();
-}
+// void	end_minishell(t_shell *minishell)
+// {
+// 	free(minishell->prompt);
+// 	free(minishell->env);
+// 	free(minishell);
+// 	minishell = NULL;
+// 	rl_clear_history();
+// }
 
-// works
-// handles ctrl c in parent process (displays a new prompt on a new line)
-void	handle_signal_parent(int signum)
-{
-	(void)signum;
-	printf("\n");
-	rl_on_new_line();//updates about jump to next line
-	// rl_replace_line("", 0);//clears current buffer //not needed
-	rl_redisplay();//refreshes readline prompt
-	return ;
-}
+// // in
+// void	handle_signal_parent(int signum)
+// {
+// 	(void)signum;
+// 	printf("\n");
+// 	rl_on_new_line();//updates about jump to next line
+// 	// rl_replace_line("", 0);//clears current buffer //not needed
+// 	rl_redisplay();//refreshes readline prompt
+// 	return ;
+// }
 
-void	setup_signals(void (*signal_handler)(int))
-{
-	signal(SIGINT, signal_handler); //case: ctrl-C
-	signal(SIGQUIT, SIG_IGN); //case: ctrl-\ - is ignored
-}
+// // in
+// void	setup_signals(void (*signal_handler)(int))
+// {
+// 	signal(SIGINT, signal_handler); //case: ctrl-C
+// 	signal(SIGQUIT, SIG_IGN); //case: ctrl-\ - is ignored
+// }
 
 // works
 // sets the prompt, reads the user input and saves it into a char *buffer
 // creates and continously adds to history if input is non-empty
 int	init_minishell(t_shell *minishell)
 {
-	static char	*input_str;
+	char	*input_str;
 
 	minishell->prompt = ft_strjoin(getenv("USER"), "@minishell: ");
 	setup_signals(handle_signal_parent);
 	while (1)
 	{
-		if (input_str)
-		{
-			free(input_str);
-			input_str = NULL;
-		}
 		input_str = readline(minishell->prompt);
 		if (!input_str)// exits in case of ctrl-D
 		{
@@ -1090,8 +1097,10 @@ int	init_minishell(t_shell *minishell)
 		}
 		if (*input_str)
 		{
-			parse(input_str, minishell); //what if this one fails?
+			parse_pipeline(input_str, minishell); //what if this one fails?
+			// execute(minishell);
 			add_history(input_str);// adds user input to history
+			free(input_str);
 		}
 	}
 	return (0);
@@ -1105,9 +1114,11 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	minishell = (t_shell *)malloc(sizeof(t_shell));
 	if (!minishell)
-		return (printf("Memory allocation failed.\n"), FAILURE);
-	// minishell->env = ft_env_dup(env);
-	init_minishell(minishell); //what if this goes wrong?
+		return (perror("t_shell memory allocation"), FAILURE);
+	minishell->env = ft_env_dup(env);
+	if (!minishell->env)
+		return (perror("env memory allocation"), FAILURE);
+	init_minishell(minishell);
 	end_minishell(minishell);
-	return (0);
+	return (SUCCESS);
 }

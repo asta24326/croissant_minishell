@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 13:13:31 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 12:50:23 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:31:05 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@
 // works
 // sets the prompt, reads the user input and saves it into a char *buffer
 // creates and continously adds to history if input is non-empty
+// attention: I need a break in case sth goes wrong, so it falls back to main
 int	init_minishell(t_shell *minishell)
 {
 	static char	*input_str;
@@ -136,7 +137,7 @@ int	init_minishell(t_shell *minishell)
 		}
 		if (*input_str)
 		{
-			parse_pipeline(input_str, minishell); //what if this one fails?
+			parse(input_str, minishell); //what if this one fails?
 			add_history(input_str);// adds user input to history
 		}
 	}

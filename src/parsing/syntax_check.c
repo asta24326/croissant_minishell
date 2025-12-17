@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   1.1.syntax_check.c                                 :+:      :+:    :+:   */
+/*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:55:55 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 18:32:17 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:49:00 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,16 @@ int	are_closed_quotes(char *copy)
 	return (false);
 }
 
-// works, no memory leaks
+// works
 // checks overall syntax of input pipeline
 int	is_valid_syntax(char *copy)
 {
 	if (!are_valid_pipes(copy))
-		return (printf("Syntax error. Pipe(s) invalid.\n"), false);
+		return (perror("Syntax error. Pipe(s) invalid.\n"), false);
 	if (!are_valid_redirs(copy))
-		return (printf("Syntax error. Redir(s) invalid.\n"), false);
+		return (perror("Syntax error. Redir(s) invalid.\n"), false);
 	if (!are_closed_quotes(copy))
-		return (printf("Syntax error. Unclosed quote(s).\n"), false);
+		return (perror("Syntax error. Unclosed quote(s).\n"), false);
 	return (true);
 }
 

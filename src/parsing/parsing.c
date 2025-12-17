@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   1.0.parsing.c                                      :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 17:29:02 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 18:15:36 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:48:00 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // works
-// returns copy of the input str all bytes within quotes set to 0
+// returns copy of the input str all bytes within quotes set to 0, or NULL on failure
 char	*blackout_quoted_content(char *str)
 {
 	char	*copy;
@@ -39,15 +39,20 @@ char	*blackout_quoted_content(char *str)
 	return (copy);
 }
 
-void	parse(char *pipeline, t_shell *minishell)
+// works
+int	parse(char *pipeline, t_shell *minishell)
 {
 	char	*copy;
 
 	copy = blackout_quoted_content(pipeline);
+	if (!copy)
+		return (perror("blackout_quoted_content"), FAILURE);
 	if (!is_valid_syntax(copy))
 		return (free(copy), FAILURE);
-	parse_pipeline(copy, minishell);
+	prepare_parsing(copy, minishell);
 	free(copy);
-	parse_cmd_lines(pipeline, minishell->pipe_count + 1, minishell);
-	execute(minishell);
+	parse_cmd_lines(pipeline, minishell->pipe_count + 1, minishell); //error handling
+	// printf("[parse] %s\n", minishell->cmd->args[0]);
+	// print_list(minishell->cmd, minishell->pipe_count + 1);
+	return (SUCCESS);
 }

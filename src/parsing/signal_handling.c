@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   0.3.signal_handling.c                              :+:      :+:    :+:   */
+/*   signal_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 11:18:03 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 12:53:11 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:44:30 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	handle_signal_parent(int signum)
 	return ;
 }
 
+// works
 void	setup_signals(void (*signal_handler)(int))
 {
 	signal(SIGINT, signal_handler); //case: ctrl-C

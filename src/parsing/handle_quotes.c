@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   5.1.handle_quotes.c                                :+:      :+:    :+:   */
+/*   handle_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 13:04:39 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/16 12:20:36 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:24:02 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*get_clean_str(char *orig_str)
 
 	clean_str = (char *)malloc(get_strlen_clean(orig_str) + 1);
 	if (!clean_str)
-		return (printf("Error with memory allocation.\n"), NULL);
+		return (perror("get_clean_str"), NULL);
 	i = 0;
 	j = 0;
 	while (orig_str[i])
@@ -74,7 +74,14 @@ void	cleanup_quotes(char **arr)
 	int		i;
 
 	i = -1;
+	// printf("orig: %s\n", arr[0]);
 	while (arr[++i])
+	{
 		if (strchr(arr[i], '\'') || strchr(arr[i], '\"'))
+		{
 			arr[i] = get_clean_str(arr[i]);
+			if (!arr[i])
+				ft_free(arr); //to include from kristin's ft_split
+		}
+	}
 }

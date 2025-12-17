@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:40:26 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/16 14:09:13 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:43:39 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,8 +247,6 @@
 // 		return (1);
 // 	return (0);
 // }
-
-
 // ----------until here, everything goes out--------------
 
 
@@ -260,10 +258,10 @@ t_cmd	*create_node(char *cmd_line)
 
 	new = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!new)
-		return (printf("Memory allocation failed.\n"), NULL);
+		return (perror("create_node"), NULL);
 	prepare_args_arr(cmd_line, new);//creates char **args, int args_count, int redirs_count
 	new->builtin = NULL;
-	if (new->redirs > 0)
+	if (new->redirs_count > 0)
 		prepare_redirs(cmd_line, new);
 	else
 		new->redirs = NULL;
@@ -312,8 +310,7 @@ void	set_index(t_cmd *stack, int cmd_count)
 // 	}
 // }
 
-// to be tested
-// splits pipeline into cmd-lines, and creates 1 node per cmd-line
+// works
 // attention: what I need here to be passed is blacked out string!
 void	create_cmd_list(char **arr, int cmd_count, t_shell *minishell)
 {

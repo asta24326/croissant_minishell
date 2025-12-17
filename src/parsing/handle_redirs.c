@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   5.2.handle_redirs.c                                :+:      :+:    :+:   */
+/*   handle_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 20:05:38 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/16 14:17:26 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:20:38 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-//attention: here, I need the index of the cmd
+// works
 int	handle_outfile(char *filename, t_cmd *cmd)
 {
 	static int	fd;
@@ -27,14 +27,13 @@ int	handle_outfile(char *filename, t_cmd *cmd)
 		close (fd);
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		return (perror(filename), "Error while opening file\n");
-	cmd->redirs->out_fd;
+		return (perror("handle_outfile"), FAILURE);
+	cmd->redirs->out_fd = fd;
 	free (filename);
 	return (SUCCESS);
 }
 
-//attention: here, I need the index of the cmd
-//attention: here, I need int append_fd in t_redirs
+// works
 int	handle_append(char *filename, t_cmd *cmd)
 {
 	static int	fd;
@@ -49,13 +48,13 @@ int	handle_append(char *filename, t_cmd *cmd)
 		close (fd);
 	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
-		return (perror(filename), "Error while opening file\n");
-	cmd->redirs->append_fd;
+		return (perror("handle_append"), FAILURE);
+	cmd->redirs->append_fd = fd;
 	free (filename);
 	return (SUCCESS);
 }
 
-//attention: here, I need the index of the cmd
+// works
 int	handle_infile(char *filename, t_cmd *cmd)
 {
 	static int	fd;
@@ -70,60 +69,58 @@ int	handle_infile(char *filename, t_cmd *cmd)
 		close (fd);
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		return (perror(filename), "Error while opening file\n");
-	cmd->redirs->in_fd;
-	free (filename);
-	return (SUCCESS);
-}
-
-//attention: here, I need the index of the cmd
-// pre-condition: quotes were handled (aka eliminated)
-// means: bool exp_hdoc was extracted while quote handling
-int	handle_heredoc(char *filename, t_cmd *cmd)
-{
-	if (cmd->redirs->hdoc_delim != NULL)//case: multiple heredocs
+		return (perror("handle_infile"), FAILURE);
+	if (cmd->redirs->hdoc_delim != NULL) //only if heredoc exists
 	{
-		free(cmd->redirs->hdoc_delim);
-		cmd->redirs->hdoc_delim == NULL;
+		close (fd);
+		fd = 0;
 	}
-	cmd->redirs->hdoc_delim = filename;
+	cmd->redirs->in_fd = fd;
+	free (filename);
 	return (SUCCESS);
 }
 
 // works
 // returns the filename/delimiter
 // pre-condition: quotes were handled (aka eliminated)
-char	*get_filename(char *redir_str, int ops)
+char	*get_filename(char *redir_str)
 {
-	int	i;
+	int	skip;
 	int	len;
-	int	whitespaces;
 
-	i = ops - 1;//jump to last redir operator sign
+	skip = 0;
 	len = ft_strlen(redir_str);
-	whitespaces = 0;
-	while (is_whitespace(redir_str[++i]))
-		whitespaces += 1;
-	return (ft_substr(redir_str, ops + whitespaces, len - ops - whitespaces));
+	while (is_redir(redir_str[skip]) || is_whitespace(redir_str[skip]))
+		skip++;
+	return (ft_substr(redir_str, skip, len - skip));
 }
 
 // works
 // handles the redir depending on the type
-int	handle_redir(char **redir_list, t_cmd *cmd)
+int	handle_redirs(t_cmd *cmd)
 {
-	int	i;
+	int		i;
+	char	**redir_list;
+	char	*filename;
 
 	i = -1;
+	redir_list = cmd->redirs->list;
 	while (redir_list[++i])
 	{
+		filename = get_filename(redir_list[i]);
+		if (!filename)
+			return (perror("get_filename"), FAILURE);
 		if (redir_list[i][0] == '>' && redir_list[i][1] != '>')
-			handle_outfile(get_filename(redir_list[i], 1), cmd);
+			handle_outfile(filename, cmd);
 		else if (redir_list[i][0] == '>' && redir_list[i][1] == '>')
-			handle_append(get_filename(redir_list[i], 2), cmd);
+			handle_append(filename, cmd);
 		else if (redir_list[i][0] == '<' && redir_list[i][1] != '<')
-			handle_infile(get_filename(redir_list[i], 1), cmd);
-		// else if (redir_list[i][0] == '<' && redir_list[i][1] == '<')
-		// 	handle_heredoc(get_filename(redir_list[i], strlen, 2), cmd);//done by Aidar
+			handle_infile(filename, cmd);
 	}
-	return (SUCCESS);
+	if (cmd->redirs->out_fd > 0 && cmd->redirs->append_fd > 0) //case: out & append, only out is passed
+	{
+		close (cmd->redirs->append_fd);
+		cmd->redirs->append_fd = 0;
+	}
+	return (free(cmd->redirs->list), SUCCESS);
 }

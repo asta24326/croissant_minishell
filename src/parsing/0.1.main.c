@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 15:34:19 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 12:28:37 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:34:25 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	minishell = (t_shell *)malloc(sizeof(t_shell));
 	if (!minishell)
-		return (printf("Memory allocation failed.\n"), FAILURE);
-	minishell->env = ft_env_dup(env);
-	init_minishell(minishell); //what if this goes wrong?
+		return (perror("t_shell memory allocation"), FAILURE);
+	// minishell->env = ft_env_dup(env);
+	init_minishell(minishell); //what if this goes wrong? - fall out of loop
 	end_minishell(minishell);
 	return (0);
 }

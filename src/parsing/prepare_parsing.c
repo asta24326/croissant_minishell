@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   1.3.parse_pipeline.c                               :+:      :+:    :+:   */
+/*   prepare_parsing.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 15:06:57 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 18:44:16 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:32:19 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@
 // 	return (0);
 // }
 
-
+// -------------end of libft--------------
 
 
 // works
@@ -74,12 +74,12 @@ int	get_pipe_count(char *copy)
 	return (count);
 }
 
-// works, no memory leaks
+// works
 // extracts data for the t_shell structure
-void	parse_pipeline(char *copy, t_shell *minishell) //wrong naming
+void	prepare_parsing(char *copy, t_shell *minishell)
 {
 	minishell->pipe_count = get_pipe_count(copy);
-	minishell->pipes = NULL;//handled in exec
+	minishell->pipes = NULL; //handled in exec
 	minishell->cmd = NULL;
 	minishell->exit_status = 0;
 	minishell->shell_pid = getpid();
