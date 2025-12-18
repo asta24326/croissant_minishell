@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/15 12:48:48 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:25:00 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,25 +221,25 @@ void		prepare_parsing(char *copy, t_shell *minishell);
 int			get_pipe_count(char *copy);
 
 // parse_cmd_line.c
-void		parse_cmd_lines(char *pipeline, int cmd_count, t_shell *minishell);
+int			parse_cmd_lines(char *pipeline, int cmd_count, t_shell *minishell);
 
-// create_cmd_lst.c
+// prepare_cmd_lst.c
 void		create_cmd_list(char **arr, int cmd_count, t_shell *minishell);
 void		add_node(t_cmd **list, t_cmd *new);
 t_cmd		*create_node(char *cmd_line);
 void		set_index(t_cmd *stack, int cmd_count);
 
 // prepare_args_arr.c
-void		prepare_args_arr(char *cmd_str, t_cmd *cmd);
+int			prepare_args_arr(char *copy, t_cmd *cmd);
 int			get_arg_count(char *copy);
 int			get_redir_count(char *copy);
 
 //prepare_redirs.c
-int			prepare_redirs(char *cmd_str, t_cmd *cmd);
-int			get_hdoc_count(char *cmd_str);
+int			prepare_redirs(char *copy, t_cmd *cmd);
+int			get_hdoc_count(char *copy);
 
 // tokenize.c
-void		tokenize(char *cmd_str, t_cmd *cmd);
+int			tokenize(char *cmd_str, t_cmd *cmd);
 
 //parse_cmd.c
 int			parse_cmd(char *str, t_cmd *cmd);
@@ -248,13 +248,13 @@ void		fill_args_arr(char *arg_str, t_cmd *cmd);
 
 //parse_redir.c
 int			parse_redir(char *cmd_str, t_cmd *cmd);
-void		prepare_hdoc(char *cmd_str, t_redirs *redirs, int len);
-char		*get_delimiter(char *cmd_str, int ops, int len);
+int			prepare_hdoc(char *cmd_str, t_redirs *redirs, int len);
+char		*get_delimiter(char *cmd_str, int len);
 int			get_redir_len(char *str);
 void		fill_redirs_arr(char *redirect, t_cmd *cmd);
 
 //handle_quotes.c
-void		cleanup_quotes(char **arr);
+int			cleanup_quotes(char **arr);
 char		*get_clean_str(char *orig_str);
 int			get_strlen_clean(char *orig_str);
 
