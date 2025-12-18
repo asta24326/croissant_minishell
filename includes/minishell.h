@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 13:25:00 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:52:38 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ typedef struct	s_redirs
 	char	**list; //needed for parsing
 	int		in_fd;
 	int		out_fd;
-	int		append_fd; //added
+	// int		append_fd; //added
 	int		hdoc_count; //added
 	char	*hdoc_delim;
 	bool	exp_hdoc; // no - if heredoc delimeter has '  ', yes - if none
@@ -231,7 +231,7 @@ void		set_index(t_cmd *stack, int cmd_count);
 
 // prepare_args_arr.c
 int			prepare_args_arr(char *copy, t_cmd *cmd);
-int			get_arg_count(char *copy);
+int			get_arg_count(char *copy, int redirs_count);
 int			get_redir_count(char *copy);
 
 //prepare_redirs.c
@@ -263,11 +263,12 @@ int			is_builtin_cmd(t_cmd *cmd);
 
 //handle_redirs.c
 int			handle_redirs(t_cmd *cmd);
-char		*get_filename(char *redir_str, int ops);
+char		*get_filename(char *redir_str);
 int			handle_infile(char *filename, t_cmd *cmd);
-int			handle_append(char *filename, t_cmd *cmd);
-int			handle_outfile(char *filename, t_cmd *cmd);
+// int			handle_append(char *filename, t_cmd *cmd);
+int			handle_outfile(char *filename, t_cmd *cmd, int op_count);
 
-
+//_print_parsing_results.c - only for testing, will go out
+void		print_list(t_cmd *cmd, int cmd_count);
 
 #endif
