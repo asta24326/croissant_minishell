@@ -4,7 +4,7 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -I includes
 RL_FLAGS = -lreadline -lhistory
 
-LIBFT_DIR = libft
+LIBFT_DIR = libraries/libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
 
 SRC_DIR = src
@@ -30,9 +30,8 @@ SRC =	$(PRS_DIR)/main.c \
 		$(PRS_DIR)/handle_quotes.c \
 		$(PRS_DIR)/check_builtin_cmds.c \
 		$(PRS_DIR)/handle_redirs.c \
-
+		$(PRS_DIR)/_print_parsing_results.c \
 		$(EXEC_DIR)/env_init.c \
-
 
 OBJ = $(SRC:.c=.o)
 
@@ -44,7 +43,7 @@ $(LIBFT_A):
 	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJ) $(LIBFT_A)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJ) $(RL_FLAGS)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJ) $(LIBFT_A) $(RL_FLAGS)
 
 valgrind: $(NAME)
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=readline_suppress.supp ./$(NAME)
