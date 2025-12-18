@@ -19,9 +19,9 @@ SRC =	$(PRS_DIR)/main.c \
 		$(PRS_DIR)/parsing.c \
 		$(PRS_DIR)/syntax_check.c \
 		$(PRS_DIR)/syntax_utils.c \
-		$(PRS_DIR)/parse_pipeline.c \
+		$(PRS_DIR)/prepare_parsing.c \
 		$(PRS_DIR)/parse_cmd_line.c \
-		$(PRS_DIR)/create_cmd_lst.c \
+		$(PRS_DIR)/prepare_cmd_lst.c \
 		$(PRS_DIR)/prepare_args_arr.c \
 		$(PRS_DIR)/prepare_redirs.c \
 		$(PRS_DIR)/tokenize.c \
@@ -31,8 +31,8 @@ SRC =	$(PRS_DIR)/main.c \
 		$(PRS_DIR)/check_builtin_cmds.c \
 		$(PRS_DIR)/handle_redirs.c \
 
-		$(EXEC_DIR)/
-		
+		$(EXEC_DIR)/env_init.c \
+
 
 OBJ = $(SRC:.c=.o)
 
