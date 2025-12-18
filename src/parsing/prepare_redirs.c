@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 16:56:50 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 12:07:11 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:52:54 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ int	prepare_redirs(char *copy, t_cmd *cmd)
 		return (perror("prepare_redirs, list"), free(redirects), FAILURE);
 	redirects->in_fd = 0;
 	redirects->out_fd = 0;
-	redirects->append_fd = 0;
+	// redirects->append_fd = 0;
 	redirects->hdoc_count = get_hdoc_count(copy); //needed? check how often used in the end //RAUS bitte, sonst error handling
 	redirects->hdoc_delim = NULL;
-	redirects->exp_hdoc = false; //needed? rather NO
+	redirects->exp_hdoc = true; //needed? rather NO
 	cmd->redirs = redirects;
 	return (SUCCESS);
 }

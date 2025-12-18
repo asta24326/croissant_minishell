@@ -6,29 +6,11 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:25:08 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/17 17:17:26 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:20:19 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// ---------libft > needs to go out-----------------
-// int	ft_strcmp(const char *s1, const char *s2)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	if (!s1)
-// 		return (1);
-// 	while (s1[i] || s2[i])
-// 	{
-// 		if (s1[i] != s2[i])
-// 			return (s1[i] - s2[i]);
-// 		i++;
-// 	}
-// 	return (0);
-// }
-// -----------end of libft functions------------------
 
 // works
 // checks whether cmd is built-in command

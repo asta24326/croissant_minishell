@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:40:26 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 12:12:37 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/18 14:24:33 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ t_cmd	*create_node(char *cmd_line)
 		return (free(new), free(copy), NULL);
 	new->builtin = NULL;
 	if (new->redirs_count > 0)
+	{
 		if (prepare_redirs(cmd_line, new))
 			return (free(new), free(copy), NULL);
+	}
 	else
 		new->redirs = NULL;
 	new->next = NULL;

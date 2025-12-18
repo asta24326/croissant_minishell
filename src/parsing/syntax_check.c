@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:55:55 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 12:08:29 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:43:21 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	are_valid_pipes(char *copy)
 		}
 		copy++;
 	}
+	if (flag == 0)
+		return (false);
 	return (true);
 }
 

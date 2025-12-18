@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 14:18:25 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 13:20:04 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:21:53 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,13 @@ int	prepare_hdoc(char *cmd_str, t_redirs *redirs, int len)
 		redirs->hdoc_delim = get_delimiter(cmd_str, len);
 		if (!redirs->hdoc_delim)
 			return (perror("get_delimiter"), FAILURE);
+		if (strchr(redirs->hdoc_delim, '\'') || strchr(redirs->hdoc_delim, '\"'))
+		{
+			redirs->exp_hdoc = false;
+			redirs->hdoc_delim = get_clean_str(redirs->hdoc_delim);
+			if (!redirs->hdoc_delim)
+				return (perror("get_clean_str, hdoc"), FAILURE);
+		}
 		nbr_hdoc = 0;
 	}
 	return (SUCCESS);
@@ -89,8 +96,10 @@ int	parse_redir(char *cmd_str, t_cmd *cmd)
 	if (index > 0)
 	{
 		if (cmd_str[0] == '<' && cmd_str[1] == '<') //case: heredoc
+		{
 			if (prepare_hdoc(cmd_str, cmd->redirs, index))
 				return (perror("parse_redir, hdoc"), -1);
+		}
 		else //case: redir
 		{
 			redirect = ft_substr(cmd_str, 0, index);

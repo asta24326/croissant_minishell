@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 13:13:31 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 11:28:30 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/18 14:31:39 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,7 @@ int	init_minishell(t_shell *minishell)
 		}
 		if (*input_str)
 		{
-			if (parse_pipeline(input_str, minishell))
-			{
-				free(input_str);
-				exit(1);
-			}
+			parse(input_str, minishell);
 			// execute(minishell);
 			add_history(input_str); //adds user input to history
 			free(input_str);

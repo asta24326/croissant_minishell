@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 17:29:02 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 12:07:49 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:50:19 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,6 @@ int	parse(char *pipeline, t_shell *minishell)
 	free(copy);
 	if (parse_cmd_lines(pipeline, minishell->pipe_count + 1, minishell))
 		return (FAILURE);
-	// print_list(minishell->cmd, minishell->pipe_count + 1);
+	print_list(minishell->cmd, minishell->pipe_count + 1); //just for testing - needs to go out
 	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:49:19 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 12:57:25 by kschmitt         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:14:51 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	get_arg_len(char *str)
 	char	quot_mark;
 
 	len = 0;
-	while (str[len])
+	while (str[len] && !is_whitespace(str[len]) && !is_operator(str[len]))
 	{
 		if (is_quote(str[len]))
 		{
@@ -31,9 +31,11 @@ int	get_arg_len(char *str)
 			len += 1;
 		}
 		else if (is_other(str[len]))
+		{
 			while (str[len] && !is_whitespace(str[len])
 				&& !is_operator(str[len]) && !is_quote(str[len]))
 				len += 1;
+		}
 	}
 	return (len);
 }
