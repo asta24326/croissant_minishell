@@ -3,86 +3,104 @@
 /*                                                        :::      ::::::::   */
 /*   7.1.expand.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 22:27:14 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/19 21:33:43 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/01/03 16:51:27 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static bool	ft_is_valid_var_char(int c);
-
-int	ft_expand(t_shell *shell)// main function to expand variables in all commands
+int	ft_expand(t_shell *shell)
 {
 	t_cmd	*curr_cmd;
+
+	curr_cmd = shell->cmd;
+	while (curr_cmd)
+	{
+		if (ft_expand_redirs_list(shell, curr_cmd) == FAILURE)
+			return (FAILURE);
+		if (ft_expand_args_list(shell, curr_cmd) == FAILURE)
+			return (FAILURE);
+		curr_cmd = curr_cmd->next;
+	}
+	return (SUCCESS);
+}
+
+int	ft_expand_redirs_list(t_shell *shell, t_cmd *cmd)
+{
 	int		i;
 	char	*expanded;
 
-	curr_cmd = shell->cmd;
-	while (curr_cmd)
+	if (cmd->redirs && cmd->redirs->list)
 	{
 		i = -1;
-		while (curr_cmd->args && curr_cmd->args[++i])// got through every coommand in list
+		while (cmd->redirs->list[++i])
 		{
-			expanded = ft_expand_arg(shell, curr_cmd->args[i]);
+			expanded = ft_expand_str(shell, cmd->redirs->list[i]);
 			if (!expanded)
 				return (FAILURE);
-			free(curr_cmd->args[i]);
-			curr_cmd->args[i] = expanded;// adding expanded string
+			free(cmd->redirs->list[i]);
+			cmd->redirs->list[i] = expanded;
 		}
-		curr_cmd = curr_cmd->next;
 	}
 	return (SUCCESS);
 }
 
-char	*ft_expand_arg(t_shell *shell, char *arg)
+int	ft_expand_args_list(t_shell *shell, t_cmd *cmd)
 {
-	if (!arg)
-		return (NULL);
-	if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')//case if there is ' '
-		return (ft_substr(arg, 1, ft_strlen(arg) - 2));// simply returning string
-	if (arg[0] == '$')
-	{
-		if (arg[1] == '?')
-			return (ft_itoa(shell->exit_status));
-		if (arg[1] == '$')
-			return (ft_itoa(shell->shell_pid));
-		if (arg[1] && ft_is_valid_var_char(arg[1]) == true)
-			return (ft_expand_env_var(shell, arg));
-		return (ft_strdup(arg));
-	}
-	return (ft_strdup(arg));
-}
-
-int	ft_expand_hdoc_delims(t_shell *shell)
-{
-	t_cmd	*curr_cmd;
+	int		i;
 	char	*expanded;
 
-	curr_cmd = shell->cmd;
-	while (curr_cmd)
+	i = -1;
+	while (cmd->args[++i])
 	{
-		if (curr_cmd->redirs->hdoc_delim && curr_cmd->redirs->hdoc_delim)
-		{
-			if (curr_cmd->redirs->exp_hdoc == true)
-			{
-				expanded = ft_expand_arg(shell, curr_cmd->redirs->hdoc_delim);
-				if (!expanded)
-					return (FAILURE);
-				free(curr_cmd->redirs->hdoc_delim);
-				curr_cmd->redirs->hdoc_delim = expanded;
-			}
-		}
-		curr_cmd = curr_cmd->next;
+		expanded = ft_expand_str(shell, cmd->args[i]);
+		if (!expanded)
+			return (FAILURE);
+		free(cmd->args[i]);
+		cmd->args[i] = expanded;
 	}
 	return (SUCCESS);
 }
 
-static bool	ft_is_valid_var_char(int c)
+char	*ft_expand_str(t_shell *shell, char *str)
 {
-	if (ft_isalnum(c) || c == '_')
-		return (true);
-	return (false);
+	size_t	len;
+
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	if (str[0] == '$')
+		return (ft_expand_dollar_start(shell, str));
+	if (len > 1 && str[0] == '\'' && str[len - 1] == '\'')
+		return (ft_strdup(str));
+	if (len > 1 && str[0] == '"' && str[len - 1] == '"')
+		return (ft_expand_dquotes_str(shell, str, len));
+	return (ft_strdup(str));
+}
+
+char	*ft_expand_dollar_start(t_shell *shell, char *str)
+{
+	char	*exit_str;
+	char	*result;
+
+	if (str[1] == '?')
+	{
+		exit_str = ft_itoa(shell->exit_status);
+		if (str[2])
+		{
+			result = ft_strjoin(exit_str, &str[2]);
+			return (free(exit_str), result);
+		}
+		return (exit_str);
+	}
+	if (str[1] == '$')
+		return (ft_itoa(shell->shell_pid));
+	if (str[1] && ft_is_valid_var_char(str[1]) == true)
+		return (ft_expand_env_var(shell, str));
+	if (str[1] == '\0' || !ft_is_valid_var_char(str[1]))
+		return (ft_strdup("$"));
+	return (ft_strdup(str));
 }

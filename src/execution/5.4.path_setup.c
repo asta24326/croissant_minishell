@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path_setup.c                                       :+:      :+:    :+:   */
+/*   5.4.path_setup.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 23:05:41 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/14 18:41:50 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/01/02 23:14:30 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ char	*ft_getpath(char *cmd, char **env)
 	char	*exec_str;
 	int		i;
 
+	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, F_OK | X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
 	allpaths = ft_split(ft_parse_env("PATH", env), ':');
 	if (!allpaths)
 		return (NULL);

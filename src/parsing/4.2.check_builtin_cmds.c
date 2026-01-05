@@ -1,21 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_builtin_cmds.c                               :+:      :+:    :+:   */
+/*   4.2.check_builtin_cmds.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:25:08 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 17:20:19 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/05 12:50:01 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// works
-// checks whether cmd is built-in command
-// checks exact spelling >> syntax error if not exact
-// pre-condition: needs to happen after quotes where taken out
 int	is_builtin_cmd(t_cmd *cmd)
 {
 	char	*str;

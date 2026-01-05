@@ -1,41 +1,58 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handling.c                                  :+:      :+:    :+:   */
+/*   0.3.signal_handling.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kschmitt <kschmitt@dent.42berlin.com>      +#+  +:+       +#+        */
+/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 11:18:03 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/19 11:01:37 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/05 12:42:31 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// to be tested
-// handles ctrl c in child process and heredoc
-void	handle_signal_child(int signum)
+volatile sig_atomic_t	g_signal_num = 0;
+
+void	ft_signal_handler(int signum)
 {
-	(void)signum;
-	printf("\n");
-	exit(130);
+	if (signum == SIGINT)
+	{
+		g_signal_num = SIGINT;
+		write(STDOUT_FILENO, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
-// works
-// handles ctrl c in parent process (displays a new prompt on a new line)
-void	handle_signal_parent(int signum)
+void	ft_setup_signals(void)
 {
-	(void)signum;
-	printf("\n");
-	rl_on_new_line();//updates about jump to next line
-	// rl_replace_line("", 0);//clears current buffer
-	rl_redisplay();//refreshes readline prompt
-	return ;
+	g_signal_num = 0;
+	signal(SIGINT, ft_signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-// works
-void	setup_signals(void (*signal_handler)(int))
+void	ft_handle_child_status(t_shell *shell, int status)
 {
-	signal(SIGINT, signal_handler); //case: ctrl-C
-	signal(SIGQUIT, SIG_IGN); //case: ctrl-\ - is ignored
+	int	sig;
+
+	if (WIFEXITED(status))
+		shell->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGINT)
+			shell->exit_status = 130;
+		else if (sig == SIGQUIT)
+			shell->exit_status = 131;
+		else if (WTERMSIG(status) == SIGPIPE)
+			shell->exit_status = 0;
+	}
+}
+
+void	ft_reset_signals(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }

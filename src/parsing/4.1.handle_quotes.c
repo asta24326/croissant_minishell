@@ -1,19 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_quotes.c                                    :+:      :+:    :+:   */
+/*   4.1.handle_quotes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 13:04:39 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 14:24:02 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/05 12:49:55 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// works
-// returns length of str cleaned by quotes to be removed
 int	get_strlen_clean(char *orig_str)
 {
 	int		len;
@@ -23,9 +21,9 @@ int	get_strlen_clean(char *orig_str)
 	quot_mark = 0;
 	while (*orig_str)
 	{
-		if (is_quote(*orig_str) && quot_mark == 0) //first quot.mark encountered
+		if (is_quote(*orig_str) && quot_mark == 0)
 			quot_mark = *orig_str;
-		else if (*orig_str == quot_mark) //matching quot.mark encountered
+		else if (*orig_str == quot_mark)
 			quot_mark = 0;
 		else
 			len++;
@@ -34,9 +32,6 @@ int	get_strlen_clean(char *orig_str)
 	return (len);
 }
 
-// works
-// returns a string witout quotes that will not be outputted
-// pre-condition: functioning operators, unecessary whitespaces and to be expanded $ have been gone
 char	*get_clean_str(char *orig_str)
 {
 	char	*clean_str;
@@ -66,9 +61,6 @@ char	*get_clean_str(char *orig_str)
 	return (free(orig_str), clean_str);
 }
 
-// works
-// cleans the passed char *arr from unnecessary quotes
-// needed for char **args and for char **redirs
 int	cleanup_quotes(char **arr)
 {
 	int		i;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   6.2.echo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 20:36:22 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/14 18:37:45 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/31 18:21:40 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@ int	ft_echo(t_cmd *cmd)
 	int	i;
 	int	new_line;
 
-	i = 0;
+	i = 1;
 	new_line = 1;
-	if (!cmd->args[1])
-		return (SUCCESS);
 	if (cmd->args[1] && ft_strcmp(cmd->args[1], "-n") == 0)
 	{
 		i = 2;

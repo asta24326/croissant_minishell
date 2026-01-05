@@ -3,66 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   4.3.handle_redirs.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kschmitt <kschmitt@dent.42berlin.com>      +#+  +:+       +#+        */
+/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 20:05:38 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/19 16:02:40 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/05 12:54:12 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// works
-int	handle_out_redir(char *filename, t_cmd *cmd, int op_count)
+int	handle_out_redir(t_shell *shell, char *filename, t_cmd *cmd, int op_count)
 {
-	static int	fd;
-	static int	cmd_index;
+	int	fd;
 
-	if (cmd_index != cmd->index)//case: we arrived at next cmd
-	{
-		cmd_index = cmd->index;
-		fd = 0;
-	}
-	if (fd > 0)//case:several outfiles in 1 cmd
-		close (fd);
-	if (op_count == 1) //case:outfile
+	if (cmd->redirs->out_fd > 0)
+		close(cmd->redirs->out_fd);
+	if (op_count == 1)
 		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (op_count == 2) //case:append
+	else if (op_count == 2)
 		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		return (free(filename), FAILURE);
 	if (fd == -1)
-		return (perror("handle_outfile"), free(filename), FAILURE);
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(filename, 2);
+		perror(" ");
+		shell->exit_status = 1;
+		return (free(filename), FAILURE);
+	}
 	cmd->redirs->out_fd = fd;
 	return (free(filename), SUCCESS);
 }
 
-// works
-int	handle_infile(char *filename, t_cmd *cmd)
+int	handle_infile(t_shell *shell, char *filename, t_cmd *cmd, int op_count)
 {
-	static int	fd;
-	static int	cmd_index;
+	int	fd;
 
-	if (cmd_index != cmd->index)//case: we arrived at next cmd
+	fd = 0;
+	if (cmd->redirs->in_fd > 0)
+		close(cmd->redirs->in_fd);
+	if (op_count == 1)
 	{
-		cmd_index = cmd->index;
-		fd = 0;
+		fd = open(filename, O_RDONLY);
+		if (fd == -1)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(filename, 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+			shell->exit_status = 1;
+			return (free(filename), FAILURE);
+		}
 	}
-	if (fd > 0)//case:several infiles in 1 cmd
-		close (fd);
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-		return (perror("handle_infile"), free(filename), FAILURE);
-	if (cmd->redirs->hdoc_delim != NULL) //only if heredoc exists
-	{
-		close (fd);
-		fd = 0;
-	}
+	if (op_count == 2)
+		fd = -1;
 	cmd->redirs->in_fd = fd;
 	return (free(filename), SUCCESS);
 }
 
-// works
-// returns the filename/delimiter
-// pre-condition: quotes were handled (aka eliminated)
 char	*get_filename(char *redir_str)
 {
 	int	skip;
@@ -75,31 +73,36 @@ char	*get_filename(char *redir_str)
 	return (ft_substr(redir_str, skip, len - skip));
 }
 
-// works
-// handles the redir depending on the type
-int	handle_redirs(t_cmd *cmd)
+int	process_redirs(t_shell *shell, t_cmd *cmd, char *rdr_str, char *filename)
+{
+	int	result;
+
+	result = 0;
+	if (rdr_str[0] == '>' && rdr_str[1] != '>')
+		result = handle_out_redir(shell, filename, cmd, 1);
+	else if (rdr_str[0] == '>' && rdr_str[1] == '>')
+		result = handle_out_redir(shell, filename, cmd, 2);
+	else if (rdr_str[0] == '<' && rdr_str[1] != '<')
+		result = handle_infile(shell, filename, cmd, 1);
+	else if (rdr_str[0] == '<' && rdr_str[1] == '<')
+		result = handle_infile(shell, filename, cmd, 2);
+	return (result);
+}
+
+int	handle_redirs(t_shell *shell, t_cmd *cmd)
 {
 	int		i;
-	int		status;
-	char	**redir_list;
 	char	*filename;
 
 	i = -1;
-	status = 0;
-	redir_list = cmd->redirs->list;
-	while (redir_list[++i])
+	while (cmd->redirs->list[++i])
 	{
-		filename = get_filename(redir_list[i]);
+		filename = get_filename(cmd->redirs->list[i]);
 		if (!filename)
-			return (perror("get_filename"), FAILURE);
-		if (redir_list[i][0] == '>' && redir_list[i][1] != '>')
-			status = handle_out_redir(filename, cmd, 1);
-		else if (redir_list[i][0] == '>' && redir_list[i][1] == '>')
-			status = handle_out_redir(filename, cmd, 2);
-		else if (redir_list[i][0] == '<' && redir_list[i][1] != '<')
-			status = handle_infile(filename, cmd);
-		if (status == 1)
-			return (free(cmd->redirs->list), FAILURE);
+			return (FAILURE);
+		if (process_redirs(shell, cmd, cmd->redirs->list[i],
+				filename) == FAILURE)
+			return (FAILURE);
 	}
-	return (free(cmd->redirs->list), SUCCESS);
+	return (SUCCESS);
 }

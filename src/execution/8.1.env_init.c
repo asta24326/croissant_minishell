@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_init.c                                         :+:      :+:    :+:   */
+/*   8.1.env_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:39:10 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/07 19:45:20 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/28 13:31:16 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,18 @@ char	**ft_env_dup(char **env)
 	int		count;
 
 	count = -1;
-	while (env[++count]);//calculationg current env strings
+	while (env[++count])
+		;
 	new_env = malloc(sizeof(char *) * (count + 1));
 	if (!new_env)
-		return (perror("env_init malloc failed"), NULL);
+		return (ft_putstr_fd("env_init malloc failed", 2), NULL);
 	i = -1;
 	while (++i < count)
 	{
 		new_env[i] = ft_strdup(env[i]);
 		if (!new_env[i])
 		{
-			while (--i >= 0)// cleanup in case of fail
+			while (--i >= 0)
 				free(new_env[i]);
 			free(new_env);
 			return (NULL);

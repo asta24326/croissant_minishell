@@ -1,19 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_check.c                                     :+:      :+:    :+:   */
+/*   1.2.syntax_check.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:55:55 by kschmitt          #+#    #+#             */
-/*   Updated: 2025/12/18 17:43:21 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/05 12:55:24 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// works
-// checks whether pipe is valid (it needs at least 1 cmd or 1 redir on left side)
+static void	ft_syntax_err_print(char *str)
+{
+	ft_putstr_fd("minishell: syntax error", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("\n", 2);
+}
+
 int	are_valid_pipes(char *copy)
 {
 	int	flag;
@@ -23,7 +28,7 @@ int	are_valid_pipes(char *copy)
 	{
 		if (is_quote(*copy) || is_redir(*copy) || is_other(*copy))
 			flag = 1;
-		else if (*copy == 124)
+		else if (*copy == '|')
 		{
 			if (flag == 0)
 				return (false);
@@ -36,8 +41,6 @@ int	are_valid_pipes(char *copy)
 	return (true);
 }
 
-// works
-// checks whether redirection has exactly 1 or 2 same arrows, +filename/delimiter
 int	are_valid_redirs(char *copy)
 {
 	int		i;
@@ -48,21 +51,19 @@ int	are_valid_redirs(char *copy)
 		if (is_redir(copy[i]))
 		{
 			i++;
-			if (copy[i] == copy[i - 1]) //case: double arrow
+			if (copy[i] == copy[i - 1])
 				i++;
 			while (is_whitespace(copy[i]))
 				i++;
-			while (is_quote(copy[i])) //case:quoted filename/delimiter
+			while (is_quote(copy[i]))
 				i++;
-			if (!is_other(copy[i]) || !copy[i]) //MUST be other
+			if (!is_other(copy[i]) || !copy[i])
 				return (false);
 		}
 	}
 	return (true);
 }
 
-// works
-// checks whether quotes are closed
 int	are_closed_quotes(char *copy)
 {
 	char	quot_mark;
@@ -81,15 +82,13 @@ int	are_closed_quotes(char *copy)
 	return (false);
 }
 
-// works
-// checks overall syntax of input pipeline
 int	is_valid_syntax(char *copy)
 {
-	if (!are_valid_pipes(copy))
-		return (perror("Syntax error. Pipe(s) invalid.\n"), false);
-	if (!are_valid_redirs(copy))
-		return (perror("Syntax error. Redir(s) invalid.\n"), false);
-	if (!are_closed_quotes(copy))
-		return (perror("Syntax error. Unclosed quote(s).\n"), false);
+	if (are_valid_pipes(copy) == false)
+		return (ft_syntax_err_print(" unexpected token '|'"), false);
+	if (are_valid_redirs(copy) == false)
+		return (ft_syntax_err_print(" near unexpected token"), false);
+	if (are_closed_quotes(copy) == false)
+		return (ft_syntax_err_print(": unclosed quote"), false);
 	return (true);
 }

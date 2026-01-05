@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_utils.c                                     :+:      :+:    :+:   */
+/*   6.5.2.export_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 19:48:00 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/14 18:39:20 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/28 13:30:46 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ char	*ft_normalize_env_var(char *var)
 
 	if (ft_strchr(var, '='))
 		return (var);
-	result = ft_str_join(var, "=");
+	result = ft_strjoin(var, "=");
 	if (!result)
-		return (perror("malloc failed"), NULL);
+		return (ft_putstr_fd("malloc failed", 2), NULL);
 	free(var);
 	return (result);
 }

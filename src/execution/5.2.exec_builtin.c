@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   5.2.exec_builtin.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:51:57 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/21 15:43:49 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/31 18:16:56 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	ft_error_and_exit(t_shell *shell, char *arg);
-
 int	ft_exec_builtin(t_shell *shell, t_cmd *cmd, char *cmd_name)
 {
+	if (getpid() != shell->shell_pid)
+		ft_reset_signals();
 	if (ft_strcmp(cmd_name, "echo") == 0)
-		return ((shell->exit_status = ft_echo(cmd)));
+		return (shell->exit_status = ft_echo(cmd));
 	if (ft_strcmp(cmd_name, "cd") == 0)
 		return ((shell->exit_status = ft_cd(shell, cmd)));
 	if (ft_strcmp(cmd_name, "pwd") == 0)
@@ -33,7 +33,7 @@ int	ft_exec_builtin(t_shell *shell, t_cmd *cmd, char *cmd_name)
 	return (ft_error_and_exit(shell, cmd_name));
 }
 
-static int	ft_error_and_exit(t_shell *shell, char *arg)
+int	ft_error_and_exit(t_shell *shell, char *arg)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(arg, 2);

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   6.7.unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 20:41:32 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/14 19:41:53 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2025/12/28 15:34:37 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	ft_remove_var(t_shell *shell, char *var);
+static void	ft_remove_var(t_shell *shell, char *var);
 
 int	ft_unset(t_shell *shell, t_cmd *cmd)
 {
@@ -23,7 +23,7 @@ int	ft_unset(t_shell *shell, t_cmd *cmd)
 	i = 0;
 	while (cmd->args[++i])
 	{
-		if (ft_is_valid_var_name(cmd->args[i]) == false) //check name of arg
+		if (ft_is_valid_var_name(cmd->args[i]) == false)
 		{
 			ft_putstr_fd("minishell: unset: '", 2);
 			ft_putstr_fd(cmd->args[i], 2);
@@ -31,13 +31,12 @@ int	ft_unset(t_shell *shell, t_cmd *cmd)
 			return (FAILURE);
 		}
 		else
-			if (ft_remove_var(shell, cmd->args[i]) == FAILURE)
-				return (FAILURE);
+			ft_remove_var(shell, cmd->args[i]);
 	}
 	return (SUCCESS);
 }
 
-static int	ft_remove_var(t_shell *shell, char *var)
+static void	ft_remove_var(t_shell *shell, char *var)
 {
 	int		i;
 	size_t	var_len;
@@ -57,8 +56,7 @@ static int	ft_remove_var(t_shell *shell, char *var)
 				i++;
 			}
 			shell->env[i] = NULL;
-			return (SUCCESS);
+			return ;
 		}
 	}
-	return (FAILURE);
 }

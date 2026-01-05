@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   6.5.1.export.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 16:29:54 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2025/12/19 17:45:26 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/01/03 13:45:57 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_export(t_shell *shell, t_cmd *cmd)
 	i = 0;
 	while (cmd->args[++i])
 	{
-		if (ft_is_valid_var_name(cmd->args[i]) == false) //check name of arg
+		if (ft_is_valid_var_name(cmd->args[i]) == false)
 		{
 			ft_putstr_fd("minishell: export: '", 2);
 			ft_putstr_fd(cmd->args[i], 2);
@@ -33,7 +33,7 @@ int	ft_export(t_shell *shell, t_cmd *cmd)
 			return (FAILURE);
 		}
 		if (ft_set_var(shell, cmd->args[i]) == FAILURE)
-			return (perror("set env var failed"), FAILURE);
+			return (ft_putstr_fd("set env var failed", 2), FAILURE);
 	}
 	return (SUCCESS);
 }
@@ -51,7 +51,7 @@ static int	ft_set_var(t_shell *shell, char *var)
 	{
 		if (ft_strncmp(shell->env[i], var, var_len) == 0
 			&& (shell->env[i][var_len] == '='
-			|| shell->env[i][var_len] == '\0')) // check if variable already exist
+			|| shell->env[i][var_len] == '\0'))
 		{
 			if (equals_sign)
 			{
@@ -88,7 +88,7 @@ static int	ft_add_new_var(t_shell *shell, char *var)
 		new_env_arr[i] = shell->env[i];
 	new_env_arr[i] = var;
 	new_env_arr[i + 1] = NULL;
-	ft_free_arr_str(shell->env);
+	free(shell->env);
 	shell->env = new_env_arr;
 	return (SUCCESS);
 }
@@ -120,11 +120,11 @@ bool	ft_is_valid_var_name(char *var)
 
 	if (!var || !var[0])
 		return (false);
-	if (var[0] != '_' && !ft_isalpha(var[0])) //first char: letter or underscore
+	if (var[0] != '_' && !ft_isalpha(var[0]))
 		return (false);
 	var_name_len = ft_get_var_name_len(var);
 	i = 0;
-	while (++i < var_name_len) //cheking the rest of the vars in name
+	while (++i < var_name_len)
 		if (var[i] != '_' && !ft_isalnum(var[i]))
 			return (false);
 	return (true);
