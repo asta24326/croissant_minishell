@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2026/01/05 13:36:39 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/05 17:18:01 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,7 +341,8 @@ char	*ft_expand_dollar_start(t_shell *shell, char *str);
 size_t	ft_get_var_name_len(char *arg);
 bool	ft_is_valid_var_char(int c);
 char	*ft_expand_env_var(t_shell *shell, char *str);
-char	*ft_expand_dquotes_str(t_shell *shell, char *str, size_t len);
+char	*ft_expand_dquotes_str(t_shell *shell, char *str);
+char	*ft_patch_with_dquotes(char *str);
 
 // 8.1.env_init.c
 char	**ft_env_dup(char **env);

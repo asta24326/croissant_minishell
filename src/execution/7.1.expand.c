@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   7.1.expand.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 22:27:14 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/03 16:51:27 by asharafe         ###   ########.fr       */
+/*   Updated: 2026/01/05 17:58:53 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*ft_expand_str(t_shell *shell, char *str)
 	if (len > 1 && str[0] == '\'' && str[len - 1] == '\'')
 		return (ft_strdup(str));
 	if (len > 1 && str[0] == '"' && str[len - 1] == '"')
-		return (ft_expand_dquotes_str(shell, str, len));
+		return (ft_expand_dquotes_str(shell, str));
 	return (ft_strdup(str));
 }
 
