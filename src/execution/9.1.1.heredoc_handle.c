@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9.1.1.heredoc_handle.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 22:51:59 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/04 11:46:24 by asharafe         ###   ########.fr       */
+/*   Updated: 2026/01/05 18:30:37 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static int	ft_heredoc_child_process(t_shell *shell, t_hdoc *curr_hdoc);
 static int	ft_heredoc_read_loop(t_shell *shell, t_hdoc *curr_hdoc);
-static void	ft_write_heredoc_line(t_shell *shell, t_hdoc *curr_hdoc, char *line);
+static void	ft_write_heredoc_line(t_shell *shell, t_hdoc *curr_hdoc,
+				char *line);
 
 void	ft_process_all_heredocs(t_shell *shell)
 {
@@ -100,7 +101,8 @@ static void	ft_write_heredoc_line(t_shell *shell, t_hdoc *curr_hdoc, char *line)
 		expanded_line = ft_expand_heredoc_str(shell, line);
 		if (expanded_line)
 		{
-			write(curr_hdoc->hdoc_fd[1], expanded_line, ft_strlen(expanded_line));
+			write(curr_hdoc->hdoc_fd[1], expanded_line,
+				ft_strlen(expanded_line));
 			free(expanded_line);
 		}
 	}

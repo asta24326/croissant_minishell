@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5.1.1.exec_cmds.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 16:15:52 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/03 22:00:24 by asharafe         ###   ########.fr       */
+/*   Updated: 2026/01/05 18:30:29 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	ft_exec_cmds(t_shell *shell)
 		return ;
 	if (ft_handle_cmds_redirs(shell) == FAILURE)
 		return ;
-	ft_process_all_heredocs(shell);
 	if (shell->cmd->next)
 	{
 		if (ft_pipes_init(shell) == FAILURE)
@@ -41,7 +40,7 @@ void	ft_exec_cmds(t_shell *shell)
 static int	ft_handle_cmds_redirs(t_shell *shell)
 {
 	t_cmd	*curr_cmd;
-	
+
 	curr_cmd = shell->cmd;
 	while (curr_cmd)
 	{
