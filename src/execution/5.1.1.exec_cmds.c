@@ -6,7 +6,7 @@
 /*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 16:15:52 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/03 22:00:24 by asharafe         ###   ########.fr       */
+/*   Updated: 2026/01/06 12:01:21 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	ft_exec_cmds(t_shell *shell)
 		return ;
 	if (ft_handle_cmds_redirs(shell) == FAILURE)
 		return ;
-	ft_process_all_heredocs(shell);
 	if (shell->cmd->next)
 	{
 		if (ft_pipes_init(shell) == FAILURE)
@@ -41,7 +40,7 @@ void	ft_exec_cmds(t_shell *shell)
 static int	ft_handle_cmds_redirs(t_shell *shell)
 {
 	t_cmd	*curr_cmd;
-	
+
 	curr_cmd = shell->cmd;
 	while (curr_cmd)
 	{
@@ -64,6 +63,7 @@ static void	ft_exec_solo_cmd(t_shell *shell, t_cmd *cmd)
 		shell->exit_status = 1;
 		return ;
 	}
+	signal(SIGINT, ft_signal_handler_for_parent);
 	ft_setup_cmd_redirs(shell, cmd);
 	if (cmd->builtin == true)
 		ft_exec_builtin(shell, cmd, cmd->args[0]);

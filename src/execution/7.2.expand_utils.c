@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 21:31:01 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/04 15:05:44 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/05 17:58:25 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ char	*ft_expand_env_var(t_shell *shell, char *str)
 	i = 1;
 	while (str[i] && ft_is_valid_var_char(str[i]) == true)
 		i++;
-	var_name = ft_substr(str, 1, i - 1);
+	if (str[i - 1] == '"')
+		var_name = ft_substr(str, 1, i - 2);
+	else
+		var_name = ft_substr(str, 1, i - 1);
 	if (!var_name)
 		return (NULL);
 	var_value = ft_getenv(shell->env, var_name);
@@ -49,28 +52,41 @@ char	*ft_expand_env_var(t_shell *shell, char *str)
 		return (ft_strdup(""));
 }
 
-char	*ft_expand_dquotes_str(t_shell *shell, char *str, size_t len)
+char	*ft_expand_dquotes_str(t_shell *shell, char *str)
 {
-	char	*without_quotes;
 	char	*expanded_str;
+	char	*result;
 
-	without_quotes = ft_substr(str, 1, len - 2);
-	if (!without_quotes)
-		return (NULL);
-	if (without_quotes[0] && without_quotes[0] == '$')
+	if (str[1] == '$')
 	{
-		if (without_quotes[1] == '\0')
-			return (free(without_quotes), ft_strdup("$"));
-		if (without_quotes[1] == '?')
+		if (str[2] == '"')
+			return (ft_strdup("$"));
+		if (str[2] == '?')
 			expanded_str = ft_itoa(shell->exit_status);
-		else if (without_quotes[1] == '$')
+		else if (str[2] == '$')
 			expanded_str = ft_itoa(shell->shell_pid);
-		else if (without_quotes[1] && ft_is_valid_var_char(without_quotes[1]))
-			expanded_str = ft_expand_env_var(shell, without_quotes);
+		else if (str[2] && ft_is_valid_var_char(str[2]))
+			expanded_str = ft_expand_env_var(shell, &str[1]);
 		else
 			expanded_str = ft_strdup("");
-		return (free(without_quotes), expanded_str);
+		result = ft_patch_with_dquotes(expanded_str);
+		return (free(expanded_str), result);
 	}
 	else
-		return (without_quotes);
+		return (ft_strdup(str));
+}
+
+char	*ft_patch_with_dquotes(char *str)
+{
+	char	*result;
+	char	*temp;
+
+	temp = ft_strjoin("\"", str);
+	if (!temp)
+		return (NULL);
+	result = ft_strjoin(temp, "\"");
+	if (!result)
+		return (free(temp), NULL);
+	free(temp);
+	return (result);
 }

@@ -35,7 +35,6 @@ SRC =	$(PRS_DIR)/0.1.main.c \
 		$(PRS_DIR)/4.1.handle_quotes.c \
 		$(PRS_DIR)/4.2.check_builtin_cmds.c \
 		$(PRS_DIR)/4.3.handle_redirs.c \
-		$(PRS_DIR)/_print_parsing_results.c \
 		$(EXEC_DIR)/5.1.1.exec_cmds.c \
 		$(EXEC_DIR)/5.1.2.exec_cmds_utils.c \
 		$(EXEC_DIR)/5.2.exec_builtin.c \

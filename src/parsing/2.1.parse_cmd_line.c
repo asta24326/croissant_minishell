@@ -6,7 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 18:33:41 by kschmitt          #+#    #+#             */
-/*   Updated: 2026/01/05 12:52:17 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/05 18:41:06 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ static int	ft_process_cmd(t_shell *minishell, char *cmd_str)
 		return (FAILURE);
 	}
 	ft_process_all_heredocs(minishell);
-	// if (ft_expand(minishell) == FAILURE)
-	// {
-	// 	minishell->exit_status = FAILURE;
-	// 	ft_cleanup_pipes_array(minishell);
-	// 	return (FAILURE);
-	// }
+	if (ft_expand(minishell) == FAILURE)
+	{
+		minishell->exit_status = FAILURE;
+		ft_cleanup_pipes_array(minishell);
+		return (FAILURE);
+	}
 	if (cleanup_quotes(minishell->cmd->args))
 		return (FAILURE);
 	if (is_builtin_cmd(minishell->cmd))

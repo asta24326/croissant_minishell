@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   6.5.1.export.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 16:29:54 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/03 13:45:57 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/01/05 19:32:30 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

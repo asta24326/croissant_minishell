@@ -6,7 +6,7 @@
 /*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 23:03:19 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/02 21:24:24 by asharafe         ###   ########.fr       */
+/*   Updated: 2026/01/06 12:01:04 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ int	ft_exec_sys_solo_cmd(t_shell *shell, t_cmd *cmd)
 static void	ft_exec_child_solo_process(t_shell *shell, t_cmd *cmd, char *path)
 {
 	ft_reset_signals();
-	signal(SIGPIPE, SIG_IGN);
-	ft_setup_cmd_redirs(shell, cmd);
 	execve(path, cmd->args, shell->env);
 	ft_handle_exec_error(cmd->args[0], path);
 }
