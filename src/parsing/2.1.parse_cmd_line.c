@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2.1.parse_cmd_line.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 18:33:41 by kschmitt          #+#    #+#             */
-/*   Updated: 2026/01/06 14:00:29 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/06 15:39:20 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,3 @@ int	parse_cmd_lines(char *copy, char *pline, int cmd_count, t_shell *minishell)
 	minishell->cmd = head;
 	return (ft_free_arr(arr), SUCCESS);
 }
-
-

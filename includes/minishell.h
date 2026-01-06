@@ -6,10 +6,10 @@
 /*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2026/01/06 14:20:18 by asharafe         ###   ########.fr       */
-/*   Updated: 2026/01/06 15:22:30 by kschmitt         ###   ########.fr       */
-/*   Updated: 2026/01/06 11:56:38 by asharafe         ###   ########.fr       */
+/*   Updated: 2026/01/06 15:38:34 by asharafe         ###   ########.fr       */
 /*                                                                            */
+/* ************************************************************************** */
+
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
@@ -195,7 +195,6 @@ void	fill_args_arr(char *arg_str, t_cmd *cmd);
 
 // 3.4.parse_redir.c
 int		parse_redir(char *cmd_str, t_cmd *cmd);
-// int			prepare_hdoc(char *cmd_str, t_redirs *redirs, int len);
 int		get_redir_len(char *str);
 void	fill_redirs_arr(char *redirect, t_cmd *cmd);
 
@@ -240,8 +239,6 @@ t_hdoc	*ft_get_last_hdoc(t_hdoc *head);
 
 // 5.3.1.exec_sys_cmd.c
 int		ft_exec_sys_solo_cmd(t_shell *shell, t_cmd *cmd);
-//static void	ft_exec_child_solo_process(t_shell *shell,
-//					t_cmd *cmd, char *path);
 int		ft_err(t_shell *shell, char *cmd);
 void	ft_err_dir(t_shell *shell, char *cmd, char *err, int code);
 void	ft_exec_err(char *cmd, char *path);
