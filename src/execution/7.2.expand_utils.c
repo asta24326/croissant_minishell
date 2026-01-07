@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   7.2.expand_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 21:31:01 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/05 17:58:25 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/07 23:24:28 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,18 @@ bool	ft_is_valid_var_char(int c)
 	return (false);
 }
 
-char	*ft_expand_env_var(t_shell *shell, char *str)
+char	*ft_expand_env_var(t_shell *shell, char *str, int len)
 {
 	char	*var_name;
 	char	*var_value;
-	int		i;
 
-	i = 1;
-	while (str[i] && ft_is_valid_var_char(str[i]) == true)
-		i++;
-	if (str[i - 1] == '"')
-		var_name = ft_substr(str, 1, i - 2);
-	else
-		var_name = ft_substr(str, 1, i - 1);
+	printf("passed= [%s]\n", str);
+	var_name = ft_substr(str, 1, len);
 	if (!var_name)
 		return (NULL);
+	printf("result var_name: [%s]\n", var_name);
 	var_value = ft_getenv(shell->env, var_name);
+	printf("========var_after expansion: [%s]\n", var_value);
 	free(var_name);
 	if (var_value)
 		return (ft_strdup(var_value));
@@ -52,28 +48,105 @@ char	*ft_expand_env_var(t_shell *shell, char *str)
 		return (ft_strdup(""));
 }
 
-char	*ft_expand_dquotes_str(t_shell *shell, char *str)
+static int	get_var_len_expanded(char *str)
 {
-	char	*expanded_str;
-	char	*result;
+	int		len;
 
-	if (str[1] == '$')
+	len = 1;
+	printf("str passed: %s\n", str);
+	while (str[len] && !is_whitespace(str[len]) && str[len] != '$' && !is_quote(str[len]))
+		len++;
+	printf("var_len: %i\n", len - 1);
+	return (len - 1);
+}
+
+char	*get_expand_str(t_shell *shell, char *str, char *unexp_str)
+{
+	char	*result;
+	char	*expanded_var;
+	int		index;
+
+	index = 0;
+	if (str[index + 1] && str[index + 1] == '"')
+		return (ft_strdup("$"));
+	else if (str[index + 1] && str[index + 1] == '?')
+		expanded_var = ft_itoa(shell->exit_status);
+	else if (str[index + 1] && str[index + 1] == '$')
+		expanded_var = ft_itoa(shell->shell_pid);
+	else if (str[index + 1] && ft_is_valid_var_char(str[index + 1]))
 	{
-		if (str[2] == '"')
-			return (ft_strdup("$"));
-		if (str[2] == '?')
-			expanded_str = ft_itoa(shell->exit_status);
-		else if (str[2] == '$')
-			expanded_str = ft_itoa(shell->shell_pid);
-		else if (str[2] && ft_is_valid_var_char(str[2]))
-			expanded_str = ft_expand_env_var(shell, &str[1]);
-		else
-			expanded_str = ft_strdup("");
-		result = ft_patch_with_dquotes(expanded_str);
-		return (free(expanded_str), result);
+		index = get_var_len_expanded(&str[index]);
+		expanded_var = ft_expand_env_var(shell, str, index);
+	}
+	if (unexp_str != NULL)
+	{
+		result = ft_strjoin(unexp_str, expanded_var);
+		if (!result)
+			return (ft_putstr_fd("strjoin failed", 2), NULL);
 	}
 	else
-		return (ft_strdup(str));
+		result = ft_strdup(expanded_var);
+	return (free(expanded_var), result);
+}
+
+char	*get_unexpand_str(char *str, char *exp_str)
+{
+	char	*result;
+	char	*temp;
+	int		index;
+
+	index = 0;
+	while (str[index] != '"' && str[index] != '$')
+		index++;
+	temp = ft_substr(str, 0, index);
+	if (exp_str && *exp_str)
+	{
+		result = ft_strjoin(exp_str, temp);
+		if (!result)
+			return (ft_putstr_fd("strjoin failed", 2), NULL);
+	}
+	else
+		result = ft_strdup(temp);
+	return (free(temp), result);
+}
+
+char	*ft_expand_dquotes_str(t_shell *shell, char *str)
+{
+	char	*temp;
+	char	*temp2;
+	int		i;
+	int		len;
+	int		last_opt;
+
+	i = 1;
+	len = 0;
+	last_opt = 0;
+	temp = NULL;
+	temp2 = NULL;
+	while (str[i] && str[i] != '"')
+	{
+		if (str[i] == '$')
+		{
+			if (last_opt == 1)
+				free(temp);
+			len = get_var_len_expanded(&str[i]);
+			temp = get_expand_str(shell, &str[i], temp2);
+			i += len + 1;
+			free(temp2);
+			last_opt = 1;
+		}
+		else
+		{
+			temp2 = get_unexpand_str(&str[i], temp);
+			free(temp);
+			last_opt = 2;
+			while (str[i] != '"' && str[i] != '$')
+				i++;
+		}
+	}
+	if (last_opt == 1)
+		return (temp);
+	return (temp2);
 }
 
 char	*ft_patch_with_dquotes(char *str)

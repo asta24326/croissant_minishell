@@ -6,7 +6,7 @@
 /*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
-/*   Updated: 2026/01/06 20:08:17 by asharafe         ###   ########.fr       */
+/*   Updated: 2026/01/07 17:28:12 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,9 +305,10 @@ char	*ft_expand_dollar_start(t_shell *shell, char *str);
 // 7.2.expand_utils.c
 size_t	ft_get_var_name_len(char *arg);
 bool	ft_is_valid_var_char(int c);
-char	*ft_expand_env_var(t_shell *shell, char *str);
+char	*ft_expand_env_var(t_shell *shell, char *str, int len);
 char	*ft_expand_dquotes_str(t_shell *shell, char *str);
 char	*ft_patch_with_dquotes(char *str);
+char	*handle_multiple_expansions(t_shell *shell, char *str);
 
 // 8.1.env_init.c
 char	**ft_env_dup(char **env);
