@@ -6,7 +6,7 @@
 /*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 21:31:01 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/07 23:24:28 by asharafe         ###   ########.fr       */
+/*   Updated: 2026/01/07 23:37:32 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ char	*get_expand_str(t_shell *shell, char *str, char *unexp_str)
 	int		index;
 
 	index = 0;
-	if (str[index + 1] && str[index + 1] == '"')
-		return (ft_strdup("$"));
+	if (str[index + 1] && (str[index + 1] == ' ' || str[index + 1] == '"'))
+		expanded_var = ft_strdup("$");
 	else if (str[index + 1] && str[index + 1] == '?')
 		expanded_var = ft_itoa(shell->exit_status);
 	else if (str[index + 1] && str[index + 1] == '$')
