@@ -3,45 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   7.2.expand_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 21:31:01 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/05 17:58:25 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/08 01:00:59 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-size_t	ft_get_var_name_len(char *arg)
-{
-	size_t	len;
-
-	len = 0;
-	while (arg[len] && arg[len] != '=')
-		len++;
-	return (len);
-}
-
-bool	ft_is_valid_var_char(int c)
-{
-	if (ft_isalnum(c) || c == '_')
-		return (true);
-	return (false);
-}
-
-char	*ft_expand_env_var(t_shell *shell, char *str)
+char	*ft_expand_env_var(t_shell *shell, char *str, int len)
 {
 	char	*var_name;
 	char	*var_value;
-	int		i;
 
-	i = 1;
-	while (str[i] && ft_is_valid_var_char(str[i]) == true)
-		i++;
-	if (str[i - 1] == '"')
-		var_name = ft_substr(str, 1, i - 2);
-	else
-		var_name = ft_substr(str, 1, i - 1);
+	var_name = ft_substr(str, 1, len);
 	if (!var_name)
 		return (NULL);
 	var_value = ft_getenv(shell->env, var_name);
@@ -52,28 +28,76 @@ char	*ft_expand_env_var(t_shell *shell, char *str)
 		return (ft_strdup(""));
 }
 
-char	*ft_expand_dquotes_str(t_shell *shell, char *str)
+char	*get_expand_str(t_shell *shell, char *str, char *unexp_str, int flag)
 {
-	char	*expanded_str;
 	char	*result;
+	char	*expanded_var;
 
-	if (str[1] == '$')
+	if (str[1] && (str[1] == ' ' || str[1] == '"'))
+		expanded_var = ft_strdup("$");
+	else if (str[1] && str[1] == '?')
+		expanded_var = ft_itoa(shell->exit_status);
+	else if (str[1] && str[1] == '$')
+		expanded_var = ft_itoa(shell->shell_pid);
+	else if (str[1] && ft_is_valid_var_char(str[1]))
+		expanded_var = ft_expand_env_var(shell, str, get_var_len_expanded(str));
+	else
+		expanded_var = ft_strdup("");
+	if (unexp_str != NULL)
 	{
-		if (str[2] == '"')
-			return (ft_strdup("$"));
-		if (str[2] == '?')
-			expanded_str = ft_itoa(shell->exit_status);
-		else if (str[2] == '$')
-			expanded_str = ft_itoa(shell->shell_pid);
-		else if (str[2] && ft_is_valid_var_char(str[2]))
-			expanded_str = ft_expand_env_var(shell, &str[1]);
-		else
-			expanded_str = ft_strdup("");
-		result = ft_patch_with_dquotes(expanded_str);
-		return (free(expanded_str), result);
+		result = ft_strjoin(unexp_str, expanded_var);
+		if (flag == 1)
+			free (unexp_str);
 	}
 	else
-		return (ft_strdup(str));
+		result = ft_strdup(expanded_var);
+	return (free(expanded_var), result);
+}
+
+char	*get_unexpand_str(char *str, char *exp_str)
+{
+	char	*result;
+	char	*temp;
+	int		index;
+
+	index = 0;
+	while (str[index] != '"' && str[index] != '$')
+		index++;
+	temp = ft_substr(str, 0, index);
+	if (exp_str && *exp_str)
+		result = ft_strjoin(exp_str, temp);
+	else
+		result = ft_strdup(temp);
+	return (free(temp), result);
+}
+
+char	*ft_expand_dquotes_str(t_shell *shell, char *str)
+{
+	int		i;
+	t_exp	*curr;
+
+	i = 1;
+	curr = shell->expansion;
+	while (str[i] && str[i] != '"')
+	{
+		if (str[i] == '$')
+		{
+			handle_dollar_sign(shell, curr, &str[i]);
+			i += get_var_len_expanded(&str[i]) + 1;
+			curr->last_opt = 1;
+		}
+		else
+		{
+			curr->temp2 = get_unexpand_str(&str[i], curr->temp);
+			free(curr->temp);
+			curr->last_opt = 2;
+			while (str[i] != '"' && str[i] != '$')
+				i++;
+		}
+	}
+	if (curr->last_opt == 1)
+		return (ft_patch_with_dquotes(curr->temp));
+	return (ft_patch_with_dquotes(curr->temp2));
 }
 
 char	*ft_patch_with_dquotes(char *str)
@@ -82,6 +106,7 @@ char	*ft_patch_with_dquotes(char *str)
 	char	*temp;
 
 	temp = ft_strjoin("\"", str);
+	free(str);
 	if (!temp)
 		return (NULL);
 	result = ft_strjoin(temp, "\"");

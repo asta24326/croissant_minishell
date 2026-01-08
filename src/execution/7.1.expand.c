@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   7.1.expand.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 22:27:14 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/05 17:58:53 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/08 00:32:28 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	ft_expand(t_shell *shell)
 			return (FAILURE);
 		if (ft_expand_args_list(shell, curr_cmd) == FAILURE)
 			return (FAILURE);
+		free(shell->expansion);
 		curr_cmd = curr_cmd->next;
 	}
 	return (SUCCESS);
@@ -99,7 +100,7 @@ char	*ft_expand_dollar_start(t_shell *shell, char *str)
 	if (str[1] == '$')
 		return (ft_itoa(shell->shell_pid));
 	if (str[1] && ft_is_valid_var_char(str[1]) == true)
-		return (ft_expand_env_var(shell, str));
+		return (ft_expand_env_var(shell, str, ft_strlen(str)));
 	if (str[1] == '\0' || !ft_is_valid_var_char(str[1]))
 		return (ft_strdup("$"));
 	return (ft_strdup(str));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1.1.parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 17:29:02 by kschmitt          #+#    #+#             */
-/*   Updated: 2026/01/06 13:57:13 by kschmitt         ###   ########.fr       */
+/*   Updated: 2026/01/08 00:40:27 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	parse(char *pipeline, t_shell *minishell)
 	if (!copy)
 		return (ft_putstr_fd("blackout_quoted_content", 2), FAILURE);
 	minishell->pipe_count = get_pipe_count(copy);
+	minishell->expansion = prepare_expasion();
 	if (is_valid_syntax(copy, minishell->pipe_count) == false)
 	{
 		minishell->exit_status = 2;
@@ -58,4 +59,17 @@ int	parse(char *pipeline, t_shell *minishell)
 		return (free(copy), FAILURE);
 	}
 	return (free(copy), SUCCESS);
+}
+
+t_exp	*prepare_expasion(void)
+{
+	t_exp	*new;
+
+	new = (t_exp *)malloc(sizeof(t_exp));
+	if (!new)
+		return (ft_putstr_fd("malloc failed", 2), NULL);
+	new->temp = NULL;
+	new->temp2 = NULL;
+	new->last_opt = 0;
+	return (new);
 }

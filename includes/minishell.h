@@ -6,6 +6,7 @@
 /*   By: kschmitt <kschmitt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 11:29:52 by kschmitt          #+#    #+#             */
+/*   Updated: 2026/01/08 00:53:24 by asharafe         ###   ########.fr       */
 /*   Updated: 2026/01/07 20:16:09 by kschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -68,6 +69,15 @@ extern volatile sig_atomic_t	g_signal_num;
 # define FAILURE 1
 
 /* STRUCTURES */
+
+/* struct for expansion */
+typedef struct s_exp
+{
+	char	*temp;
+	char	*temp2;
+	int		last_opt;
+}	t_exp;
+
 /* hdocs struct */
 typedef struct s_hdoc
 {
@@ -115,6 +125,7 @@ typedef struct s_shell
 	pid_t			last_pid;
 	int				orig_stdin;
 	int				orig_stdout;
+	t_exp			*expansion;
 }	t_shell;
 
 /* FUNCTIONS */
@@ -138,6 +149,7 @@ void	shell_loop(t_shell *minishell);
 // 1.1.parsing.c
 int		parse(char *pipeline, t_shell *minishell);
 char	*blackout_quoted_content(char *str);
+t_exp	*prepare_expasion(void);
 
 // 1.2.syntax_check.c
 int		is_valid_syntax(char *copy, int pipe_count);
@@ -303,11 +315,17 @@ char	*ft_expand_str(t_shell *shell, char *str);
 char	*ft_expand_dollar_start(t_shell *shell, char *str);
 
 // 7.2.expand_utils.c
-size_t	ft_get_var_name_len(char *arg);
-bool	ft_is_valid_var_char(int c);
-char	*ft_expand_env_var(t_shell *shell, char *str);
+char	*ft_expand_env_var(t_shell *shell, char *str, int len);
+char	*get_expand_str(t_shell *shell, char *str, char *unexp_str, int flag);
+char	*get_unexpand_str(char *str, char *exp_str);
 char	*ft_expand_dquotes_str(t_shell *shell, char *str);
 char	*ft_patch_with_dquotes(char *str);
+
+// 7.2.3.expand_utils_2.c
+size_t	ft_get_var_name_len(char *arg);
+bool	ft_is_valid_var_char(int c);
+int		get_var_len_expanded(char *str);
+void	handle_dollar_sign(t_shell *shell, t_exp *curr, char *str);
 
 // 8.1.env_init.c
 char	**ft_env_dup(char **env);
