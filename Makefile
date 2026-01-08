@@ -55,6 +55,7 @@ SRC =	$(PRS_DIR)/0.1.main.c \
 		$(EXEC_DIR)/6.7.unset.c \
 		$(EXEC_DIR)/7.1.expand.c \
 		$(EXEC_DIR)/7.2.expand_utils.c \
+		$(EXEC_DIR)/7.3.expand_utils_2.c \
 		$(EXEC_DIR)/8.1.env_init.c \
 		$(EXEC_DIR)/9.1.1.heredoc_handle.c \
 		$(EXEC_DIR)/9.1.2.heredoc_handle_utils.c \
