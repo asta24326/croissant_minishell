@@ -6,7 +6,7 @@
 /*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 21:31:01 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/01/08 01:00:59 by asharafe         ###   ########.fr       */
+/*   Updated: 2026/01/08 17:10:29 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*get_unexpand_str(char *str, char *exp_str)
 	int		index;
 
 	index = 0;
-	while (str[index] != '"' && str[index] != '$')
+	while (str[index] && str[index] != '"' && str[index] != '$')
 		index++;
 	temp = ft_substr(str, 0, index);
 	if (exp_str && *exp_str)

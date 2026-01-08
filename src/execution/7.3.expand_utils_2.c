@@ -6,7 +6,7 @@
 /*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 00:50:52 by asharafe          #+#    #+#             */
-/*   Updated: 2026/01/08 16:30:53 by asharafe         ###   ########.fr       */
+/*   Updated: 2026/01/08 17:10:52 by asharafe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int	get_var_len_expanded(char *str)
 	int		len;
 
 	len = 1;
-	if (str[len] == '$')
+	if (str[len] == '$' || str[len] == '?')
 		return (1);
-	else 
+	else
 		while (str[len] && !is_whitespace(str[len]) 
 			&& (str[len] != '$') && !is_quote(str[len]))
 			len++;
