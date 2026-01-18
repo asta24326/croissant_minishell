@@ -99,4 +99,5 @@ make valgrind
 
 ## Author
 
-This project was developed as part of the 42 school curriculum.
+This project was developed as part of the 42 school curriculum by team [@kristin32schmitt](https://github.com/kristin32schmitt) - Kristin Schmitt
+- [@asta24326](https://github.com/asta24326) - Aidar Sharafeev
